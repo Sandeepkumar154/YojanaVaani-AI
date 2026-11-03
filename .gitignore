@@ -1,0 +1,8 @@
+﻿.env
+*.db
+__pycache__/
+.streamlit/
+*.bin
+debug_*.wav
+temp_*
+node_modules/

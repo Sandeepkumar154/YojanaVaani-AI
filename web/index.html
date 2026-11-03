@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YojanaVaani AI — Bharat's Next-Gen Citizen Welfare Voice AI</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇮🇳</text></svg>">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              500: '#14b8a6',
+              600: '#0d9488',
+            },
+            saffron: '#FF9933',
+            tiranga_green: '#138808',
+            chakra: '#000088'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #060913;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 153, 51, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(19, 136, 8, 0.08) 0px, transparent 50%);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Ambient Glassmorphism */
+    .glass-panel {
+      background: rgba(13, 19, 33, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-panel-glow {
+      background: rgba(13, 19, 33, 0.85);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Siri/ChatGPT Style Dynamic Voice Orb */
+    .orb-glow {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #38bdf8 0%, #6366f1 50%, #0f172a 100%);
+      box-shadow: 
+        0 0 40px rgba(56, 189, 248, 0.5),
+        0 0 80px rgba(99, 102, 241, 0.3),
+        inset 0 0 25px rgba(255, 255, 255, 0.6);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .orb-glow.recording {
+      animation: pulse-rec 1.4s infinite alternate;
+      background: radial-gradient(circle at 35% 35%, #f43f5e 0%, #fb923c 60%, #4c0519 100%);
+      box-shadow: 
+        0 0 60px rgba(244, 63, 94, 0.7),
+        0 0 100px rgba(251, 146, 60, 0.4),
+        inset 0 0 30px rgba(255, 255, 255, 0.8);
+    }
+
+    .orb-glow.speaking {
+      animation: pulse-speak 1.1s infinite alternate;
+      background: radial-gradient(circle at 35% 35%, #10b981 0%, #06b6d4 60%, #064e3b 100%);
+      box-shadow: 
+        0 0 60px rgba(16, 185, 129, 0.7),
+        0 0 100px rgba(6, 182, 212, 0.4),
+        inset 0 0 30px rgba(255, 255, 255, 0.8);
+    }
+
+    @keyframes pulse-rec {
+      0% { transform: scale(0.96); filter: brightness(1); }
+      100% { transform: scale(1.12); filter: brightness(1.25); }
+    }
+
+    @keyframes pulse-speak {
+      0% { transform: scale(0.98); }
+      100% { transform: scale(1.1); }
+    }
+
+    /* Soundwave bars */
+    .bar {
+      width: 4px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, #38bdf8, #818cf8);
+      animation: bounce 1s infinite alternate ease-in-out;
+    }
+    @keyframes bounce {
+      0% { height: 6px; }
+      100% { height: 28px; }
+    }
+
+    /* Phone Mockup */
+    .phone-mockup {
+      width: 320px;
+      height: 610px;
+      border: 10px solid #1e293b;
+      border-radius: 46px;
+      background: #090e1a;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-notch {
+      width: 110px;
+      height: 18px;
+      background: #1e293b;
+      border-radius: 0 0 14px 14px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- Top Global Header -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 px-6 py-3.5 transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand & Emblem -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 via-sky-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-sky-500/20 font-extrabold text-white text-base">
+          భా
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-lg font-extrabold tracking-tight text-white">YojanaVaani AI</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20">PRO v2.4</span>
+          </div>
+          <p id="headerSub" class="text-[11px] text-slate-400 font-medium">Bharat's Citizen Voice AI • Powered by Gnani.ai</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
+        <button onclick="switchTab('studio')" id="tab-studio" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 transition flex items-center gap-1.5">
+          <i data-lucide="mic" class="w-3.5 h-3.5"></i> <span id="tabStudioText">Voice AI Studio</span>
+        </button>
+        <button onclick="switchTab('phone')" id="tab-phone" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> <span id="tabPhoneText">1800 Telephony</span>
+        </button>
+        <button onclick="switchTab('schemes')" id="tab-schemes" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i data-lucide="landmark" class="w-3.5 h-3.5"></i> <span id="tabSchemesText">Schemes Directory</span>
+        </button>
+        <button onclick="switchTab('security')" id="tab-security" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> <span id="tabSecurityText">Anti-Fraud Shield</span>
+        </button>
+      </nav>
+
+      <!-- Right Carrier & Language Badge -->
+      <div class="flex items-center gap-3">
+        <!-- 22 Languages Coverage Badge -->
+        <div class="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-500/10 border border-sky-500/20 text-[10px] font-bold text-sky-300">
+          <span>🇮🇳</span> 22 Official Languages
+        </div>
+
+        <!-- Live Carrier Pill -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-[11px] font-semibold text-emerald-300">Carrier: +1 (737) 250-8034</span>
+        </div>
+
+        <!-- Language Selector with all 22 Indian Languages (8th Schedule) -->
+        <select id="langSelect" onchange="onLangChange()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-sky-500 font-medium">
+          <option value="indic-auto" selected>🌐 Auto-Detect Language (All 22 Languages)</option>
+          <option value="en">English (India)</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="te">తెలుగు (Telugu)</option>
+          <option value="hi-en">Hinglish (Code-Mixed)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="kn">ಕನ್ನಡ (Kannada)</option>
+          <option value="ml">മലയാളം (Malayalam)</option>
+          <option value="mr">मराठी (Marathi)</option>
+          <option value="bn">বাংলা (Bengali)</option>
+          <option value="gu">ગુજરાતી (Gujarati)</option>
+          <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+          <option value="or">ଓଡ଼ିଆ (Odia)</option>
+          <option value="as">অসমীয়া (Assamese)</option>
+          <option value="ur">اردو (Urdu)</option>
+          <option value="sa">संस्कृतम् (Sanskrit)</option>
+          <option value="ne">नेपाली (Nepali)</option>
+          <option value="kok">कोंकणी (Konkani)</option>
+          <option value="mai">मैथिली (Maithili)</option>
+          <option value="doi">डोगरी (Dogri)</option>
+          <option value="ks">کٲشُر / कॉशुर (Kashmiri)</option>
+          <option value="sd">سنڌي / सिन्धी (Sindhi)</option>
+          <option value="mni">ꯃৈতৈলোନ୍ (Manipuri / Meitei)</option>
+          <option value="brx">बड़ो (Bodo)</option>
+          <option value="sat">ᱥᱟᱱᱛᱟᱲᱤ (Santali)</option>
+        </select>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full">
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: VOICE AI STUDIO (ChatGPT/Siri-like Experience)     -->
+    <!-- ======================================================== -->
+    <div id="view-studio" class="space-y-8">
+      
+      <!-- Hero Tagline -->
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <div id="heroBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-semibold text-sky-400">
+          <span class="text-saffron">●</span> Digital India <span class="text-emerald">●</span> Citizen Empowerment
+        </div>
+        <h1 id="heroTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+          Speak in your <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue</span>, Get Instant Welfare Answers.
+        </h1>
+        <p id="heroSub" class="text-sm text-slate-400">
+          Powered by Gnani Prisma Indic STT and Timbre TTS. Answers over 2,000+ Central and State welfare schemes in real time.
+        </p>
+      </div>
+
+      <!-- Main Interactive Voice Chamber -->
+      <div class="max-w-3xl mx-auto glass-panel-glow rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
+        
+        <!-- Background subtle glow ring -->
+        <div class="absolute -top-24 -left-24 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Voice Orb Container -->
+        <div class="flex flex-col items-center justify-center space-y-5">
+          
+          <div id="voiceOrb" onclick="toggleMicrophone()" class="orb-glow flex items-center justify-center select-none shadow-2xl" title="Click to Speak to YojanaVaani AI">
+            <!-- Inline SVG Microphone Logo (Guaranteed 100% visible, crisp, and permanent) -->
+            <svg id="orbIcon" class="w-16 h-16 text-white drop-shadow-xl pointer-events-none transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" x2="12" y1="19" y2="22"></line>
+            </svg>
+          </div>
+
+          <!-- Dynamic Status Text -->
+          <div class="space-y-1">
+            <h3 id="orbStatusTitle" class="text-xl font-bold text-white tracking-tight">Tap Orb or Click "Start Recording"</h3>
+            <p id="orbStatusSub" class="text-xs text-slate-400">Auto-detected via Gnani Prisma (Telugu • Hindi • English)</p>
+          </div>
+
+          <!-- Real-Time Audio Canvas Visualizer & Hardware Rhythm Bar -->
+          <div class="w-full max-w-md mx-auto space-y-2">
+            <canvas id="liveAudioVisualizer" width="420" height="46" class="rounded-xl border border-slate-700/80 bg-slate-950 shadow-inner w-full"></canvas>
+            
+            <!-- Real-Time Live Volume Rhythm Level Bar -->
+            <div class="w-full bg-slate-900 border border-slate-800 h-2 rounded-full overflow-hidden p-0.5 shadow-inner">
+              <div id="liveVolumeBar" class="h-full rounded-full bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 transition-all duration-75" style="width: 0%;"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
+              <span id="micStatusText" class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-500"></span> Mic: Standby</span>
+              <span id="micTimerText" class="text-slate-500">00:00</span>
+            </div>
+          </div>
+
+          <!-- Explicit Action Buttons: Start, Stop, and Mute AI -->
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
+            <button id="btnPlayAnnouncement" onclick="playDirectAnnouncement(true)" class="px-5 py-3 rounded-2xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-sm flex items-center gap-2 border border-amber-500/40 shadow-lg shadow-amber-500/10 transition-all transform hover:scale-105 active:scale-95 cursor-pointer">
+              <span class="text-base">🔊</span>
+              <span id="btnAnnouncementText">Play Announcement</span>
+            </button>
+            <button id="btnStartRecord" onclick="startRecording()" class="px-7 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-sm flex items-center gap-2.5 shadow-lg shadow-emerald-500/25 transition-all transform hover:scale-105 active:scale-95">
+              <svg class="w-4 h-4 text-white pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" x2="12" y1="19" y2="22"></line>
+              </svg>
+              <span id="btnStartText">Start Recording</span>
+            </button>
+            <button id="btnStopRecord" onclick="stopRecording()" class="hidden px-7 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-extrabold text-sm flex items-center gap-2.5 shadow-lg shadow-rose-600/30 transition-all animate-pulse transform hover:scale-105 active:scale-95">
+              <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+              <span id="btnStopText">Stop & Send Question (<span id="btnTimerText">00:00</span>)</span>
+            </button>
+            <button id="btnStopAudio" onclick="stopAudioPlayback()" class="hidden px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-amber-600/30 transition-all animate-pulse transform hover:scale-105">
+              <i data-lucide="volume-x" class="w-4 h-4"></i> <span id="btnStopAudioText">Stop AI Voice</span>
+            </button>
+          </div>
+          <p id="vadHintText" class="text-[11px] text-slate-400 font-medium">
+            ⚡ <b>Smart Auto-Cutoff (VAD):</b> Stops automatically ~1.2s after you finish talking, or click "Stop & Send" anytime.
+          </p>
+
+        </div>
+
+        <!-- Quick Citizen Scheme Prompts (Capsules) -->
+        <div class="mt-8 pt-6 border-t border-slate-800/80">
+          <p id="samplePromptHeading" class="text-xs font-semibold text-slate-400 mb-3 flex items-center justify-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> <span id="samplePromptHeadingText">Or tap any sample question to test:</span>
+          </p>
+          <div id="samplePromptsContainer" class="flex flex-wrap items-center justify-center gap-2">
+            <!-- Dynamically populated based on active language -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Conversation Feed -->
+      <div id="convoFeed" class="max-w-3xl mx-auto space-y-4">
+        <!-- Message Card Template dynamically populated -->
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: CELLULAR 1800 PHONE CALL SIMULATOR                 -->
+    <!-- ======================================================== -->
+    <div id="view-phone" class="hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-5xl mx-auto">
+        
+        <!-- Left Explainer & Controls -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-bold text-emerald-400">
+            <i data-lucide="radio" class="w-3.5 h-3.5"></i> Carrier Telephony Engine
+          </div>
+          <h2 id="phoneTitle" class="text-3xl font-extrabold text-white tracking-tight">
+            Realistic 1800 Helpline Call Simulator
+          </h2>
+          <p id="phoneSub" class="text-sm text-slate-300 leading-relaxed">
+            Experience the exact telephony experience rural citizens experience when dialing our toll-free number from any basic feature phone (no smartphone or internet required on citizen side).
+          </p>
+
+          <div class="glass-panel rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
+              <span id="carrierLabelText" class="text-slate-400">Connected Virtual Carrier:</span>
+              <span class="font-mono font-bold text-sky-400">+1 (737) 250-8034</span>
+            </div>
+            <div class="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
+              <span id="audioCodecLabelText" class="text-slate-400">Audio Codec:</span>
+              <span class="font-semibold text-emerald-400">8,000 Hz Narrowband (GSM Telephony)</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span id="twimlLabelText" class="text-slate-400">TwiML Webhook Status:</span>
+              <span class="font-mono text-xs text-amber-400">POST /call/incoming (200 OK)</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button onclick="startPhoneCall()" id="btnStartCall" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition">
+              <i data-lucide="phone-outgoing" class="w-4 h-4"></i> <span id="btnStartCallText">Dial 1800-YOJANA-GOV</span>
+            </button>
+            <button onclick="endPhoneCall()" id="btnEndCall" class="px-6 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm hidden items-center gap-2 shadow-lg shadow-rose-600/30 transition">
+              <i data-lucide="phone-off" class="w-4 h-4"></i> <span id="btnEndCallText">Hang Up Call</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: 3D Smartphone Device Mockup -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="phone-mockup flex flex-col justify-between p-5 select-none">
+            
+            <!-- Phone Top Status -->
+            <div class="space-y-4 text-center">
+              <div class="phone-notch"></div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 px-2 font-mono">
+                <span>BSNL 4G</span>
+                <span id="phoneClock">12:30</span>
+                <div class="flex items-center gap-1">
+                  <i data-lucide="wifi" class="w-3 h-3"></i>
+                  <i data-lucide="battery" class="w-3 h-3"></i>
+                </div>
+              </div>
+
+              <div class="pt-4 space-y-1">
+                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl shadow-inner">
+                  🏛️
+                </div>
+                <h4 class="font-bold text-white text-base">1800-YOJANA-GOV</h4>
+                <p id="phoneStatusText" class="text-xs text-slate-400">Ready to Dial</p>
+                <div id="phoneTimer" class="text-xs font-mono text-emerald-400 hidden">00:00</div>
+              </div>
+            </div>
+
+            <!-- Phone Screen Transcript Area -->
+            <div id="phoneTranscriptBox" class="my-4 flex-1 glass-panel rounded-xl p-3 text-[11px] text-slate-300 overflow-y-auto space-y-2 border border-slate-800/80">
+              <p class="text-slate-500 text-center italic">Press "Dial 1800-YOJANA-GOV" to connect live call...</p>
+            </div>
+
+            <!-- Phone Dialpad Action Grid -->
+            <div class="grid grid-cols-3 gap-3 text-center pb-2">
+              <div class="p-2.5 rounded-xl bg-slate-800/80 text-slate-400 flex flex-col items-center">
+                <i data-lucide="mic-off" class="w-4 h-4"></i>
+                <span class="text-[9px] mt-1">Mute</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-800/80 text-slate-400 flex flex-col items-center">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+                <span class="text-[9px] mt-1">Speaker</span>
+              </div>
+              <div onclick="endPhoneCall()" class="p-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white flex flex-col items-center cursor-pointer transition">
+                <i data-lucide="phone-off" class="w-4 h-4"></i>
+                <span class="text-[9px] mt-1">End</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: SCHEMES DIRECTORY (Search & Filter)               -->
+    <!-- ======================================================== -->
+    <div id="view-schemes" class="hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 id="schemesTitle" class="text-2xl font-extrabold text-white">Central & State Welfare Knowledge Base</h2>
+          <p id="schemesSub" class="text-xs text-slate-400">29+ Verified Schemes with Direct Eligibility Criteria & Benefits</p>
+        </div>
+        <div class="relative w-full sm:w-72">
+          <input type="text" id="schemeSearch" oninput="filterSchemes()" placeholder="Search scheme or keyword..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-sky-500">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+        </div>
+      </div>
+
+      <!-- Schemes Grid -->
+      <div id="schemesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: ANTI-FRAUD SCAM SHIELD DEMO                       -->
+    <!-- ======================================================== -->
+    <div id="view-security" class="hidden max-w-4xl mx-auto space-y-6">
+      
+      <div class="glass-panel border-rose-500/30 rounded-3xl p-8 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="p-3 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
+            <i data-lucide="shield-alert" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 id="securityTitle" class="text-xl font-bold text-white">Anti-Fraud Citizen Scam Shield</h3>
+            <p id="securitySub" class="text-xs text-slate-400">Real-time detection of OTP theft, banking scams, and fake registration agents.</p>
+          </div>
+        </div>
+
+        <p id="securityDesc" class="text-sm text-slate-300 leading-relaxed">
+          Rural citizens frequently get duped by fraudsters pretending to register them for welfare schemes while asking for bank PINs, Aadhaar OTPs, or upfront fees. YojanaVaani AI detects sensitive information instantly and triggers an emergency alert.
+        </p>
+
+        <div class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-4 text-xs text-rose-200 space-y-3">
+          <div class="font-bold flex items-center gap-2 text-rose-300">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i> Security Guardrail Active
+          </div>
+          <p id="securityTestPrompt">Test the scam shield by saying or tapping: <i>"My bank OTP is 7894, please link it to PM-Kisan scheme."</i></p>
+          <button onclick="runScamTest()" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold text-xs flex items-center gap-2 shadow-lg shadow-rose-600/30 transition transform hover:scale-105 active:scale-95">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i> <span id="btnScamTestText">Run Live Scam Test</span>
+          </button>
+
+          <!-- Live Result Box right inside Tab 4 -->
+          <div id="scamResultBox" class="hidden mt-4 p-4 rounded-xl bg-rose-900/60 border border-rose-500/80 text-white space-y-2.5">
+            <div class="flex items-center gap-2 text-rose-300 font-bold text-sm">
+              <i data-lucide="shield-x" class="w-5 h-5 text-rose-400"></i>
+              <span>CRITICAL ALERT: FRAUDULENT REQUEST BLOCKED</span>
+            </div>
+            <div id="scamReasonText" class="text-xs text-rose-100 leading-relaxed"></div>
+            <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-rose-300 border-t border-rose-700/60">
+              <span class="flex items-center gap-1 font-semibold">📞 National Cyber Helpline: Dial 1930</span>
+              <span class="px-2 py-0.5 rounded bg-black/50 font-mono text-emerald-400">Escalated to Seva Kendra</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Global Audio Player (Hidden) -->
+  <audio id="globalAudio"></audio>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 glass-panel py-4 px-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>Built for the <b>Great Indian AI Internship Challenge</b> • Team YojanaVaani</span>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>Gnani Prisma v3.0 STT</span>
+        <span>•</span>
+        <span>Gnani Timbre v2.5 TTS</span>
+        <span>•</span>
+        <span>Twilio Telephony Carrier</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    lucide.createIcons();
+
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let currentCallSeconds = 0;
+    let callTimerInterval = null;
+
+    let audioCtx = null;
+    let analyser = null;
+    let animFrameId = null;
+    let mediaStream = null;
+    let recordSeconds = 0;
+    let recordTimerInterval = null;
+
+    // Tab Switching
+    function switchTab(tabId) {
+      ['studio', 'phone', 'schemes', 'security'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+          btn.className = "nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5";
+        }
+      });
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 transition flex items-center gap-1.5";
+      }
+
+      if (tabId === 'schemes') {
+        loadSchemes();
+      }
+    }
+
+    const SAMPLE_PROMPTS_BY_LANG = {
+      'indic-auto': [
+        { label: '🌾 PM-Kisan ₹6000', query: 'How to get ₹6,000 yearly benefit under PM-Kisan scheme?' },
+        { label: '🏥 Ayushman Bharat ₹5L', query: 'ఆయుష్మాన్ భారత్ 5 లక్షల ఉచిత వైద్యం కార్డ్ ఎలా దరఖాస్తు చేసుకోవాలి?' },
+        { label: '☀️ PM Surya Ghar Solar', query: 'पीएम सूर्य घर मुफ्त बिजली योजना में सोलर पैनल कैसे लगवाएं?' },
+        { label: '🎓 Scholarship Scheme', query: 'What are the eligibility criteria for post-matric scholarship?' },
+      ],
+      'en': [
+        { label: '🌾 PM-Kisan ₹6000', query: 'How to get ₹6,000 yearly benefit under PM-Kisan scheme?' },
+        { label: '🏥 Ayushman Bharat ₹5 Lakh', query: 'How can I apply for Ayushman Bharat 5 lakh free treatment card?' },
+        { label: '☀️ PM Surya Ghar Solar', query: 'How to get solar panels installed under PM Surya Ghar Muft Bijli Yojana?' },
+        { label: '🎓 Post-Matric Scholarship', query: 'What are the eligibility criteria and documents required for post-matric scholarship?' },
+      ],
+      'te': [
+        { label: '🌾 పీఎం-కిసాన్ ₹6000', query: 'పీఎం-కిసాన్ పథకం ₹6,000 ఎలా పొందాలి?' },
+        { label: '🏥 ఆయుష్మాన్ భారత్ ₹5 లక్షలు', query: 'ఆయుష్మాన్ భారత్ 5 లక్షల ఉచిత వైద్యం కార్డ్ ఎలా దరఖాస్తు చేసుకోవాలి?' },
+        { label: '☀️ పీఎం సూర్య ఘర్ సోలార్', query: 'పీఎం సూర్య ఘర్ ఉచిత విద్యుత్ పథకం సోలార్ ప్యానెల్ ఎలా పెట్టుకోవాలి?' },
+        { label: '🎓 విద్యా దీవెన స్కాలర్‌షిప్', query: 'పోస్ట్ మెట్రిక్ విద్యా దీవెన స్కాలర్‌షిప్ అర్హతలు ఏమిటి?' },
+      ],
+      'hi': [
+        { label: '🌾 पीएम-किसान ₹6000', query: 'पीएम-किसान सम्मान निधि के 6000 रुपये कैसे मिलेंगे?' },
+        { label: '🏥 आयुष्मान भारत 5 लाख', query: 'आयुष्मान भारत 5 लाख मुफ्त इलाज कार्ड कैसे बनवाएं?' },
+        { label: '☀️ पीएम सूर्य घर सोलर', query: 'पीएम सूर्य घर मुफ्त बिजली योजना में सोलर पैनल कैसे लगवाएं?' },
+        { label: '🎓 पोस्ट मैट्रिक छात्रवृत्ति', query: 'पोस्ट मैट्रिक छात्रवृत्ति योजना के नियम और आवश्यक दस्तावेज क्या हैं?' },
+      ],
+      'hi-en': [
+        { label: '🌾 PM-Kisan ₹6000', query: 'PM-Kisan samman nidhi ke 6000 rupaye kaise milenge?' },
+        { label: '🏥 Ayushman Bharat 5 Lakh', query: 'Ayushman Card kaise banwayein aur 5 lakh muft ilaj kaise milega?' },
+        { label: '☀️ PM Surya Ghar Bijli', query: 'PM Surya Ghar muft bijli yojana me solar panel kaise lagwayein?' },
+        { label: '🎓 Post-Matric Scholarship', query: 'Scholarship ke liye eligibility aur jaruri documents kya hain?' },
+      ],
+      'ta': [
+        { label: '🌾 பிஎம் கிசான் ₹6000', query: 'பிஎம் கிசான் ₹6,000 உதவித்தொகை பெறுவது எப்படி?' },
+        { label: '🏥 ஆயுஷ்மான் பாரத் ₹5 லட்சம்', query: 'ஆயுஷ்மான் பாரத் 5 லட்சம் இலவச மருத்துவ அட்டை பெறுவது எப்படி?' },
+        { label: '☀️ பிஎம் சூர்ய கர் சோலார்', query: 'பிஎம் சூர்ய கர் திட்டத்தில் இலவச சோலார் பேனல் அமைப்பது எப்படி?' },
+        { label: '🎓 கல்வி உதவித்தொகை', query: 'கல்வி உதவித்தொகைக்கு தகுதிகள் மற்றும் ஆவணங்கள் என்ன?' },
+      ],
+      'kn': [
+        { label: '🌾 ಪಿಎಂ-ಕಿಸಾನ್ ₹6000', query: 'ಪಿಎಂ-ಕಿಸಾನ್ ಯೋಜನೆಯ ₹6,000 ಹಣ ಪಡೆಯುವುದು ಹೇಗೆ?' },
+        { label: '🏥 ಆಯುಶ್ಮಾನ್ ಭಾರತ್ ₹5 ಲಕ್ಷ', query: 'ಆಯುಶ್ಮಾನ್ ಭಾರತ್ 5 ಲಕ್ಷ ಉಚಿತ ಆರೋಗ್ಯ ಕಾರ್ಡ್ ಹೇಗೆ ಪಡೆಯುವುದು?' },
+        { label: '☀️ ಪಿಎಂ ಸೂರ್ಯ ಘರ್ ಸೋಲಾರ್', query: 'ಪಿಎಂ ಸೂರ್ಯ ಘರ್ ಉಚಿತ ವಿದ್ಯುತ್ ಯೋಜನೆ ಸೋಲಾರ್ ಪ್ಯಾನೆಲ್ ಹೇಗೆ ಪಡೆಯುವುದು?' },
+        { label: '🎓 ವಿದ್ಯಾರ್ಥಿವೇತನ ಯೋಜನೆ', query: 'ಮೆಟ್ರಿಕ್ ನಂತರದ ವಿದ್ಯಾರ್ಥಿವೇತನಕ್ಕೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಲು ಅಗತ್ಯ ದಾಖಲೆಗಳು ಯಾವುವು?' },
+      ],
+      'ml': [
+        { label: '🌾 പിഎം-കിസാൻ ₹6000', query: 'പിഎം-കിസാൻ പദ്ധതിയിലെ 6000 രൂപ എങ്ങനെ ലഭിക്കും?' },
+        { label: '🏥 ആയുഷ്മാൻ ഭാരത് ₹5 ലക്ഷം', query: 'ആയുഷ്മാൻ ഭാരത് 5 ലക്ഷം സൗജന്യ ചികിത്സാ കാർഡ് എങ്ങനെ നേടാം?' },
+        { label: '☀️ സൗരോർജ്ജ പദ്ധതി', query: 'പിഎം സൂര്യ ഘർ സൗജന്യ സൗരോർജ്ജ പദ്ധതിക്ക് അപേക്ഷിക്കേണ്ടത് എങ്ങനെ?' },
+        { label: '🎓 സ്കോളർഷിപ്പ്', query: 'വിദ്യാർത്ഥികൾക്കുള്ള സ്കോളർഷിപ്പ് ലഭിക്കാൻ ആവശ്യമായ രേഖകൾ എന്തൊക്കെ?' },
+      ],
+      'mr': [
+        { label: '🌾 पीएम-किसान ₹६०००', query: 'पीएम-किसान सन्मान निधीचे ₹६००० कसे मिळतील?' },
+        { label: '🏥 आयुष्मान भारत ₹५ लाख', query: 'आयुष्मान भारत ५ लाख मोफत उपचार कार्ड कसे काढायचे?' },
+        { label: '☀️ सूर्य घर मोफत वीज', query: 'पीएम सूर्य घर योजनेत सोलर पॅनेल कसे बसवायचे?' },
+        { label: '🎓 शिष्यवृत्ती योजना', query: 'महाविद्यालयातील विद्यार्थ्यांसाठी शिष्यवृत्ती कशी मिळेल?' },
+      ],
+      'bn': [
+        { label: '🌾 পিএম-কিষাণ ₹৬০০০', query: 'প্রধানমন্ত্রী কিষাণ সম্মান নিধির ৬০০০ টাকা কীভাবে পাবেন?' },
+        { label: '🏥 আয়ুষ্মান ভারত ₹৫ লাখ', query: 'আয়ুষ্মান ভারত ৫ লাখ টাকার বিনামূল্যে চিকিৎসার কার্ড কীভাবে বানাবেন?' },
+        { label: '☀️ সূর্য ঘর সৌর বিদ্যুৎ', query: 'পিএম সূর্য ঘর প্রকল্পে কীভাবে সোলার প্যানেল বসাবেন?' },
+        { label: '🎓 স্কলারশিপ প্রকল্প', query: 'ছাত্র-ছাত্রীদের স্কলারশিপ পাওয়ার নিয়ম কী?' },
+      ],
+      'gu': [
+        { label: '🌾 પીએમ-કિસાન ₹6000', query: 'પીએમ-કિસાન યોજનાના ₹6000 કેવી રીતે મેળવવા?' },
+        { label: '🏥 આયુષ્માન ભારત ₹5 લાખ', query: 'આયુષ્માન ભારત ₹5 લાખનું મફત સારવાર કાર્ડ કેવી રીતે બનાવવું?' },
+        { label: '☀️ સૂર્ય ઘર મફત વીજળી', query: 'પીએમ સૂર્ય ઘર યોજનામાં સોલર પેનલ કેવી રીતે લગાવવી?' },
+        { label: '🎓 શિષ્યવૃત્તિ યોજના', query: 'વિદ્યાર્થીઓ માટે શિષ્યવૃત્તિની પાત્રતા શું છે?' },
+      ],
+      'pa': [
+        { label: '🌾 ਪੀਐਮ-ਕਿਸਾਨ ₹6000', query: 'ਪੀਐਮ-ਕਿਸਾਨ ਸਕੀਮ ਦੇ ₹6,000 ਕਿਵੇਂ ਮਿਲਣਗੇ?' },
+        { label: '🏥 ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ ₹5 ਲੱਖ', query: 'ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ ₹5 ਲੱਖ ਮੁਫ਼ਤ ਇਲਾਜ ਕਾਰਡ ਕਿਵੇਂ ਬਣਵਾਉਣਾ ਹੈ?' },
+        { label: '☀️ ਸੂਰਜ ਘਰ ਸੋਲਰ', query: 'ਪੀਐਮ ਸੂਰਜ ਘਰ ਮੁਫ਼ਤ ਬਿਜਲੀ ਸਕੀਮ ਵਿੱਚ ਅਪਲਾਈ ਕਿਵੇਂ ਕਰੀਏ?' },
+        { label: '🎓 ਵਜ਼ੀਫ਼ਾ ਸਕੀਮ', query: 'ਸਕੂਲ ਅਤੇ ਕਾਲਜ ਵਜ਼ੀਫ਼ੇ ਲਈ ਯੋਗਤਾ ਕੀ ਹੈ?' },
+      ],
+      'or': [
+        { label: '🌾 ପିଏମ-କିଷାନ ₹୬୦୦୦', query: 'ପିଏମ-କିଷାନ ଯୋଜନାର ₹୬,୦୦୦ କିପରି ପାଇବେ?' },
+        { label: '🏥 ଆୟୁଷ୍ମାନ ଭାରତ ₹୫ ଲକ୍ଷ', query: 'ଆୟୁଷ୍ମାନ ଭାରତ ₹୫ ଲକ୍ଷ ମାଗଣା ଚିକିତ୍ସା କାର୍ଡ କିପରି ମିଳିବ?' },
+        { label: '☀️ ସୂର୍ଯ୍ୟ ଘର ସୋଲାର', query: 'ପିଏମ ସୂର୍ଯ୍ୟ ଘର ମାଗଣା ବିଜୁଳି ଯୋଜନାରେ ଆବେଦନ କିପରି କରିବେ?' },
+        { label: '🎓 ଛାତ୍ରବୃତ୍ତି ଯୋଜନା', query: 'ମେଧାବୀ ଛାତ୍ରଛାତ୍ରୀଙ୍କ ପାଇଁ ସ୍କଲାରସିପ୍ କିପରି ମିଳିବ?' },
+      ],
+      'as': [
+        { label: '🌾 পিএম-কিষাণ ₹৬০০০', query: 'পিএম-কিষাণ আঁচনিৰ ৬,০০০ টকা কেনেকৈ লাভ কৰিব?' },
+        { label: '🏥 আয়ুষ্মান ভাৰত ₹৫ লাখ', query: 'আয়ুষ্মান ভাৰত ৫ লাখ টকাৰ বিনামূলীয়া চিকিৎসা কাৰ্ড কেনেকৈ পাব?' },
+        { label: '☀️ পিএম সূৰ্য্য ঘৰ সৌৰ', query: 'পিএম সূৰ্য্য ঘৰ বিনামূলীয়া বিদ্যুৎ আঁচনিত আবেদন কেনেকৈ কৰিব?' },
+        { label: '🎓 ৰাষ্ট্ৰীয় জলপানী', query: 'মেধাৱী শিক্ষাৰ্থীসকলৰ বাবে ৰাষ্ট্ৰীয় জলপানী কেনেকৈ পাব?' },
+      ],
+      'ur': [
+        { label: '🌾 پی ایم کسان 6000', query: 'پی ایم کسان یوجنا کے 6000 روپے کیسے حاصل کریں؟' },
+        { label: '🏥 آیوشمان بھارت 5 لاکھ', query: 'آیوشمان بھارت 5 لاکھ مفت علاج کارڈ کے لیے کیسے درخواست دیں؟' },
+        { label: '☀️ پی ایم سوریا گھر سولر', query: 'پی ایم سوریا گھر اسکیم کے تحت مفت بجلی اور سولر پینل کیسے لگائیں؟' },
+        { label: '🎓 پوسٹ میٹرک اسکالرشپ', query: 'پوسٹ میٹرک اسکالرشپ کی اہلیت اور مطلوبہ دستاویزات کیا ہیں؟' },
+      ],
+    };
+
+    // Complete Multi-Language Context Engine (Gov Portal Standard)
+    const SITE_I18N = {
+      'en': {
+        headerSub: "Bharat's Citizen Voice AI • Powered by Gnani.ai",
+        tabStudio: "Voice AI Studio",
+        tabPhone: "1800 Telephony",
+        tabSchemes: "Schemes Directory",
+        tabSecurity: "Anti-Fraud Shield",
+        heroBadge: '<span class="text-saffron">●</span> Digital India <span class="text-emerald">●</span> Citizen Empowerment',
+        heroTitle: 'Speak in your <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue</span>, Get Instant Welfare Answers.',
+        heroSub: "Powered by Gnani Prisma Indic STT and Timbre TTS. Answers over 2,000+ Central and State welfare schemes in real time.",
+        orbTitle: 'Tap Orb or Click "Start Recording"',
+        orbSub: 'Auto-detected via Gnani Prisma (All 22 Languages)',
+        btnStart: 'Start Recording',
+        btnStop: 'Stop & Send Question',
+        btnStopAudio: 'Stop AI Voice',
+        vadHint: '⚡ <b>Smart Auto-Cutoff (VAD):</b> Stops automatically ~1.2s after you finish talking, or click "Stop & Send" anytime.',
+        sampleHeading: 'Or tap any sample question to test:',
+        phoneTitle: 'Realistic 1800 Helpline Call Simulator',
+        phoneSub: 'Experience the exact telephony experience rural citizens experience when dialing our toll-free number from any basic feature phone (no smartphone or internet required on citizen side).',
+        btnStartCall: 'Dial 1800-YOJANA-GOV',
+        btnEndCall: 'Hang Up Call',
+        schemesTitle: 'Central & State Welfare Knowledge Base',
+        schemesSub: '29+ Verified Schemes with Direct Eligibility Criteria & Benefits',
+        searchPlaceholder: 'Search scheme or keyword...',
+        securityTitle: 'Anti-Fraud Citizen Scam Shield',
+        securitySub: 'Real-time detection of OTP theft, banking scams, and fake registration agents.',
+        securityDesc: 'Rural citizens frequently get duped by fraudsters pretending to register them for welfare schemes while asking for bank PINs, Aadhaar OTPs, or upfront fees. YojanaVaani AI detects sensitive information instantly and triggers an emergency alert.',
+        btnScamTest: 'Run Live Scam Test',
+        askVoiceBtn: 'Ask in Voice'
+      },
+      'te': {
+        headerSub: 'భారత ప్రభుత్వ పౌర సంక్షేమ వాయిస్ AI • Powered by Gnani.ai',
+        tabStudio: 'వాయిస్ AI స్టూడియో',
+        tabPhone: '1800 టెలిఫోనీ హెల్ప్‌లైన్',
+        tabSchemes: 'సంక్షేమ పథకాల జాబితా',
+        tabSecurity: 'మోసాల నిరోధక రక్షణ',
+        heroBadge: '<span class="text-saffron">●</span> డిజిటల్ ఇండియా <span class="text-emerald">●</span> పౌర సాధికారత',
+        heroTitle: 'మీ <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">మాతృభాషలో మాట్లాడండి</span>, తక్షణ సంక్షేమ వివరాలు పొందండి.',
+        heroSub: 'జ్ఞాని ప్రిస్మా STT మరియు టింబ్రే TTS సాంకేతికతతో 2,000+ కేంద్ర, రాష్ట్ర ప్రభుత్వ సంక్షేమ పథకాల సమాచారం క్షణాల్లో.',
+        orbTitle: 'మాట్లాడటానికి మైక్ లేదా బటన్ నొక్కండి',
+        orbSub: 'జ్ఞాని AI ద్వారా మీ భాష స్వయంచాలకంగా గుర్తించబడుతుంది',
+        btnStart: 'వాయిస్ రికార్డింగ్ ప్రారంభించండి',
+        btnStop: 'ప్రశ్న పంపండి',
+        btnStopAudio: 'AI వాయిస్ ఆపండి',
+        vadHint: '⚡ <b>స్మార్ట్ ఆటో-కటాఫ్:</b> మీరు మాట్లాడటం ఆపిన 1.2 సెకన్లలో ప్రశ్న ఆటోమేటిక్‌గా పంపబడుతుంది.',
+        sampleHeading: 'లేదా క్రింది ప్రశ్నలపై క్లిక్ చేయండి:',
+        phoneTitle: '1800 టోల్-ఫ్రీ హెల్ప్‌లైన్ సిమ్యులేటర్',
+        phoneSub: 'గ్రామీణ ప్రాంత పౌరులు తమ సాధారణ ఫోన్ నుండి 1800 నంబర్‌కు డయల్ చేసినప్పుడు లభించే ప్రత్యక్ష వాయిస్ అనుభవం.',
+        btnStartCall: '1800-YOJANA కు కాల్ చేయండి',
+        btnEndCall: 'కాల్ ముగించండి',
+        schemesTitle: 'కేంద్ర & రాష్ట్ర ప్రభుత్వ సంక్షేమ పథకాలు',
+        schemesSub: '29+ ధృవీకరించబడిన సంక్షేమ పథకాల పూర్తి అర్హతలు మరియు ప్రయోజనాలు',
+        searchPlaceholder: 'పథకం పేరు లేదా కీవర్డ్ శోధించండి...',
+        securityTitle: 'పౌర సైబర్ రక్షణ & మోసాల నిరోధం',
+        securitySub: 'ఓటీపీ దొంగతనం, బ్యాంకింగ్ మోసాలు మరియు నకిలీ ఏజెంట్లను తక్షణమే నిరోధిస్తుంది.',
+        securityDesc: 'ప్రభుత్వ పథకాల నమోదు పేరుతో ప్రజలను మోసం చేసి ఓటీపీలు లేదా బ్యాంక్ పిన్‌లు అడిగే కాల్స్‌ను యోజనవాణి AI వెంటనే గుర్తించి అప్రమత్తం చేస్తుంది.',
+        btnScamTest: 'మోసాల రక్షణ పరీక్షించండి',
+        askVoiceBtn: 'వాయిస్‌లో అడగండి'
+      },
+      'hi': {
+        headerSub: 'भारत सरकार नागरिक कल्याण वॉयस एआई • Powered by Gnani.ai',
+        tabStudio: 'वॉयस एआई स्टूडियो',
+        tabPhone: '1800 टेलीफोनी हेल्पलाइन',
+        tabSchemes: 'योजना निर्देशिका',
+        tabSecurity: 'धोखाधड़ी सुरक्षा शील्ड',
+        heroBadge: '<span class="text-saffron">●</span> डिजिटल इंडिया <span class="text-emerald">●</span> नागरिक सशक्तिकरण',
+        heroTitle: 'अपनी <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">मातृभाषा में बोलें</span>, सरकारी योजनाओं की तुरंत जानकारी पाएं।',
+        heroSub: 'ज्ञानी प्रिज़्मा STT और टिम्ब्रे TTS द्वारा संचालित। 2,000+ केंद्र और राज्य सरकारी योजनाओं की सटीक जानकारी।',
+        orbTitle: 'बोलने के लिए माइक दबाएं',
+        orbSub: 'ज्ञानी एआई द्वारा स्वतः भाषा पहचान (सभी 22 भाषाएँ)',
+        btnStart: 'रिकॉर्डिंग शुरू करें',
+        btnStop: 'सवाल भेजें',
+        btnStopAudio: 'एआई आवाज़ बंद करें',
+        vadHint: '⚡ <b>स्मार्ट ऑटो-कटऑफ:</b> आपके चुप होने के 1.2 सेकंड बाद सवाल अपने आप जमा हो जाएगा।',
+        sampleHeading: 'या नीचे दिए गए प्रश्नों पर टैप करें:',
+        phoneTitle: '1800 टोल-फ्री हेल्पलाइन सिम्युलेटर',
+        phoneSub: 'ग्रामीण नागरिक किसी भी सामान्य कीपैड फोन से जब टोल-फ्री नंबर पर कॉल करते हैं तो मिलने वाला वास्तविक अनुभव।',
+        btnStartCall: '1800-YOJANA पर कॉल करें',
+        btnEndCall: 'कॉल समाप्त करें',
+        schemesTitle: 'केंद्रीय एवं राज्य कल्याणकारी योजनाएं',
+        schemesSub: '29+ सत्यापित योजनाओं की पात्रता एवं लाभ की पूरी जानकारी',
+        searchPlaceholder: 'योजना का नाम खोजें...',
+        securityTitle: 'धोखाधड़ी और फर्जी कॉल सुरक्षा शील्ड',
+        securitySub: 'ओटीपी चोरी, बैंक धोखाधड़ी और फर्जी रजिस्ट्रेशन एजेंटों की तुरंत पहचान।',
+        securityDesc: 'सरकारी योजनाओं के नाम पर बैंक पिन या ओटीपी मांगने वाले फर्जीवाड़े को योजनावाणी एआई तुरंत पहचानकर चेतावनी जारी करता है।',
+        btnScamTest: 'धोखाधड़ी शील्ड का परीक्षण करें',
+        askVoiceBtn: 'आवाज़ में पूछें'
+      },
+      'hi-en': {
+        headerSub: "Bharat's Citizen Welfare Voice AI • Powered by Gnani.ai",
+        tabStudio: "Voice AI Studio",
+        tabPhone: "1800 Telephony Helpline",
+        tabSchemes: "Schemes Directory",
+        tabSecurity: "Anti-Fraud Shield",
+        heroBadge: '<span class="text-saffron">●</span> Digital India <span class="text-emerald">●</span> Citizen Empowerment',
+        heroTitle: 'Apni <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue Me Bolein</span>, Instant Welfare Answers Payein.',
+        heroSub: "Gnani Prisma STT aur Timbre TTS ke sath 2,000+ Central aur State welfare schemes ki accurate jankari.",
+        orbTitle: 'Mic dabayein ya bolna shuru karein',
+        orbSub: 'Gnani Prisma dwara auto-detected (Hinglish • Hindi • Telugu)',
+        btnStart: 'Start Recording',
+        btnStop: 'Stop & Send Question',
+        btnStopAudio: 'Stop AI Voice',
+        vadHint: '⚡ <b>Smart Auto-Cutoff:</b> Bolna band karne ke ~1.2s baad question automatically submit ho jata hai.',
+        sampleHeading: 'Ya neeche diye gaye sawaal par tap karein:',
+        phoneTitle: 'Realistic 1800 Helpline Call Simulator',
+        phoneSub: 'Basic mobile phone se 1800 toll-free number dial karke live voice assistant se baat karein.',
+        btnStartCall: 'Dial 1800-YOJANA-GOV',
+        btnEndCall: 'Hang Up Call',
+        schemesTitle: 'Central & State Welfare Knowledge Base',
+        schemesSub: '29+ Verified Schemes with Direct Eligibility Criteria & Benefits',
+        searchPlaceholder: 'Scheme ka naam ya keyword search karein...',
+        securityTitle: 'Anti-Fraud Citizen Scam Shield',
+        securitySub: 'OTP chori, banking fraud aur fake registration agents ki turant pehchan.',
+        securityDesc: 'Sarkari yojana ke naam par OTP ya password mangne wale fraud ko YojanaVaani AI turant block karta hai.',
+        btnScamTest: 'Run Live Scam Test',
+        askVoiceBtn: 'Voice Me Poochhein'
+      },
+      'as': {
+        headerSub: 'ভাৰত চৰকাৰৰ নাগৰিক কল্যাণ ভয়েচ এআই • Powered by Gnani.ai',
+        tabStudio: 'ভয়েচ এআই ষ্টুডিঅ’',
+        tabPhone: '১৮০০ টেলিফোনী হেল্পলাইন',
+        tabSchemes: 'আঁচনিৰ তালিকা',
+        tabSecurity: 'প্ৰৱঞ্চনা বিৰোধী সুৰক্ষা',
+        heroBadge: '<span class="text-saffron">●</span> ডিজিটেল ইণ্ডিয়া <span class="text-emerald">●</span> নাগৰিক সৱলীকৰণ',
+        heroTitle: 'আপোনাৰ <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">মাতৃভাষাত কওক</span>, চৰকাৰী আঁচনিৰ সঠিক তথ্য লওক।',
+        heroSub: 'জ্ঞানী প্ৰিজমা এছটিটি আৰু টিমব্ৰে টিটিএছৰ দ্বাৰা ২০০০+ কেন্দ্ৰীয় আৰু ৰাজ্যিক আঁচনিৰ সঠিক তথ্য।',
+        orbTitle: 'কবলৈ মাইক টিপক',
+        orbSub: 'জ্ঞানী এআইৰ দ্বাৰা স্বয়ংক্ৰিয় ভাষা চিনাক্তকৰণ',
+        btnStart: 'ৰেকৰ্ডিং আৰম্ভ কৰক',
+        btnStop: 'প্ৰশ্ন প্ৰেৰণ কৰক',
+        btnStopAudio: 'এআই মাত বন্ধ কৰক',
+        vadHint: '⚡ <b>স্মাৰ্ট অটো-কাটঅফ:</b> আপুনি কথা কোৱা বন্ধ কৰাৰ ১.২ ছেকেণ্ড পিছত স্বয়ংক্ৰিয়ভাৱে প্ৰশ্ন জমা হ’ব।',
+        sampleHeading: 'বা তলৰ প্ৰশ্নসমূহত টিপক:',
+        phoneTitle: '১৮০০ টোল-ফ্ৰী হেল্পলাইন চিমুলেটৰ',
+        phoneSub: 'যিকোনো সাধাৰণ ফোনৰ পৰা ১৮০০ নম্বৰত কল কৰি পোৱা বাস্তৱিক ভয়েচ অভিজ্ঞতা।',
+        btnStartCall: '১৮০০-যোজনা কল কৰক',
+        btnEndCall: 'কল সমাপ্ত কৰক',
+        schemesTitle: 'কেন্দ্ৰীয় আৰু ৰাজ্যিক কল্যাণমূলক আঁচনিসমূহ',
+        schemesSub: '২৯+ চৰকাৰী আঁচনিৰ যোগ্যতা আৰু লাভালাভৰ সম্পূৰ্ণ বিৱৰণ',
+        searchPlaceholder: 'আঁচনিৰ নাম বা শব্দ সন্ধান কৰক...',
+        securityTitle: 'প্ৰৱঞ্চনা বিৰোধী নাগৰিক সুৰক্ষা',
+        securitySub: 'অ’টিপি চুৰি আৰু ভুৱা এজেন্ট চিনাক্তকৰণ।',
+        securityDesc: 'চৰকাৰী আঁচনিৰ নামত অ’টিপি বা বেংক তথ্য বিচৰা প্ৰৱঞ্চকক যোজনা বাণী এআইয়ে তৎক্ষণাত ধৰা পেলায়।',
+        btnScamTest: 'প্ৰৱঞ্চনা সুৰক্ষা পৰীক্ষা কৰক',
+        askVoiceBtn: 'মাতত সোধক'
+      },
+      'ur': {
+        headerSub: 'حکومت ہند کی فلاحی وائس اے آئی • Powered by Gnani.ai',
+        tabStudio: 'وائس اے آئی اسٹوڈیو',
+        tabPhone: '1800 ٹیلی فونی ہیلپ لائن',
+        tabSchemes: 'اسکیموں کی فہرست',
+        tabSecurity: 'فراڈ سے تحفظ',
+        heroBadge: '<span class="text-saffron">●</span> ڈیجیٹل انڈیا <span class="text-emerald">●</span> عوامی بااختیاری',
+        heroTitle: 'اپنی <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">مادری زبان میں بولیں</span>، سرکاری اسکیموں کی فوری معلومات حاصل کریں۔',
+        heroSub: 'گیانی پرزما اور ٹمبرے آواز کے ذریعے 2,000 سے زائد مرکزی اور ریاستی فلاحی اسکیموں کی درست معلومات۔',
+        orbTitle: 'بولنے کے لیے مائیک دبائیں',
+        orbSub: 'گیانی اے آئی کے ذریعے خودکار زبان کی شناخت',
+        btnStart: 'ریکارڈنگ شروع کریں',
+        btnStop: 'سوال بھیجیں',
+        btnStopAudio: 'اے آئی آواز بند کریں',
+        vadHint: '⚡ <b>سمارٹ آٹو کٹ آف:</b> بولنا بند کرنے کے 1.2 سیکنڈ بعد سوال خود بخود بھیج دیا جائے گا۔',
+        sampleHeading: 'یا نیچے دیے گئے سوالات پر ٹیپ کریں:',
+        phoneTitle: '1800 ٹول فری ہیلپ لائن سمیلیٹر',
+        phoneSub: 'دیہی شہریوں کے لیے کسی بھی بنیادی موبائل سے ٹول فری نمبر ملا کر بات کرنے کا حقیقی تجربہ۔',
+        btnStartCall: '1800-YOJANA ڈائل کریں',
+        btnEndCall: 'کال بند کریں',
+        schemesTitle: 'مرکزی اور ریاستی فلاحی اسکیمیں',
+        schemesSub: '29 سے زائد تصدیق شدہ اسکیموں کی اہلیت اور فوائد کی مکمل تفصیلات',
+        searchPlaceholder: 'اسکیم کا نام تلاش کریں...',
+        securityTitle: 'شہریوں کا اینٹی فراڈ شیلڈ',
+        securitySub: 'او ٹی پی چوری اور جعلی ایجنٹوں کی فوری شناخت۔',
+        securityDesc: 'سرکاری اسکیموں کے نام پر او ٹی پی یا بینک پن مانگنے والی جعلی کالوں کو یوجنا وانی اے آئی فوری روکتا ہے۔',
+        btnScamTest: 'فراڈ شیلڈ ٹیسٹ کریں',
+        askVoiceBtn: 'آواز میں پوچھیں'
+      },
+      'ta': {
+        headerSub: 'இந்திய அரசின் குடிமக்கள் நல வாய்ஸ் AI • Powered by Gnani.ai',
+        tabStudio: 'வாய்ஸ் AI அரங்கம்',
+        tabPhone: '1800 தொலைபேசி உதவி',
+        tabSchemes: 'திட்டங்கள் அடைவு',
+        tabSecurity: 'மோசடி தடுப்பு கவசம்',
+        heroBadge: '<span class="text-saffron">●</span> டிஜிட்டல் இந்தியா <span class="text-emerald">●</span> குடிமக்கள் அதிகாரம்',
+        heroTitle: 'உங்கள் <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">தாய்மொழியில் பேசுங்கள்</span>, உடனடி அரசு திட்ட விவரங்களை பெறுங்கள்.',
+        heroSub: 'ஞானி பிரிஸ்மா STT மற்றும் டிம்ப்ரே TTS மூலம் 2,000+ அரசு திட்டங்களின் நேரடி தகவல்கள்.',
+        orbTitle: 'பேச மைக் அல்லது பொத்தானை அழுத்தவும்',
+        orbSub: 'ஞானி AI மூலம் உங்கள் மொழி தானாக கண்டறியப்படும்',
+        btnStart: 'பதிவை தொடங்கவும்',
+        btnStop: 'கேள்வியை அனுப்பவும்',
+        btnStopAudio: 'AI குரலை நிறுத்தவும்',
+        vadHint: '⚡ <b>தானியங்கி நிறுத்தம்:</b> நீங்கள் பேசி முடித்த 1.2 நொடிகளில் கேள்வி தானாக சமர்ப்பிக்கப்படும்.',
+        sampleHeading: 'அல்லது கீழே உள்ள கேள்விகளை சொடுக்கவும்:',
+        phoneTitle: '1800 கட்டணமில்லா தொலைபேசி மாதிரி',
+        phoneSub: 'எளிய மொபைல் போனிலிருந்து 1800 எண்ணை தொடர்பு கொள்ளும் போது கிடைக்கும் நேரடி குரல் அனுபவம்.',
+        btnStartCall: '1800-YOJANA அழைக்கவும்',
+        btnEndCall: 'அழைப்பை முடிக்கவும்',
+        schemesTitle: 'மத்திய & மாநில அரசு நலத்திட்டங்கள்',
+        schemesSub: '29+ சரிபார்க்கப்பட்ட அரசு திட்டங்களின் தகுதிகள் மற்றும் பலன்கள்',
+        searchPlaceholder: 'திட்டத்தின் பெயரை தேடவும்...',
+        securityTitle: 'சைபர் மோசடி தடுப்பு பாதுகாப்பு',
+        securitySub: 'OTP திருட்டு மற்றும் போலி ஏஜென்ட்களை உடனுக்குடன் கண்டறியும்.',
+        securityDesc: 'அரசு திட்ட பதிவு என்ற பெயரில் வங்கி கடவுச்சொல் கேட்கும் மோசடிகளை யோஜனாவாணி AI உடனடியாக தடுக்கிறது.',
+        btnScamTest: 'மோசடி சோதனையை இயக்கவும்',
+        askVoiceBtn: 'குரலில் கேட்கவும்'
+      },
+      'kn': {
+        headerSub: 'ಭಾರತ ಸರ್ಕಾರದ ನಾಗರಿಕ ಕಲ್ಯಾಣ ಧ್ವನಿ AI • Powered by Gnani.ai',
+        tabStudio: 'ಧ್ವನಿ AI ಸ್ಟುಡಿಯೋ',
+        tabPhone: '1800 ದೂರವಾಣಿ ಸಹಾಯವಾಣಿ',
+        tabSchemes: 'ಯೋಜನೆಗಳ ಕೋಶ',
+        tabSecurity: 'ವಂಚನೆ ತಡೆ ರಕ್ಷಣೆ',
+        heroBadge: '<span class="text-saffron">●</span> ಡಿಜಿಟಲ್ ಇಂಡಿಯಾ <span class="text-emerald">●</span> ನಾಗರಿಕ ಸಬಲೀಕರಣ',
+        heroTitle: 'ನಿಮ್ಮ <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">ಮಾತೃಭಾಷೆಯಲ್ಲಿ ಮಾತನಾಡಿ</span>, ತಕ್ಷಣ ಯೋಜನೆಗಳ ಮಾಹಿತಿ ಪಡೆಯಿರಿ.',
+        heroSub: 'ಜ್ಞಾನಿ ಪ್ರಿಸ್ಮಾ STT ಮತ್ತು ಟಿಂಬ್ರೆ TTS ಮೂಲಕ 2,000+ ಕೇಂದ್ರ ಹಾಗೂ ರಾಜ್ಯ ಯೋಜನೆಗಳ ಮಾಹಿತಿ.',
+        orbTitle: 'ಮಾತನಾಡಲು ಮೈಕ್ ಒತ್ತಿ',
+        orbSub: 'ಜ್ಞಾನಿ AI ಮೂಲಕ ಸ್ವಯಂಚಾಲಿತ ಭಾಷಾ ಗುರುತಿಸುವಿಕೆ',
+        btnStart: 'ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ',
+        btnStop: 'ಪ್ರಶ್ನೆ ಕಳುಹಿಸಿ',
+        btnStopAudio: 'AI ಧ್ವನಿ ನಿಲ್ಲಿಸಿ',
+        vadHint: '⚡ <b>ಸ್ಮಾರ್ಟ್ ಆಟೋ-ಕಟ್‌ಆಫ್:</b> ನೀವು ಮಾತನಾಡಿ ಮುಗಿಸಿದ 1.2 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಪ್ರಶ್ನೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಲ್ಲಿಕೆಯಾಗುತ್ತದೆ.',
+        sampleHeading: 'ಅಥವಾ ಕೆಳಗಿನ ಪ್ರಶ್ನೆಗಳ ಮೇಲೆ ಒತ್ತಿ:',
+        phoneTitle: '1800 ಉಚಿತ ಸಹಾಯವಾಣಿ ಸಿಮ್ಯುಲೇಟರ್',
+        phoneSub: 'ಯಾವುದೇ ಸಾಮಾನ್ಯ ಮೊಬೈಲ್‌ನಿಂದ 1800 ಸಂಖ್ಯೆಗೆ ಕರೆ ಮಾಡಿದಾಗ ಸಿಗುವ ನೈಜ ಅನುಭವ.',
+        btnStartCall: '1800-YOJANA ಗೆ ಕರೆ ಮಾಡಿ',
+        btnEndCall: 'ಕರೆ ಕೊನೆಗೊಳಿಸಿ',
+        schemesTitle: 'ಕೇಂದ್ರ ಮತ್ತು ರಾಜ್ಯ ಕಲ್ಯಾಣ ಯೋಜನೆಗಳು',
+        schemesSub: '29+ ಪರಿಶೀಲಿಸಿದ ಯೋಜನೆಗಳ ಅರ್ಹತೆ ಮತ್ತು ಪ್ರಯೋಜನಗಳ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ',
+        searchPlaceholder: 'ಯೋಜನೆ ಹೆಸರು ಹುಡುಕಿ...',
+        securityTitle: 'ಸೈಬರ್ ವಂಚನೆ ತಡೆ ರಕ್ಷಾ ಕವಚ',
+        securitySub: 'ಒಟಿಪಿ ಕಳ್ಳತನ ಮತ್ತು ನಕಲಿ ಏಜೆಂಟರ ತಕ್ಷಣ ಪತ್ತೆಹಚ್ಚುವಿಕೆ.',
+        securityDesc: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಹೆಸರಿನಲ್ಲಿ ಒಟಿಪಿ ಅಥವಾ ಬ್ಯಾಂಕ್ ಮಾಹಿತಿ ಕೇಳುವ ವಂಚಕರನ್ನು ಯೋಜನಾವಾಣಿ AI ತಕ್ಷಣ ತಡೆಯುತ್ತದೆ.',
+        btnScamTest: 'ವಂಚನೆ ರಕ್ಷಣೆ ಪರೀಕ್ಷಿಸಿ',
+        askVoiceBtn: 'ಧ್ವನಿಯಲ್ಲಿ ಕೇಳಿ'
+      },
+      'bn': {
+        headerSub: 'ভারত সরকারের নাগরিক কল্যাণ ভয়েস এআই • Powered by Gnani.ai',
+        tabStudio: 'ভয়েস এআই স্টুডিও',
+        tabPhone: '১৮০০ টেলিফোনি হেল্পলাইন',
+        tabSchemes: 'প্রকল্প নির্দেশিকা',
+        tabSecurity: 'প্রতারণা সুরক্ষা শিল্ড',
+        heroBadge: '<span class="text-saffron">●</span> ডিজিটাল ইন্ডিয়া <span class="text-emerald">●</span> নাগরিক ক্ষমতায়ন',
+        heroTitle: 'আপনার <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">মাতৃভাষায় বলুন</span>, সরকারি প্রকল্পের তাত্ক্ষণিক তথ্য পান।',
+        heroSub: 'জ্ঞানী প্রিজমা এবং টিমব্রে প্রযুক্তিতে ২০০০+ সরকারি প্রকল্পের নির্ভুল তথ্য।',
+        orbTitle: 'কথা বলতে মাইক টিপুন',
+        orbSub: 'জ্ঞানী এআই দ্বারা স্বয়ংক্রিয় ভাষা সনাক্তকরণ',
+        btnStart: 'রেকর্ডিং শুরু করুন',
+        btnStop: 'প্রশ্ন জমা দিন',
+        btnStopAudio: 'এআই ভয়েস বন্ধ করুন',
+        vadHint: '⚡ <b>স্মার্ট অটো-কাটঅফ:</b> কথা শেষ করার ১.২ সেকেন্ডের মধ্যে প্রশ্ন স্বয়ংক্রিয়ভাবে জমা হবে।',
+        sampleHeading: 'অথবা নিচের যেকোনো প্রশ্নে ট্যাপ করুন:',
+        phoneTitle: '১৮০০ টোল-ফ্রি হেল্পলাইন সিমুলেটর',
+        phoneSub: 'সাধারণ মোবাইল ফোন থেকে ১৮০০ নম্বরে কল করে কথা বলার বাস্তব অভিজ্ঞতা।',
+        btnStartCall: '১৮০০-যোজনা ডায়াল করুন',
+        btnEndCall: 'কল সমাপ্ত করুন',
+        schemesTitle: 'কেন্দ্রীয় ও রাজ্য সরকারি প্রকল্পসমূহ',
+        schemesSub: '২৯+ যাচাইকৃত প্রকল্পের যোগ্যতা এবং সুবিধার সম্পূর্ণ বিবরণ',
+        searchPlaceholder: 'প্রকল্পের নাম খুঁজুন...',
+        securityTitle: 'সাইবার জালিয়াতি ও ওটিপি সুরক্ষা',
+        securitySub: 'ওটিপি চুরি এবং ভুয়া এজেন্ট অবিলম্বে প্রতিহত করে।',
+        securityDesc: 'সরকারি প্রকল্পের নামে ওটিপি বা পিন চাওয়া জালিয়াতদের যোজনা বাণী এআই সঙ্গে সঙ্গে চিহ্নিত করে।',
+        btnScamTest: 'স্ক্যাম শিল্ড পরীক্ষা করুন',
+        askVoiceBtn: 'ভয়েসে জিজ্ঞাসা করুন'
+      },
+      'mr': {
+        headerSub: 'भारत सरकार नागरिक कल्याण व्हॉइस एआय • Powered by Gnani.ai',
+        tabStudio: 'व्हॉइस एआय स्टुडिओ',
+        tabPhone: '१८०० टेलिफोनी हेल्पलाइन',
+        tabSchemes: 'योजना निर्देशिका',
+        tabSecurity: 'फसवणूक सुरक्षा कवच',
+        heroBadge: '<span class="text-saffron">●</span> डिजिटल इंडिया <span class="text-emerald">●</span> नागरिक सक्षमीकरण',
+        heroTitle: 'आपल्या <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">मातृभाषेत बोला</span>, सरकारी योजनांची त्वरित माहिती मिळवा.',
+        heroSub: 'ज्ञानी प्रिझ्मा आणि टिम्ब्रे तंत्रज्ञानासह २०००+ सरकारी योजनांची अचूक माहिती.',
+        orbTitle: 'बोलण्यासाठी माइक दाबा',
+        orbSub: 'ज्ञानी एआय द्वारे स्वयंचलित भाषा ओळख',
+        btnStart: 'रेकॉर्डिंग सुरू करा',
+        btnStop: 'प्रश्न पाठवा',
+        btnStopAudio: 'एआय आवाज बंद करा',
+        vadHint: '⚡ <b>स्मार्ट ऑटो-कटऑफ:</b> आपण बोलणे थांबवल्यानंतर १.२ सेकंदात प्रश्न आपोआप सबमिट होईल.',
+        sampleHeading: 'किंवा खालील प्रश्नांवर टॅप करा:',
+        phoneTitle: '१८०० टोल-फ्री हेल्पलाइन सिम्युलेटर',
+        phoneSub: 'साध्या मोबाईल फोनवरून १८०० क्रमांकावर डायल केल्यावर मिळणारा थेट आवाज अनुभव.',
+        btnStartCall: '१८००-योजना डायल करा',
+        btnEndCall: 'कॉल समाप्त करा',
+        schemesTitle: 'केंद्रीय आणि राज्य कल्याणकारी योजना',
+        schemesSub: '२९+ सत्यापित योजनांची पात्रता व लाभांची संपूर्ण माहिती',
+        searchPlaceholder: 'योजनेचे नाव शोधा...',
+        securityTitle: 'नागरिक सायबर सुरक्षा कवच',
+        securitySub: 'ओटीपी चोरी आणि बनावट एजंट्स त्वरित रोखते.',
+        securityDesc: 'सरकारी योजनांच्या नावाखाली ओटीपी किंवा बँक पिन मागणाऱ्या कॉल्सना योजनावाणी एआय त्वरित ओळखते.',
+        btnScamTest: 'सुरक्षा कवच तपासा',
+        askVoiceBtn: 'आवाजात विचारा'
+      },
+      'gu': {
+        headerSub: 'ભારત સરકાર નાગરિક કલ્યાણ વૉઇસ AI • Powered by Gnani.ai',
+        tabStudio: 'વૉઇસ AI સ્ટુડિયો',
+        tabPhone: '1800 ટેલિફોની હેલ્પલાઇન',
+        tabSchemes: 'યોજના ડિરેક્ટરી',
+        tabSecurity: 'છેતરપિંડી સુરક્ષા શિલ્ડ',
+        heroBadge: '<span class="text-saffron">●</span> ડિજિટલ ઇન્ડિયા <span class="text-emerald">●</span> નાગરિક સશક્તિકરણ',
+        heroTitle: 'તમારી <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">માતૃભાષામાં બોલો</span>, સરકારી યોજનાઓની માહિતી તુરંત મેળવો.',
+        heroSub: 'જ્ઞાની પ્રિઝ્મા અને ટિમ્બ્રે ટેકનોલોજી દ્વારા 2,000+ સરકારી યોજનાઓની સચોટ વિગતો.',
+        orbTitle: 'બોલવા માટે માઇક દબાવો',
+        orbSub: 'જ્ઞાની AI દ્વારા આપમેળે ભાષા ઓળખ',
+        btnStart: 'રેકોર્ડિંગ શરૂ કરો',
+        btnStop: 'પ્રશ્ન મોકલો',
+        btnStopAudio: 'AI અવાજ બંધ કરો',
+        vadHint: '⚡ <b>સ્માર્ટ ઓટો-કટઓફ:</b> તમે બોલવાનું બંધ કરો તે પછી 1.2 સેકન્ડમાં પ્રશ્ન આપમેળે સબમિટ થશે.',
+        sampleHeading: 'અથવા નીચેના પ્રશ્નો પર ટેપ કરો:',
+        phoneTitle: '1800 ટોલ-ફ્રી હેલ્પલાઇન સિમ્યુલેટર',
+        phoneSub: 'સામાન્ય ફોન પરથી 1800 નંબર ડાયલ કરવાનો વાસ્તવિક અનુભવ.',
+        btnStartCall: '1800-YOJANA ડાયલ કરો',
+        btnEndCall: 'કૉલ સમાપ્ત કરો',
+        schemesTitle: 'કેન્દ્રીય અને રાજ્ય કલ્યાણકારી યોજનાઓ',
+        schemesSub: '29+ ચકાસાયેલી યોજનાઓની પાત્રતા અને લાભોની વિગતો',
+        searchPlaceholder: 'યોજનાનું નામ શોધો...',
+        securityTitle: 'સાયબર છેતરપિંડી સુરક્ષા શિલ્ડ',
+        securitySub: 'OTP ચોરી અને નકલી એજન્ટોની ત્વરિત ઓળખ.',
+        securityDesc: 'યોજનાઓના નામે OTP કે પિન માંગનારાઓને યોજનાવાણી AI તુરંત બ્લોક કરે છે.',
+        btnScamTest: 'સુરક્ષા શિલ્ડ ટેસ્ટ કરો',
+        askVoiceBtn: 'અવાજમાં પૂછો'
+      },
+      'pa': {
+        headerSub: 'ਭਾਰਤ ਸਰਕਾਰ ਨਾਗਰਿਕ ਭਲਾਈ ਵੌਇਸ AI • Powered by Gnani.ai',
+        tabStudio: 'ਵੌਇਸ AI ਸਟੂਡੀਓ',
+        tabPhone: '1800 ਟੈਲੀਫੋਨੀ ਹੈਲਪਲਾਈਨ',
+        tabSchemes: 'ਸਕੀਮਾਂ ਦੀ ਸੂਚੀ',
+        tabSecurity: 'ਧੋਖਾਧੜੀ ਸੁਰੱਖਿਆ ਸ਼ੀਲਡ',
+        heroBadge: '<span class="text-saffron">●</span> ਡਿਜੀਟਲ ਇੰਡੀਆ <span class="text-emerald">●</span> ਨਾਗਰਿਕ ਸਸ਼ਕਤੀਕਰਨ',
+        heroTitle: 'ਆਪਣੀ <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">ਮਾਂ-ਬੋਲੀ ਵਿੱਚ ਬੋਲੋ</span>, ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਦੀ ਤੁਰੰਤ ਜਾਣਕਾਰੀ ਲਓ।',
+        heroSub: 'ਗਿਆਨੀ ਪ੍ਰਿਜ਼ਮਾ ਅਤੇ ਟਿੰਬਰੇ ਵੌਇਸ ਨਾਲ 2,000+ ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਦੀ ਸਹੀ ਜਾਣਕਾਰੀ।',
+        orbTitle: 'ਬੋਲਣ ਲਈ ਮਾਈਕ ਦਬਾਓ',
+        orbSub: 'ਗਿਆਨੀ AI ਦੁਆਰਾ ਆਟੋ-ਡਿਟੈਕਟਡ ਭਾਸ਼ਾ',
+        btnStart: 'ਰਿਕਾਰਡਿੰਗ ਸ਼ੁਰੂ ਕਰੋ',
+        btnStop: 'ਸਵਾਲ ਭੇਜੋ',
+        btnStopAudio: 'AI ਆਵਾਜ਼ ਬੰਦ ਕਰੋ',
+        vadHint: '⚡ <b>ਸਮਾਰਟ ਆਟੋ-ਕੱਟਆਫ:</b> ਬੋਲਣਾ ਬੰਦ ਕਰਨ ਦੇ 1.2 ਸਕਿੰਟਾਂ ਬਾਅਦ ਸਵਾਲ ਆਪਣੇ ਆਪ ਜਮ੍ਹਾਂ ਹੋ ਜਾਵੇਗਾ।',
+        sampleHeading: 'ਜਾਂ ਹੇਠਾਂ ਦਿੱਤੇ ਸਵਾਲਾਂ  ਉੱਤੇ  ਕਲਿੱਕ ਕਰੋ:',
+        phoneTitle: '1800 ਟੋਲ-ਫ੍ਰੀ ਹੈਲਪਲਾਈਨ ਸਿਮੂਲੇਟਰ',
+        phoneSub: 'ਕਿਸੇ ਵੀ ਆਮ ਫ਼ੋਨ ਤੋਂ 1800 ਨੰਬਰ ਡਾਇਲ ਕਰਨ ਦਾ ਅਸਲ ਤਜ਼ਰਬਾ।',
+        btnStartCall: '1800-YOJANA ਡਾਇਲ ਕਰੋ',
+        btnEndCall: 'ਕਾਲ ਬੰਦ ਕਰੋ',
+        schemesTitle: 'ਕੇਂਦਰੀ ਅਤੇ ਰਾਜ ਭਲਾਈ ਸਕੀਮਾਂ',
+        schemesSub: '29+ ਤਸਦੀਕਸ਼ੁਦਾ ਸਕੀਮਾਂ ਦੀ ਯੋਗਤਾ ਅਤੇ ਲਾਭ',
+        searchPlaceholder: 'ਸਕੀਮ ਦਾ ਨਾਮ ਖੋਜੋ...',
+        securityTitle: 'ਸਾਈਬਰ ਧੋਖਾਧੜੀ ਸੁਰੱਖਿਆ ਸ਼ੀਲਡ',
+        securitySub: 'OTP ਚੋਰੀ ਅਤੇ ਜਾਅਲੀ ਏਜੰਟਾਂ ਦੀ ਤੁਰੰਤ ਪਛਾਣ।',
+        securityDesc: 'ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਦੇ ਨਾਮ  ਉੱਤੇ  OTP ਜਾਂ ਪਾਸਵਰਡ ਮੰਗਣ ਵਾਲਿਆਂ ਨੂੰ ਯੋਜਨਾਵਾਣੀ AI ਤੁਰੰਤ ਰੋਕਦਾ ਹੈ।',
+        btnScamTest: 'ਧੋਖਾਧੜੀ ਸ਼ੀਲਡ ਟੈਸਟ ਕਰੋ',
+        askVoiceBtn: 'ਆਵਾਜ਼ ਵਿੱਚ ਪੁੱਛੋ'
+      },
+      'or': {
+        headerSub: 'ଭାରତ ସରକାର ନାଗରିକ କଲ୍ୟାଣ ଭଏସ୍ AI • Powered by Gnani.ai',
+        tabStudio: 'ଭଏସ୍ AI ଷ୍ଟୁଡିଓ',
+        tabPhone: '୧୮୦୦ ଟେଲିଫୋନି ହେଲ୍ପଲାଇନ୍',
+        tabSchemes: 'ଯୋଜନା ତାଲିକା',
+        tabSecurity: 'ଠକେଇ ନିରୋଧୀ ସୁରକ୍ଷା',
+        heroBadge: '<span class="text-saffron">●</span> ଡିଜିଟାଲ୍ ଇଣ୍ଡିଆ <span class="text-emerald">●</span> ନାଗରିକ ସଶକ୍ତୀକରଣ',
+        heroTitle: 'ନିଜ <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">ମାତୃଭାଷାରେ କୁହନ୍ତୁ</span>, ସରକାରୀ ଯୋଜନାର ତୁରନ୍ତ ତଥ୍ୟ ପାଆନ୍ତୁ।',
+        heroSub: 'ଜ୍ଞାନୀ ପ୍ରିଜ୍ମା ଏବଂ ଟିମ୍ବ୍ରେ ମାଧ୍ୟମରେ ୨,୦୦୦+ ସରକାରୀ ଯୋଜନାର ସଠିକ୍ ସୂଚନା।',
+        orbTitle: 'କହିବା ପାଇଁ ମାଇକ୍ ଦବାନ୍ତୁ',
+        orbSub: 'ଜ୍ଞାନୀ AI ଦ୍ୱାରା ସ୍ୱୟଂଚାଳିତ ଭାଷା ଚିହ୍ନଟ',
+        btnStart: 'ରେକର୍ଡିଂ ଆରମ୍ଭ କରନ୍ତୁ',
+        btnStop: 'ପ୍ରଶ୍ନ ପଠାନ୍ତୁ',
+        btnStopAudio: 'AI ସ୍ୱର ବନ୍ଦ କରନ୍ତୁ',
+        vadHint: '⚡ <b>ସ୍ମାର୍ଟ ଅଟୋ-କଟଅଫ୍:</b> କହିବା ବନ୍ଦ କରିବାର ୧.୨ ସେକେଣ୍ଡ ମଧ୍ୟରେ ପ୍ରଶ୍ନ ସ୍ୱୟଂଚାଳିତ ଭାବେ ଦାଖଲ ହେବ।',
+        sampleHeading: 'କିମ୍ବା ତଳେ ଥିବା ପ୍ରଶ୍ନ ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ:',
+        phoneTitle: '୧୮୦୦ ଟୋଲ୍-ଫ୍ରି ହେଲ୍ପଲାଇନ୍ ସିମୁଲେଟର୍',
+        phoneSub: 'ଯେକୌଣସି ସାଧାରଣ ଫୋନରୁ ୧୮୦୦ ନମ୍ବର ଡାଏଲ୍ କରି କଥା ହେବାର ପ୍ରକୃତ ଅନୁଭୂତି।',
+        btnStartCall: '୧୮୦୦-ଯୋଜନା କଲ୍ କରନ୍ତୁ',
+        btnEndCall: 'କଲ୍ ଶେଷ କରନ୍ତୁ',
+        schemesTitle: 'କେନ୍ଦ୍ରୀୟ ଏବଂ ରାଜ୍ୟ କଲ୍ୟାଣକାରୀ ଯୋଜନା',
+        schemesSub: '୨୯+ ଯାଞ୍ଚ ହୋଇଥିବା ଯୋଜନାର ଯୋଗ୍ୟତା ଏବଂ ଲାଭ',
+        searchPlaceholder: 'ଯୋଜନାର ନାମ ଖୋଜନ୍ତୁ...',
+        securityTitle: 'ସାଇବର ଠକେଇ ସୁରକ୍ଷା କବଚ',
+        securitySub: 'OTP ଚୋରି ଏବଂ ନକଲି ଏଜେଣ୍ଟଙ୍କୁ ତୁରନ୍ତ ଚିହ୍ନଟ କରେ।',
+        securityDesc: 'ସରକାରୀ ଯୋଜନା ନାମରେ OTP ବା ବ୍ୟାଙ୍କ ତଥ୍ୟ ମାଗୁଥିବା ଠକମାନଙ୍କୁ ଯୋଜନା ବାଣୀ AI ତୁରନ୍ତ ଚେତାବନୀ ଦିଏ।',
+        btnScamTest: 'ଠକେଇ ସୁରକ୍ଷା ପରୀକ୍ଷା କରନ୍ତୁ',
+        askVoiceBtn: 'ସ୍ୱରରେ ପଚାରନ୍ତୁ'
+      },
+      'ml': {
+        headerSub: 'ഭാരത സർക്കാർ പൗരക്ഷേമ വോയ്‌സ് AI • Powered by Gnani.ai',
+        tabStudio: 'വോയ്‌സ് AI സ്റ്റുഡിയോ',
+        tabPhone: '1800 ടെലിഫോണി ഹെൽപ്പ്‌ലൈൻ',
+        tabSchemes: 'ക്ഷേമ പദ്ധതികളുടെ വിവരങ്ങൾ',
+        tabSecurity: 'തട്ടിപ്പ് തടയൽ സുരക്ഷ',
+        heroBadge: '<span class="text-saffron">●</span> ഡിജിറ്റൽ ഇന്ത്യ <span class="text-emerald">●</span> പൗര ശാക്തീകരണം',
+        heroTitle: 'നിങ്ങളുടെ <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">മാതൃഭാഷയിൽ സംസാരിക്കൂ</span>, സർക്കാർ പദ്ധതികളുടെ വിവരങ്ങൾ തത്സമയം നേടൂ.',
+        heroSub: 'ജ്ഞാനി പ്രിസ്മ, ടിംബ്രെ സാങ്കേതികവിദ്യ വഴി 2,000+ സർക്കാർ ക്ഷേമ പദ്ധതികളുടെ വിവരങ്ങൾ.',
+        orbTitle: 'സംസാരിക്കാൻ മൈക്ക് അമർത്തുക',
+        orbSub: 'ജ്ഞാനി AI വഴി സ്വയം ഭാഷ തിരിച്ചറിയൽ',
+        btnStart: 'റെക്കോർഡിംഗ് ആരംഭിക്കുക',
+        btnStop: 'ചോദ്യം അയക്കുക',
+        btnStopAudio: 'AI ശബ്ദം നിർത്തുക',
+        vadHint: '⚡ <b>സ്മാർട്ട് ഓട്ടോ-കട്ട്ഓഫ്:</b> സംസാരിച്ചു കഴിഞ്ഞാൽ 1.2 സെക്കൻഡിനുള്ളിൽ ചോദ്യം തനിയെ സമർപ്പിക്കപ്പെടും.',
+        sampleHeading: 'അല്ലെങ്കിൽ താഴെയുള്ള ചോദ്യങ്ങളിൽ തൊടുക:',
+        phoneTitle: '1800 ടോൾ-ഫ്രീ ഹെൽപ്പ്‌ലൈൻ സിമുലേറ്റർ',
+        phoneSub: 'സാധാരണ ഫോണിൽ നിന്ന് 1800 നമ്പറിലേക്ക് വിളിക്കുമ്പോഴുള്ള തത്സമയ അനുഭവം.',
+        btnStartCall: '1800-YOJANA വിളിക്കുക',
+        btnEndCall: 'കോൾ അവസാനിപ്പിക്കുക',
+        schemesTitle: 'കേന്ദ്ര-സംസ്ഥാന ക്ഷേമ പദ്ധതികൾ',
+        schemesSub: '29+ സർക്കാർ പദ്ധതികളുടെ യോഗ്യതകളും ആനുകൂല്യങ്ങളും',
+        searchPlaceholder: 'പദ്ധതിയുടെ പേര് തിരയുക...',
+        securityTitle: 'സൈബർ തട്ടിപ്പ് തടയൽ കവചം',
+        securitySub: 'ഒടിപി തട്ടിപ്പുകളും വ്യാജ ഏജന്റുമാരെയും തത്സമയം തടയുന്നു.',
+        securityDesc: 'സർക്കാർ പദ്ധതികളുടെ പേരിൽ ബാങ്ക് വിവരങ്ങളോ ഒടിപിയോ ചോദിക്കുന്നവരെ യോജനാവാണി AI ഉടൻ തിരിച്ചറിയുന്നു.',
+        btnScamTest: 'തട്ടിപ്പ് കവചം പരിശോധിക്കുക',
+        askVoiceBtn: 'ശബ്ദത്തിൽ ചോദിക്കുക'
+      }
+    };
+
+    function updateSamplePrompts(lang) {
+      const container = document.getElementById('samplePromptsContainer');
+      if (!container) return;
+      const list = SAMPLE_PROMPTS_BY_LANG[lang] || SAMPLE_PROMPTS_BY_LANG['en'];
+      container.innerHTML = list.map(item => `
+        <button onclick="askPrompt('${item.query.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-sky-500/50 text-slate-200 transition">
+          ${item.label}
+        </button>
+      `).join('');
+    }
+
+    // Apply Full Website Context Localization (Government Portal Standard)
+    function applyLanguageContext(lang) {
+      const activeLang = (lang === 'indic-auto' || !SITE_I18N[lang]) ? 'en' : lang;
+      const t = SITE_I18N[activeLang] || SITE_I18N['en'];
+
+      // Header
+      const hSub = document.getElementById('headerSub');
+      if (hSub) hSub.textContent = t.headerSub;
+
+      // Navigation tabs
+      const tabStudio = document.getElementById('tabStudioText');
+      if (tabStudio) tabStudio.textContent = t.tabStudio;
+      const tabPhone = document.getElementById('tabPhoneText');
+      if (tabPhone) tabPhone.textContent = t.tabPhone;
+      const tabSchemes = document.getElementById('tabSchemesText');
+      if (tabSchemes) tabSchemes.textContent = t.tabSchemes;
+      const tabSecurity = document.getElementById('tabSecurityText');
+      if (tabSecurity) tabSecurity.textContent = t.tabSecurity;
+
+      // Hero Tagline
+      const heroBadge = document.getElementById('heroBadge');
+      if (heroBadge) heroBadge.innerHTML = t.heroBadge;
+      const heroTitle = document.getElementById('heroTitle');
+      if (heroTitle) heroTitle.innerHTML = t.heroTitle;
+      const heroSub = document.getElementById('heroSub');
+      if (heroSub) heroSub.textContent = t.heroSub;
+
+      // Voice AI Chamber
+      const orbTitle = document.getElementById('orbStatusTitle');
+      if (orbTitle && !isRecording) orbTitle.textContent = t.orbTitle;
+      const orbSub = document.getElementById('orbStatusSub');
+      if (orbSub && !isRecording) orbSub.textContent = t.orbSub;
+
+      const btnStart = document.getElementById('btnStartText');
+      if (btnStart) btnStart.textContent = t.btnStart;
+      const btnStop = document.getElementById('btnStopText');
+      if (btnStop) {
+        const timerSpan = document.getElementById('btnTimerText');
+        const curTime = timerSpan ? timerSpan.textContent : "00:00";
+        btnStop.innerHTML = `${t.btnStop} (<span id="btnTimerText">${curTime}</span>)`;
+      }
+      const btnStopAudio = document.getElementById('btnStopAudioText');
+      if (btnStopAudio) btnStopAudio.textContent = t.btnStopAudio;
+
+      const vadHint = document.getElementById('vadHintText');
+      if (vadHint) vadHint.innerHTML = t.vadHint;
+      const sampleHeading = document.getElementById('samplePromptHeadingText');
+      if (sampleHeading) sampleHeading.textContent = t.sampleHeading;
+
+      // Telephony Tab
+      const phoneTitle = document.getElementById('phoneTitle');
+      if (phoneTitle) phoneTitle.textContent = t.phoneTitle;
+      const phoneSub = document.getElementById('phoneSub');
+      if (phoneSub) phoneSub.textContent = t.phoneSub;
+      const btnStartCall = document.getElementById('btnStartCallText');
+      if (btnStartCall) btnStartCall.textContent = t.btnStartCall;
+      const btnEndCall = document.getElementById('btnEndCallText');
+      if (btnEndCall) btnEndCall.textContent = t.btnEndCall;
+
+      // Schemes Tab
+      const schemesTitle = document.getElementById('schemesTitle');
+      if (schemesTitle) schemesTitle.textContent = t.schemesTitle;
+      const schemesSub = document.getElementById('schemesSub');
+      if (schemesSub) schemesSub.textContent = t.schemesSub;
+      const schemeSearch = document.getElementById('schemeSearch');
+      if (schemeSearch) schemeSearch.placeholder = t.searchPlaceholder;
+
+      // Security Tab
+      const securityTitle = document.getElementById('securityTitle');
+      if (securityTitle) securityTitle.textContent = t.securityTitle;
+      const securitySub = document.getElementById('securitySub');
+      if (securitySub) securitySub.textContent = t.securitySub;
+      const securityDesc = document.getElementById('securityDesc');
+      if (securityDesc) securityDesc.textContent = t.securityDesc;
+      const btnScamTest = document.getElementById('btnScamTestText');
+      if (btnScamTest) btnScamTest.textContent = t.btnScamTest;
+
+      // Update sample question capsules
+      updateSamplePrompts(lang);
+      if (allSchemes && allSchemes.length > 0) renderSchemes(allSchemes);
+    }
+
+    let announcementPlayed = false;
+
+    function showAutoplayHint() {
+      if (document.getElementById('autoplayBanner')) return;
+      const b = document.createElement('div');
+      b.id = 'autoplayBanner';
+      b.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-gradient-to-r from-amber-500 to-emerald-500 text-slate-950 px-5 py-2.5 rounded-full font-bold text-xs shadow-2xl flex items-center gap-2 animate-bounce cursor-pointer border border-amber-200';
+      b.innerHTML = '<span class="text-sm">🔊</span> <span>Welcome announcement ready — Click anywhere to listen!</span>';
+      b.onclick = () => {
+        playDirectAnnouncement(true);
+        b.remove();
+      };
+      document.body.appendChild(b);
+    }
+
+    async function playDirectAnnouncement(force = false) {
+      const lang = document.getElementById('langSelect').value || 'indic-auto';
+      const audio = document.getElementById('globalAudio');
+      if (!audio) return;
+
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = 1.0;
+      audio.muted = false;
+      audio.src = `/api/announcement.wav?lang=${encodeURIComponent(lang)}`;
+
+      const orb = document.getElementById('voiceOrb');
+      if (orb) orb.classList.add('speaking');
+      
+      const title = document.getElementById('orbStatusTitle');
+      if (title) title.textContent = "🔊 Welcome Announcement Playing...";
+
+      const stopBtn = document.getElementById('btnStopAudio');
+      if (stopBtn) stopBtn.classList.remove('hidden');
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          announcementPlayed = true;
+          const banner = document.getElementById('autoplayBanner');
+          if (banner) banner.remove();
+        }).catch((err) => {
+          console.warn("[Autoplay Policy] Direct playback restricted. Waiting for gesture.", err);
+          showAutoplayHint();
+          const triggerOnGesture = () => {
+            audio.play().then(() => {
+              announcementPlayed = true;
+              if (orb) orb.classList.add('speaking');
+              const banner = document.getElementById('autoplayBanner');
+              if (banner) banner.remove();
+            }).catch(() => {});
+            ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(e => {
+              window.removeEventListener(e, triggerOnGesture);
+            });
+          };
+          ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(e => {
+            window.addEventListener(e, triggerOnGesture, { once: true });
+          });
+        });
+      }
+
+      audio.onended = () => {
+        if (orb) orb.classList.remove('speaking');
+        if (stopBtn) stopBtn.classList.add('hidden');
+        if (title) title.textContent = "Tap Orb or Start Recording";
+      };
+    }
+
+    function onLangChange() {
+      const lang = document.getElementById('langSelect').value;
+      applyLanguageContext(lang);
+      const prompts = {
+        'indic-auto': 'Welcome! Tap "Start Recording" and speak in your mother tongue (English, Telugu, Hindi, etc.) — our AI will auto-detect your language and adapt the portal!',
+        'te': 'నమస్కారం! పైన ఉన్న బటన్ నొక్కి మీ ప్రశ్నను అడగండి (ఉదా: పీఎం-కిసాన్ లేదా ఆయుష్మాన్ భారత్).',
+        'hi': 'नमस्ते! ऊपर दिए गए बटन को दबाकर अपना सवाल पूछिए (जैसे: पीएम-किसान या आयुष्मान भारत)।',
+        'en': 'Welcome! Tap "Start Recording" and ask your question about any government welfare scheme.',
+        'hi-en': 'Namaste! Tap the orb and ask your question about PM-Kisan, Ayushman Bharat, or scholarships.',
+        'ta': 'வணக்கம்! மேலே உள்ள பொத்தானை அழுத்தி உங்கள் கேள்வியைக் கேளுங்கள்.',
+        'kn': 'ನಮಸ್ಕಾರ! ಮೇಲಿನ ಗುಂಡಿಯನ್ನು ಒತ್ತಿ ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ.',
+        'ml': 'നമസ്കാരം! നിങ്ങളുടെ സംശയങ്ങൾ ചോദിക്കൂ.',
+        'mr': 'नमस्कार! सरकारी योजनांबद्दल प्रश्न विचारा.',
+        'bn': 'নমস্কার! আপনার প্রশ্নটি বলুন।',
+        'gu': 'નમસ્તે! સરકારી યોજનાઓ વિશે પૂછો.',
+        'pa': 'ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ! ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਬਾਰੇ ਪੁੱਛੋ।',
+        'or': 'ନମସ୍କାର! ଆପଣଙ୍କ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ।',
+        'as': 'নমস্কাৰ! চৰকাৰী আঁচনি সম্পৰ্কে সোধক।',
+        'ur': 'آداب! سرکاری اسکیموں کے بارے میں سوال پوچھیں۔',
+        'sa': 'नमस्ते! योजनाविषये पृच्छन्तु।',
+        'ne': 'नमस्ते! योजना बारे सोध्नुहोस्।',
+        'kok': 'नमस्कार! सरकारी योजनांची माहिती घेयात.',
+        'mai': 'प्रणाम! सरकारी योजनाक जानकारी लेल पूछू।',
+        'doi': 'नमस्ते! सरकारी योजनाएं बारे पुच्छो।',
+        'ks': 'سلام! پانہٕ سوال پُچھِو।',
+        'sd': 'نمستي! سرڪاري اسڪيمن بابت پڇو.',
+        'mni': 'ꯈꯨꯔꯨꯝꯖꯔꯤ! ꯋꯥꯍꯪ ꯍꯪꯕꯤꯌꯨ.',
+        'brx': 'खুলुमबाय! সোलोंথায়নি সোমোन्दै সों।',
+        'sat': 'ᱡᱚᱦᱟᱨ! ᱥᱚᱨᱠﺎᱨᱤ ᱡᱚᱡᱚᱱᱟ ᱵᱟᱵᱚᱛ ᱠᱩᱞᱤ ᱢᱮ.'
+      };
+      const feed = document.getElementById('convoFeed'); if (feed) feed.innerHTML = ''; appendBotMessage(prompts[lang] || prompts['en'], null, null); playDirectAnnouncement(true);
+    }
+    
+    let speechDetected = false;
+    let lastSpeechTime = null;
+    let silenceCounter = 0;
+    let visualizerIdlePhase = 0;
+    let animRunning = false;
+
+    // True Live Vocal Rhythm Visualizer (Never dies, responsive to user voice input)
+    function drawLiveVisualizer() {
+      const canvas = document.getElementById('liveAudioVisualizer');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (animRunning) return;
+      animRunning = true;
+
+      function render() {
+        requestAnimationFrame(render);
+        visualizerIdlePhase += 0.05;
+
+        // Clear canvas
+        ctx.fillStyle = '#060913';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Center baseline
+        ctx.strokeStyle = isRecording ? 'rgba(56, 189, 248, 0.4)' : 'rgba(56, 189, 248, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+
+        const numBars = 36;
+        const barWidth = Math.floor(canvas.width / numBars) - 2;
+        const orb = document.getElementById('voiceOrb');
+        const volBar = document.getElementById('liveVolumeBar');
+
+        const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        if (isRecording) {
+          grad.addColorStop(0, '#38bdf8');
+          grad.addColorStop(0.5, '#10b981');
+          grad.addColorStop(1, '#f59e0b');
+        } else {
+          grad.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+          grad.addColorStop(0.5, 'rgba(16, 185, 129, 0.25)');
+          grad.addColorStop(1, 'rgba(56, 189, 248, 0.2)');
+        }
+        ctx.fillStyle = grad;
+
+        if (!isRecording || !analyser) {
+          // Idle breathing baseline: shows visualizer is on standby
+          for (let i = 0; i < numBars; i++) {
+            const idleWave = Math.sin(visualizerIdlePhase + i * 0.3) * 2.0 + 3.0;
+            const x = i * (barWidth + 2) + 2;
+            const y = Math.round((canvas.height - idleWave) / 2);
+            ctx.fillRect(x, y, barWidth, Math.max(2, idleWave));
+          }
+          if (volBar) volBar.style.width = '0%';
+          if (orb && !orb.classList.contains('speaking')) orb.style.transform = 'scale(1.0)';
+          return;
+        }
+
+        // Active recording: Read native frequency spectrum and time domain data
+        const freqData = new Uint8Array(analyser.frequencyBinCount);
+        const timeData = new Uint8Array(analyser.fftSize);
+        analyser.getByteFrequencyData(freqData);
+        analyser.getByteTimeDomainData(timeData);
+
+        // Compute direct RMS from timeDomain data
+        let sumSquares = 0;
+        for (let i = 0; i < timeData.length; i++) {
+          const norm = (timeData[i] - 128) / 128;
+          sumSquares += norm * norm;
+        }
+        const rms = Math.sqrt(sumSquares / timeData.length);
+
+        // Render responsive rhythm equalizer bars
+        for (let i = 0; i < numBars; i++) {
+          const freqIndex = Math.floor(Math.pow(i / numBars, 1.25) * (freqData.length / 2));
+          const freqVal = freqData[freqIndex] || 0;
+          const idleWave = Math.sin(visualizerIdlePhase + i * 0.25) * 1.5 + 2.0;
+          const vocalHeight = (freqVal / 240) * (canvas.height - 4) + (rms * canvas.height * 2.5);
+          const finalHeight = Math.max(idleWave, Math.min(canvas.height - 4, Math.round(vocalHeight)));
+
+          const x = i * (barWidth + 2) + 2;
+          const y = Math.round((canvas.height - finalHeight) / 2);
+          ctx.fillRect(x, y, barWidth, Math.max(3, finalHeight));
+        }
+
+        // Live Volume Rhythm Bar update (Dynamic hardware sync)
+        if (volBar) {
+          const volPct = Math.min(100, Math.round(rms * 500));
+          volBar.style.width = `${Math.max(2, volPct)}%`;
+        }
+
+        // Live Voice Rhythm pulsing of the central Voice Orb
+        if (orb) {
+          const orbScale = 1.0 + Math.min(0.22, rms * 1.6);
+          orb.style.transform = `scale(${orbScale})`;
+        }
+
+        // Intelligent Voice Activity Detection (Auto-Cutoff on pause)
+        if (rms > 0.012) {
+          speechDetected = true;
+          lastSpeechTime = Date.now();
+          silenceCounter = 0;
+          const micStatus = document.getElementById('micStatusText');
+          if (micStatus) {
+            micStatus.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span> <span class="text-emerald-300 font-bold">● VOICE DETECTED (Rhythm Active)</span>';
+          }
+        } else if (speechDetected && lastSpeechTime) {
+          const silenceMs = Date.now() - lastSpeechTime;
+          const remainSec = Math.max(0, ((1200 - silenceMs) / 1000)).toFixed(1);
+          const micStatus = document.getElementById('micStatusText');
+          if (micStatus) {
+            micStatus.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span> <span class="text-amber-300 font-semibold">● Pausing... sending question in ${remainSec}s</span>`;
+          }
+
+          if (silenceMs >= 1200) {
+            console.log("VAD: 1.2s natural pause detected. Auto-submitting citizen voice question!");
+            stopRecording();
+          }
+        }
+      }
+      render();
+    }
+
+    // Start Audio Recording with Persistent Audio Pipeline
+    async function startRecording() {
+      if (isRecording) return;
+      stopAudioPlayback();
+      speechDetected = false;
+      lastSpeechTime = null;
+      silenceCounter = 0;
+
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert("Microphone access is not supported on this connection. Please open http://localhost:8000 in Chrome/Edge.");
+          return;
+        }
+
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch (e1) {
+          console.warn("Retrying getUserMedia with basic audio constraint:", e1);
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false } });
+        }
+        
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+          await audioCtx.resume();
+        }
+
+        const source = audioCtx.createMediaStreamSource(mediaStream);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.5;
+        source.connect(analyser);
+
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+          ? 'audio/webm;codecs=opus'
+          : (MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '');
+
+        mediaRecorder = mimeType ? new MediaRecorder(mediaStream, { mimeType }) : new MediaRecorder(mediaStream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+          const hasSpeech = speechDetected;
+          try {
+            if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
+          } catch (e) {}
+          analyser = null;
+
+          if (!hasSpeech && recordSeconds < 4) {
+            console.log("Recorded buffer was silent. Skipping network call.");
+            return;
+          }
+
+          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          await processSpokenAudio(audioBlob);
+        };
+
+        mediaRecorder.start(250);
+        isRecording = true;
+
+        // UI Updates
+        const orb = document.getElementById('voiceOrb');
+        if (orb) orb.classList.add('recording');
+        document.getElementById('btnStartRecord').classList.add('hidden');
+        document.getElementById('btnStopRecord').classList.remove('hidden');
+        document.getElementById('orbStatusTitle').textContent = "Listening to Your Voice...";
+        document.getElementById('orbStatusSub').textContent = "Speak clearly in your mother tongue (auto-submits when you pause)";
+        document.getElementById('micStatusText').innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span> <span class="text-rose-400 font-bold">RECORDING ACTIVE</span>';
+
+        recordSeconds = 0;
+        document.getElementById('micTimerText').textContent = "00:00";
+        const bTimer0 = document.getElementById('btnTimerText');
+        if (bTimer0) bTimer0.textContent = "00:00";
+
+        recordTimerInterval = setInterval(() => {
+          recordSeconds++;
+          const m = String(Math.floor(recordSeconds / 60)).padStart(2, '0');
+          const s = String(recordSeconds % 60).padStart(2, '0');
+          document.getElementById('micTimerText').textContent = `${m}:${s}`;
+          const bTimer = document.getElementById('btnTimerText');
+          if (bTimer) bTimer.textContent = `${m}:${s}`;
+          
+          // Initial Silence Auto-Cutoff:
+          // If citizen clicked start but did not speak within 4 seconds, auto-stop!
+          if (!speechDetected && recordSeconds >= 4) {
+            console.log("VAD: No speech detected within 4s initial window. Auto-stopping to save citizen time.");
+            stopRecording(true);
+            return;
+          }
+
+          // Max limit safety guard: Auto-stop after 10s (never wait 25s!)
+          if (recordSeconds >= 10) {
+            console.log("VAD: 10s maximum recording duration reached. Auto-stopping.");
+            stopRecording(false);
+          }
+        }, 1000);
+
+      } catch (err) {
+        console.error(err);
+        alert("Microphone permission was denied. Please allow microphone access in your browser settings to speak to the AI.");
+      }
+    }
+
+    // Stop Audio Recording & Send to Gnani AI
+    function stopRecording(wasSilent = false) {
+      if (!isRecording) return;
+      isRecording = false;
+      clearInterval(recordTimerInterval);
+
+      // UI Updates: Immediately show clear processing state
+      const orb = document.getElementById('voiceOrb');
+      if (orb) {
+        orb.classList.remove('recording');
+        orb.style.transform = 'scale(1.0)';
+      }
+      document.getElementById('btnStartRecord').classList.remove('hidden');
+      document.getElementById('btnStopRecord').classList.add('hidden');
+      
+      if (wasSilent) {
+        document.getElementById('orbStatusTitle').textContent = "Tap Orb or Start Recording";
+        document.getElementById('orbStatusSub').textContent = "Auto-detected via Gnani Prisma";
+        document.getElementById('micStatusText').innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400"></span> <span class="text-amber-300 font-semibold">No voice detected. Tap to speak or choose a question below.</span>';
+      } else {
+        document.getElementById('orbStatusTitle').textContent = "Processing with Gnani AI...";
+        document.getElementById('orbStatusSub').textContent = "Transcribing with Prisma STT & synthesizing Timbre voice...";
+        document.getElementById('micStatusText').innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span> Processing Audio...';
+      }
+
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+      }
+    }
+
+    // Toggle Microphone (for clicking the orb)
+    function toggleMicrophone() {
+      const orb = document.getElementById('voiceOrb');
+      if (orb && orb.classList.contains('speaking')) {
+        stopAudioPlayback();
+        return;
+      }
+      if (isRecording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    }
+
+    // Live Scam Test runner directly inside Tab 4
+    async function runScamTest() {
+      const box = document.getElementById('scamResultBox');
+      const reasonText = document.getElementById('scamReasonText');
+      const lang = document.getElementById('langSelect').value;
+
+      box.classList.remove('hidden');
+      reasonText.innerHTML = "⏳ <i>Analyzing citizen input for sensitive banking & OTP fraud indicators...</i>";
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            text: 'నా బ్యాంక్ OTP 7894, పీఎం-కిసాన్ పథకంలో లింక్ చేయండి', 
+            lang: lang 
+          })
+        });
+        const data = await res.json();
+        reasonText.innerHTML = `
+          <div class="space-y-1">
+            <p class="font-bold text-rose-200">⚠️ Sensitive Information Intercepted: <span class="font-mono text-white bg-black/40 px-1.5 py-0.5 rounded">4-digit OTP '7894'</span></p>
+            <p class="text-xs text-rose-100">${data.reply_text}</p>
+          </div>
+        `;
+        if (data.audio_base64) {
+          playAudio(data.audio_base64);
+        }
+      } catch (err) {
+        reasonText.textContent = "Error testing scam shield.";
+      }
+    }
+
+    // Process Voice Blob with Backend API
+    async function processSpokenAudio(blob) {
+      const lang = document.getElementById('langSelect').value;
+      const formData = new FormData();
+      formData.append('audio', blob, 'voice.wav');
+      formData.append('lang', lang);
+
+      try {
+        const res = await fetch('/api/voice', {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) {
+          const errText = await res.text();
+          console.error("Voice API HTTP error:", res.status, errText);
+          appendBotMessage("Voice service busy or temporary timeout. Please speak again.", null, null);
+          return;
+        }
+        const data = await res.json();
+        handleApiResponse(data);
+      } catch (err) {
+        console.error("Voice API error:", err);
+        appendBotMessage("Voice connection interrupted. Please tap the microphone and speak again.", null, null);
+      } finally {
+        resetOrbUI();
+      }
+    }
+
+    // Query Prompt via text
+    async function askPrompt(text) {
+      const lang = document.getElementById('langSelect').value;
+      appendUserMessage(text);
+      
+      const title = document.getElementById('orbStatusTitle');
+      title.textContent = "Generating Voice...";
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text, lang: lang })
+        });
+        const data = await res.json();
+        handleApiResponse(data, true); // true = skip duplicate user message
+      } catch (err) {
+        console.error(err);
+      } finally {
+        resetOrbUI();
+      }
+    }
+
+    function handleApiResponse(data, skipUser = false) {
+      if (!skipUser && data.user_text) {
+        appendUserMessage(data.user_text);
+      }
+      appendBotMessage(data.reply_text, data.audio_base64, data.matched_scheme);
+      
+      // Auto-adapt entire portal context to the citizen's detected language!
+      if (data.detected_lang && data.detected_lang !== 'indic-auto') {
+        const langDropdown = document.getElementById('langSelect');
+        if (langDropdown && langDropdown.value !== data.detected_lang) {
+          langDropdown.value = data.detected_lang;
+          applyLanguageContext(data.detected_lang);
+        }
+      }
+
+      if (data.audio_base64) {
+        playAudio(data.audio_base64);
+      }
+    }
+
+    function resetOrbUI() {
+      const orb = document.getElementById('voiceOrb');
+      if (orb) {
+        orb.classList.remove('recording');
+        orb.classList.remove('speaking');
+        orb.style.transform = 'scale(1.0)';
+      }
+      document.getElementById('orbStatusTitle').textContent = "Tap Orb or Start Recording";
+      document.getElementById('orbStatusSub').textContent = "Auto-detected via Gnani Prisma (All 22 Languages)";
+      const micStatus = document.getElementById('micStatusText');
+      if (micStatus) micStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-500"></span> Mic: Standby';
+      const volBar = document.getElementById('liveVolumeBar');
+      if (volBar) volBar.style.width = '0%';
+    }
+
+    // Stop AI Voice Playback immediately
+    function stopAudioPlayback() {
+      const audio = document.getElementById('globalAudio');
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      const orb = document.getElementById('voiceOrb');
+      if (orb) orb.classList.remove('speaking');
+      const stopBtn = document.getElementById('btnStopAudio');
+      if (stopBtn) stopBtn.classList.add('hidden');
+      document.getElementById('orbStatusTitle').textContent = "Tap Orb or Start Recording";
+      document.getElementById('orbStatusSub').textContent = "Auto-detected via Gnani Prisma";
+    }
+
+    function playAudio(b64) {
+      stopAudioPlayback();
+      const orb = document.getElementById('voiceOrb');
+      orb.classList.add('speaking');
+      const stopBtn = document.getElementById('btnStopAudio');
+      if (stopBtn) stopBtn.classList.remove('hidden');
+      document.getElementById('orbStatusTitle').textContent = "🔊 AI Speaking Response...";
+      document.getElementById('orbStatusSub').textContent = "Click 'Stop AI Voice' to silence anytime";
+
+      const audio = document.getElementById('globalAudio');
+      audio.src = `data:audio/wav;base64,${b64}`;
+      audio.play();
+      audio.onended = () => {
+        orb.classList.remove('speaking');
+        if (stopBtn) stopBtn.classList.add('hidden');
+        document.getElementById('orbStatusTitle').textContent = "Tap Orb or Start Recording";
+        document.getElementById('orbStatusSub').textContent = "Auto-detected via Gnani Prisma";
+      };
+    }
+
+    let lastUserMessageText = "";
+    let lastUserMessageTime = 0;
+
+    function appendUserMessage(text) {
+      if (!text || !text.trim()) return;
+      const cleanText = text.trim();
+      const now = Date.now();
+      // Strict Deduplication: Do not render duplicate question within 5 seconds
+      if (cleanText === lastUserMessageText && (now - lastUserMessageTime) < 5000) {
+        return;
+      }
+      lastUserMessageText = cleanText;
+      lastUserMessageTime = now;
+
+      const feed = document.getElementById('convoFeed');
+      const card = document.createElement('div');
+      card.className = "flex justify-end";
+      card.innerHTML = `
+        <div class="max-w-xl bg-sky-600/20 border border-sky-500/30 rounded-2xl rounded-tr-sm p-4 text-sm text-sky-100 shadow-md">
+          <div class="flex items-center gap-2 mb-1 text-[10px] text-sky-300 font-bold uppercase tracking-wider">
+            <i data-lucide="user" class="w-3 h-3"></i> Citizen Voice
+          </div>
+          <p>${cleanText}</p>
+        </div>
+      `;
+      feed.appendChild(card);
+      lucide.createIcons();
+      card.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function appendBotMessage(text, audioB64, scheme) {
+      const feed = document.getElementById('convoFeed');
+      const card = document.createElement('div');
+      card.className = "flex justify-start";
+
+      let schemeBadge = "";
+      if (scheme) {
+        schemeBadge = `
+          <div class="mt-2 pt-2 border-t border-slate-700/60 flex items-center justify-between text-xs text-amber-300">
+            <span>🏛️ <b>Matched Scheme:</b> ${scheme.name}</span>
+            <span class="text-[10px] bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30">${scheme.state || 'All India'}</span>
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="max-w-xl glass-panel border-slate-700 rounded-2xl rounded-tl-sm p-4 text-sm text-slate-100 shadow-lg space-y-2">
+          <div class="flex items-center justify-between text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+            <span class="flex items-center gap-1.5"><i data-lucide="bot" class="w-3.5 h-3.5"></i> YojanaVaani AI Voice</span>
+            <span class="text-slate-400 font-mono">Gnani Timbre</span>
+          </div>
+          <p class="leading-relaxed">${text}</p>
+          ${schemeBadge}
+        </div>
+      `;
+      feed.appendChild(card);
+      lucide.createIcons();
+      card.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Phone Call Simulation
+    function startPhoneCall() {
+      document.getElementById('btnStartCall').classList.add('hidden');
+      document.getElementById('btnEndCall').classList.remove('hidden');
+      document.getElementById('phoneStatusText').textContent = "Call Connected • HD Voice";
+      document.getElementById('phoneTimer').classList.remove('hidden');
+      
+      currentCallSeconds = 0;
+      callTimerInterval = setInterval(() => {
+        currentCallSeconds++;
+        const mins = String(Math.floor(currentCallSeconds / 60)).padStart(2, '0');
+        const secs = String(currentCallSeconds % 60).padStart(2, '0');
+        document.getElementById('phoneTimer').textContent = `${mins}:${secs}`;
+      }, 1000);
+
+      const box = document.getElementById('phoneTranscriptBox');
+      box.innerHTML = `
+        <div class="bg-emerald-950/40 border border-emerald-800/60 p-2.5 rounded-lg text-emerald-300 text-xs">
+          <b>YojanaVaani AI:</b> "నమస్కారం! యోజనవాణి ప్రభుత్వ సంక్షేమ కాల్ సెంటర్‌కు స్వాగతం. మీ ప్రశ్నను అడగండి."
+        </div>
+      `;
+
+      // Play phone welcome
+      askPrompt("నమస్కారం! పీఎం-కిసాన్ మరియు ఇతర పథకాల సమాచారం కోసం అడగండి");
+    }
+
+    function endPhoneCall() {
+      clearInterval(callTimerInterval);
+      document.getElementById('btnStartCall').classList.remove('hidden');
+      document.getElementById('btnEndCall').classList.add('hidden');
+      document.getElementById('phoneStatusText').textContent = "Call Ended";
+      document.getElementById('phoneTimer').classList.add('hidden');
+      const audio = document.getElementById('globalAudio');
+      audio.pause();
+    }
+
+    // Load & Cache Schemes Database
+    let allSchemes = [];
+    async function loadSchemes() {
+      const grid = document.getElementById('schemesGrid');
+      if (allSchemes.length > 0) {
+        renderSchemes(allSchemes);
+        return;
+      }
+      grid.innerHTML = "<p class='text-slate-400'>Loading verified schemes...</p>";
+      try {
+        const res = await fetch('/api/schemes');
+        allSchemes = await res.json();
+        renderSchemes(allSchemes);
+      } catch (err) {
+        grid.innerHTML = "<p class='text-rose-400'>Failed to load schemes.</p>";
+      }
+    }
+
+    function renderSchemes(schemes) {
+      const grid = document.getElementById('schemesGrid');
+      grid.innerHTML = "";
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const t = SITE_I18N[lang] || SITE_I18N['en'];
+      const btnText = t.askVoiceBtn || 'Ask in Voice';
+
+      schemes.forEach(s => {
+        const card = document.createElement('div');
+        card.className = "glass-panel p-5 rounded-2xl border-slate-800 hover:border-sky-500/40 transition space-y-3";
+        
+        let queryPrompt = `${s.name} scheme eligibility and benefits?`;
+        if (lang === 'te') queryPrompt = `${s.name} పథకం వివరాలు మరియు అర్హతలు ఏమిటి?`;
+        else if (lang === 'hi') queryPrompt = `${s.name} योजना की पात्रता और लाभ क्या हैं?`;
+        else if (lang === 'as') queryPrompt = `${s.name} আঁচনিৰ বিৱৰণ আৰু সুবিধা কি?`;
+        else if (lang === 'ur') queryPrompt = `${s.name} اسکیم کی اہلیت اور فوائد کیا ہیں؟`;
+        else if (lang === 'ta') queryPrompt = `${s.name} திட்டத்தின் பலன் மற்றும் தகுதிகள் என்ன?`;
+        else if (lang === 'kn') queryPrompt = `${s.name} ಯೋಜನೆಯ ಪ್ರಯೋಜನಗಳು ಮತ್ತು ಅರ್ಹತೆ ಏನು?`;
+        else if (lang === 'bn') queryPrompt = `${s.name} প্রকল্পের সুবিধা ও যোগ্যতা কি?`;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">${s.state || 'All India'}</span>
+            <span class="text-[10px] text-slate-500 font-mono">${s.ministry || 'Govt of India'}</span>
+          </div>
+          <h4 class="font-bold text-white text-base">${s.name}</h4>
+          <p class="text-xs text-slate-300 line-clamp-2">${s.description || ''}</p>
+          <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs font-semibold text-emerald-400">${s.benefit || 'Welfare Benefit'}</span>
+            <button onclick="askPrompt('${queryPrompt.replace(/'/g, "\\'")}')" class="text-xs font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1">
+              ${btnText} <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    // Initial greeting and visualizer loop
+    window.onload = () => {
+      onLangChange();
+      drawLiveVisualizer();
+      loadSchemes();
+    };
+  </script>
+</body>
+</html>
+
