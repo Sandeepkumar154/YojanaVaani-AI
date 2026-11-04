@@ -1184,7 +1184,17 @@
         };
         utterance.lang = langMap[langCode] || 'en-IN';
         utterance.rate = 0.95;
-        utterance.pitch = 1.0;
+        utterance.pitch = 1.25; // Warm female pitch
+
+        // Select female voice if available
+        const allVoices = window.speechSynthesis.getVoices();
+        const targetLang = langMap[langCode] || 'en-IN';
+        const femaleVoice = allVoices.find(v => (v.lang === targetLang || v.lang.startsWith(targetLang.slice(0, 2))) && /female|woman|girl|zira|kavya|swara|kalpana|heera|priya|aarohi|sangeeta/i.test(v.name))
+          || allVoices.find(v => /female|woman|girl|zira|kavya|swara|kalpana|heera|priya|aarohi|sangeeta/i.test(v.name))
+          || allVoices.find(v => v.lang === targetLang || v.lang.startsWith(targetLang.slice(0, 2)));
+        if (femaleVoice) {
+          utterance.voice = femaleVoice;
+        }
 
         const orb = document.getElementById('voiceOrb');
         const title = document.getElementById('orbStatusTitle');

@@ -75,11 +75,15 @@ def serve_home():
 
 @app.get("/api/health")
 def health_check():
+    gnani_ok = bool(os.getenv("GNANI_API_KEY", "").strip())
+    gemini_ok = bool(os.getenv("GEMINI_API_KEY", "").strip())
     return {
         "status": "online",
         "service": "YojanaVaani AI Telephony Gateway",
         "gnani_stt": "Prisma v3.0 (telephony 8kHz/16kHz)",
         "gnani_tts": "Timbre v2.5",
+        "has_gnani_key": gnani_ok,
+        "has_gemini_key": gemini_ok,
         "server_url": get_server_url(),
         "carrier_number": os.getenv("TWILIO_PHONE_NUMBER", "+17372508034"),
         "total_active_sessions": len(CALL_SESSIONS),

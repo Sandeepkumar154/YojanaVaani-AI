@@ -1051,7 +1051,10 @@ def process_voice_turn(
                 user_audio = cleaned_audio
             except Exception as e:
                 print(f"[Voice Pipeline] STT processing error: {e}")
-                transcript = ""
+                if not has_api_key():
+                    transcript = "API Key Missing on Server"
+                else:
+                    transcript = ""
         else:
             print(f"[Voice Pipeline] user_audio too short ({len(user_audio)} bytes), skipping STT.")
             transcript = ""
