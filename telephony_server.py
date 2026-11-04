@@ -75,15 +75,17 @@ def serve_home():
 
 @app.get("/api/health")
 def health_check():
-    gnani_ok = bool(os.getenv("GNANI_API_KEY", "").strip())
-    gemini_ok = bool(os.getenv("GEMINI_API_KEY", "").strip())
+    gnani_diag = verify_gnani_connection()
+    gemini_diag = verify_gemini_connection()
     return {
         "status": "online",
         "service": "YojanaVaani AI Telephony Gateway",
         "gnani_stt": "Prisma v3.0 (telephony 8kHz/16kHz)",
         "gnani_tts": "Timbre v2.5",
-        "has_gnani_key": gnani_ok,
-        "has_gemini_key": gemini_ok,
+        "has_gnani_key": bool(os.getenv("GNANI_API_KEY", "").strip()),
+        "has_gemini_key": bool(os.getenv("GEMINI_API_KEY", "").strip()),
+        "gnani_check": gnani_diag,
+        "gemini_check": gemini_diag,
         "server_url": get_server_url(),
         "carrier_number": os.getenv("TWILIO_PHONE_NUMBER", "+17372508034"),
         "total_active_sessions": len(CALL_SESSIONS),
@@ -127,7 +129,7 @@ def get_announcement(lang: str = "indic-auto"):
     entry = ANNOUNCEMENT_TEXTS.get(lang) or ANNOUNCEMENT_TEXTS["indic-auto"]
     text, lang_code = entry
 
-    if lang not in ANNOUNCEMENT_CACHE:
+    if not ANNOUNCEMENT_CACHE.get(lang):
         try:
             audio_bytes = synthesize(text, language=lang_code)
             ANNOUNCEMENT_CACHE[lang] = base64.b64encode(audio_bytes).decode("utf-8")
@@ -151,7 +153,7 @@ def get_announcement_wav(lang: str = "indic-auto"):
     entry = ANNOUNCEMENT_TEXTS.get(lang) or ANNOUNCEMENT_TEXTS["indic-auto"]
     text, lang_code = entry
 
-    if lang not in ANNOUNCEMENT_RAW_CACHE:
+    if not ANNOUNCEMENT_RAW_CACHE.get(lang):
         try:
             ANNOUNCEMENT_RAW_CACHE[lang] = synthesize(text, language=lang_code)
         except Exception as e:
