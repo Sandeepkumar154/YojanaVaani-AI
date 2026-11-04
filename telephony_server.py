@@ -24,6 +24,8 @@ from services import (
     has_api_key,
     _load_kb,
     INDIAN_OFFICIAL_LANGUAGES,
+    verify_gnani_connection,
+    verify_gemini_connection,
 )
 
 load_dotenv(override=True)
