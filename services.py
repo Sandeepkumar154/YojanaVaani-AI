@@ -124,7 +124,7 @@ INDIAN_OFFICIAL_LANGUAGES: dict[str, dict[str, str]] = {
 }
 
 VOICE_MAP: dict[str, tuple[str, str]] = {
-    code: (code if code != "indic-auto" else "hi-en", "Poorvi")
+    code: (code if code != "indic-auto" else "hi-en", "Aarohi")
     for code in INDIAN_OFFICIAL_LANGUAGES.keys()
 }
 
@@ -240,14 +240,14 @@ def enhance_audio(audio_bytes: bytes) -> bytes:
         # 2. Bandpass filter for speech clarity (80 Hz to 7500 Hz)
         nyq = 0.5 * framerate
         if nyq > 120:
-            low = max(80.0 / nyq, 0.01)
+            low = max(40.0 / nyq, 0.005)
             high = min(7500.0 / nyq, 0.98)
             b, a = signal.butter(2, [low, high], btype="bandpass")
             data = signal.lfilter(b, a, data)
 
         # 3. Dynamic Gain & Peak Normalization (up to 500x boost for faint rural microphones)
         max_val = np.max(np.abs(data))
-        if max_val > 5.0:
+        if max_val > 1.0:
             target_peak = 28000.0
             gain = min(target_peak / max_val, 500.0)
             data = data * gain
@@ -466,7 +466,7 @@ def get_voice_for_language(lang_code: str | None) -> tuple[str, str]:
 
 TTS_CACHE: dict[str, bytes] = {}
 
-def synthesize(text: str, language: str = "hi-en", voice: str = "Poorvi") -> bytes:
+def synthesize(text: str, language: str = "hi-en", voice: str = "Aarohi") -> bytes:
     clean_text = text.strip()[:1200]
     cache_key = f"{language}:{voice}:{clean_text}"
     if cache_key in TTS_CACHE:
@@ -504,7 +504,7 @@ def verify_gnani_connection() -> dict[str, Any]:
         return {"ok": False, "status": "missing", "error": "No GNANI_API_KEY found in .env"}
     t0 = time.time()
     try:
-        audio = synthesize("నమస్కారం", language="te", voice="Poorvi")
+        audio = synthesize("నమస్కారం", language="te", voice="Aarohi")
         lat = round((time.time() - t0) * 1000)
         return {"ok": True, "status": "active", "latency_ms": lat, "bytes": len(audio)}
     except Exception as e:

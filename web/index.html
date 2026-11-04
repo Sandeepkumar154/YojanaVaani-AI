@@ -1410,7 +1410,7 @@
         }
 
         // Intelligent Voice Activity Detection (Auto-Cutoff on pause)
-        if (rms > 0.012) {
+        if (rms > 0.003) {
           speechDetected = true;
           lastSpeechTime = Date.now();
           silenceCounter = 0;
@@ -1420,13 +1420,13 @@
           }
         } else if (speechDetected && lastSpeechTime) {
           const silenceMs = Date.now() - lastSpeechTime;
-          const remainSec = Math.max(0, ((1200 - silenceMs) / 1000)).toFixed(1);
+          const remainSec = Math.max(0, ((1800 - silenceMs) / 1000)).toFixed(1);
           const micStatus = document.getElementById('micStatusText');
           if (micStatus) {
             micStatus.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span> <span class="text-amber-300 font-semibold">● Pausing... sending question in ${remainSec}s</span>`;
           }
 
-          if (silenceMs >= 1200) {
+          if (silenceMs >= 1800) {
             console.log("VAD: 1.2s natural pause detected. Auto-submitting citizen voice question!");
             stopRecording();
           }
@@ -1450,10 +1450,16 @@
         }
 
         try {
-          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: false, // Preserves natural low-pitch and vocal body
+              autoGainControl: true
+            }
+          });
         } catch (e1) {
-          console.warn("Retrying getUserMedia with basic audio constraint:", e1);
-          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false } });
+          console.warn("Retrying getUserMedia with basic audio fallback:", e1);
+          mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         }
         
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1485,8 +1491,9 @@
           } catch (e) {}
           analyser = null;
 
-          if (!hasSpeech && recordSeconds < 4) {
-            console.log("Recorded buffer was silent. Skipping network call.");
+          // Always process the recorded voice audio
+          if (audioChunks.length === 0) {
+            console.log("No audio chunks recorded.");
             return;
           }
 
@@ -1521,7 +1528,7 @@
           
           // Initial Silence Auto-Cutoff:
           // If citizen clicked start but did not speak within 4 seconds, auto-stop!
-          if (!speechDetected && recordSeconds >= 4) {
+          if (!speechDetected && recordSeconds >= 8) {
             console.log("VAD: No speech detected within 4s initial window. Auto-stopping to save citizen time.");
             stopRecording(true);
             return;
