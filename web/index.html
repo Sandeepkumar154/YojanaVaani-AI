@@ -1287,7 +1287,7 @@
       };
     }
 
-    function onLangChange() {
+    function onLangChange(isInitial = false) {
       const lang = document.getElementById('langSelect').value;
       applyLanguageContext(lang);
       const prompts = {
@@ -1317,7 +1317,16 @@
         'brx': 'खুলुमबाय! সোलोंথায়নি সোমোन्दै সों।',
         'sat': 'ᱡᱚᱦᱟᱨ! ᱥᱚᱨᱠﺎᱨᱤ ᱡᱚᱡᱚᱱᱟ ᱵᱟᱵᱚᱛ ᱠᱩᱞᱤ ᱢᱮ.'
       };
-      const feed = document.getElementById('convoFeed'); if (feed) feed.innerHTML = ''; appendBotMessage(prompts[lang] || prompts['en'], null, null); playDirectAnnouncement(true);
+      const feed = document.getElementById('convoFeed');
+      if (feed) feed.innerHTML = '';
+      appendBotMessage(prompts[lang] || prompts['en'], null, null);
+
+      // Only play the welcome announcement once on initial website open
+      if (isInitial && !announcementPlayed) {
+        playDirectAnnouncement(false);
+      } else {
+        stopAudioPlayback();
+      }
     }
     
     let speechDetected = false;
@@ -1993,7 +2002,7 @@
 
     // Initial greeting and visualizer loop
     window.onload = () => {
-      onLangChange();
+      onLangChange(true);
       drawLiveVisualizer();
       loadSchemes();
     };
