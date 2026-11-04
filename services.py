@@ -690,7 +690,7 @@ def generate_dynamic_response(
                 headers={"Content-Type": "application/json"},
                 json={
                     "contents": [{"parts": [{"text": system_instruction}]}],
-                    "generationConfig": {"temperature": 0.2, "maxOutputTokens": 250},
+                    "generationConfig": {"temperature": 0.2, "maxOutputTokens": 1000, "thinkingConfig": {"thinkingBudget": 0}},
                 },
                 timeout=8,
             )
