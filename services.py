@@ -58,6 +58,32 @@ KB_PATH = ROOT / "knowledge_base.json"
 STT_URL = "https://api.vachana.ai/stt/v3"
 TTS_URL = "https://api.vachana.ai/api/v1/tts/inference"
 
+
+STATE_ALIASES: dict[str, list[str]] = {
+    "Andhra Pradesh": ["andhra pradesh", "andhra", "ap", "ఆంధ్రప్రదేశ్", "ఆంధ్ర", "ఆంధ్ర ప్రదేశ్", "आंध्र प्रदेश", "ஆந்திரா", "ಆಂಧ್ರಪ್ರದೇಶ"],
+    "Telangana": ["telangana", "ts", "తెలంగాణ", "तेलंगाना", "ತೆಲಂಗಾಣ", "தெலுங்கானா"],
+    "Karnataka": ["karnataka", "కర్ణాటక", "ಕರ್ನಾಟಕ", "कर्नाटक", "கர்நாடகா"],
+    "Tamil Nadu": ["tamil nadu", "tamilnadu", "tn", "తమిళనాడు", "தமிழ்நாடு", "तमिलनाडु", "ತಮಿಳುನಾಡು"],
+    "Maharashtra": ["maharashtra", "మహారాష్ట్ర", "महाराष्ट्र", "மகாராஷ்டிரா"],
+    "Kerala": ["kerala", "కేరళ", "കേരളం", "केरल", "கேரளா"],
+    "Uttar Pradesh": ["uttar pradesh", "up", "ఉత్తర ప్రదేశ్", "उत्तर प्रदेश"],
+    "Bihar": ["bihar", "బీహార్", "बिहार"],
+    "West Bengal": ["west bengal", "bengal", "పశ్చిమ బెంగాల్", "পশ্চিমবঙ্গ", "पश्चिम बंगाल"],
+    "Madhya Pradesh": ["madhya pradesh", "mp", "మధ్యప్రదేశ్", "मध्य प्रदेश"],
+    "Rajasthan": ["rajasthan", "రాజస్థాన్", "राजस्थान"],
+    "Gujarat": ["gujarat", "గుజరాత్", "ગુજરાત", "गुजरात"],
+    "Odisha": ["odisha", "orissa", "ఒడిశా", "ଓଡ଼ିଶା", "ओडिशा"],
+    "Punjab": ["punjab", "పంజాబ్", "ਪੰਜਾਬ", "पंजाब"],
+    "Assam": ["assam", "అస్సాం", "অসম", "असम"]
+}
+
+def detect_state_from_query(query: str) -> str | None:
+    low = query.lower()
+    for state, aliases in STATE_ALIASES.items():
+        if any(a in low for a in aliases):
+            return state
+    return None
+
 SCAM_OR_FRAUD_TERMS = (
     "otp", "atm pin", "cvv", "lottery", "password", "bank password",
     "paise transfer", "paisa bhejo", "fake call", "fraud", "మోసం",
@@ -772,6 +798,42 @@ def answer_open_ended_scheme(
     return (fallback_msg, None, True)
 
 
+
+def build_comprehensive_state_schemes_response(state: str, schemes: list[dict[str, Any]], lang_code: str) -> str:
+    """Build a complete, thorough scheme-by-scheme breakdown in native script when citizen requests full schemes."""
+    if lang_code == "te":
+        header = f"ఆంధ్రప్రదేశ్ రాష్ట్రంలో ఉన్న ముఖ్యమైన ప్రభుత్వ సంక్షేమ పథకాల పూర్తి వివరాలు:" if state == "Andhra Pradesh" else f"{state} రాష్ట్ర సంక్షేమ పథకాలు:"
+        entries = []
+        for idx, s in enumerate(schemes, start=1):
+            name = s.get("name", "")
+            benefit = s.get("benefit", "")
+            eligibility = s.get("eligibility", "")
+            entries.append(f"{idx}. {name}:\n• లబ్ధి: {benefit}\n• అర్హత: {eligibility}")
+        footer = "\n\nదరఖాస్తు విధానం: గ్రామ/వార్డు సచివాలయంలో లేదా ఆన్‌లైన్ సేవా కేంద్రంలో ఆధార్ మరియు రేషన్ కార్డుతో దరఖాస్తు చేసుకోవచ్చు."
+        return header + "\n\n" + "\n\n".join(entries) + footer
+
+    elif lang_code == "hi":
+        header = f"{state} राज्य की प्रमुख सरकारी कल्याणकारी योजनाओं का संपूर्ण विवरण:"
+        entries = []
+        for idx, s in enumerate(schemes, start=1):
+            name = s.get("name", "")
+            benefit = s.get("benefit", "")
+            eligibility = s.get("eligibility", "")
+            entries.append(f"{idx}. {name}:\n• लाभ: {benefit}\n• पात्रता: {eligibility}")
+        footer = "\n\nआवेदन प्रक्रिया: आप नजदीकी ग्राम सचिवालय या ऑनलाइन सेवा केंद्र में आधार और राशन कार्ड के साथ आवेदन कर सकते हैं।"
+        return header + "\n\n" + "\n\n".join(entries) + footer
+
+    else:
+        header = f"Comprehensive Overview of Welfare Schemes in {state}:"
+        entries = []
+        for idx, s in enumerate(schemes, start=1):
+            name = s.get("name", "")
+            benefit = s.get("benefit", "")
+            eligibility = s.get("eligibility", "")
+            entries.append(f"{idx}. {name}:\n• Benefit: {benefit}\n• Eligibility: {eligibility}")
+        footer = "\n\nHow to Apply: Visit your nearest Village/Ward Secretariat (Sachivalayam) or Common Service Centre with Aadhaar and Ration Card."
+        return header + "\n\n" + "\n\n".join(entries) + footer
+
 def generate_multi_scheme_response(
     query: str,
     schemes: list[dict[str, Any]],
@@ -904,21 +966,28 @@ def answer_from_schemes(
     scored.sort(key=lambda row: row[0], reverse=True)
     score, best = scored[0]
 
-    # Detect if citizen asked for a list or overview of multiple schemes
-    list_intents = ["list", "what and all", "what all", "available", "all schemes", "schemes in", "schemes for", "how many", "tell me schemes", "అన్ని", "జాబితా", "పథకాలు",
-                     "सभी", "योजनाएं", "सूची", "لیست", "Sab", "Saare", "查询", "列表", "список", "Список",
-                     "궁금증", "목록", "danh sách", "Danh sách", "รายการ", "รายการ", "දර්ශක", "Dandekar",
-                     "Список", "Lista", "Lijst", "Список", "Makala", "Makala"]
+    # Detect if citizen asked for a list or overview of multiple schemes or state schemes
+    detected_state = detect_state_from_query(lowered) or (state_filter if state_filter not in ("All Schemes", "All India") else None)
+    list_intents = ["list", "what and all", "what all", "available", "all schemes", "schemes in", "schemes for", "how many", "tell me schemes", 
+                    "ప్రతి", "అన్ని", "జాబితా", "పథకాలు", "స్కీములు", "స్కీమ్", "చెప్పండి", "వివరించండి", "explain",
+                    "सभी", "योजनाएं", "सूची", "हर योजना", "बताइए", "لیست", "Sab", "Saare"]
     is_list_query = any(w in lowered for w in list_intents)
 
+    # If citizen asks for all/every scheme in a state (e.g. Andhra Pradesh)
+    if detected_state:
+        state_schemes = [item for item in items if item.get("state") == detected_state]
+        if state_schemes and (is_list_query or score < 5):
+            print(f"[State Schemes Engine] Resolved {len(state_schemes)} full schemes for {detected_state} in {active_lang}!")
+            full_answer = build_comprehensive_state_schemes_response(detected_state, state_schemes, active_lang)
+            return full_answer, state_schemes[0], False
+
     if is_list_query and score >= 5:
-        # Collect top matching schemes (score >= 5 or same state)
-        matched_schemes = [item for sc, item in scored if sc >= 5][:4]
+        matched_schemes = [item for sc, item in scored if sc >= 5][:8]
         if len(matched_schemes) > 1:
             if has_gemini_key():
                 answer_text = generate_multi_scheme_response(question, matched_schemes, active_lang)
             else:
-                answer_text = " \n".join([_pick_answer(s, active_lang) for s in matched_schemes[:2]])
+                answer_text = " \n".join([_pick_answer(s, active_lang) for s in matched_schemes[:4]])
             return answer_text, best, False
 
     if score >= 5:
