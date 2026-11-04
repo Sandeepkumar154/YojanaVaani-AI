@@ -1150,13 +1150,78 @@
       if (allSchemes && allSchemes.length > 0) renderSchemes(allSchemes);
     }
 
+    const ANNOUNCEMENT_TEXTS_LOCAL = {
+      'indic-auto': 'Welcome to YojanaVaani AI. Tap Start Recording and speak in your mother tongue, or ask any question about government welfare schemes.',
+      'en': 'Welcome to YojanaVaani AI. Tap Start Recording and speak in your mother tongue, or ask any question about government welfare schemes.',
+      'hi-en': 'Namaste! Welcome to YojanaVaani AI. Tap Start Recording and speak in your mother tongue.',
+      'te': 'నమస్కారం! యోజనవాణి ప్రభుత్వ సంక్షేమ పోర్టల్‌కు స్వాగతం. మైక్ నొక్కి మీ ప్రశ్నను అడగండి.',
+      'hi': 'नमस्ते! योजनावाणी पोर्टल में आपका स्वागत है। सरकारी योजनाओं की जानकारी के लिए माइक दबाकर बोलें।',
+      'ta': 'வணக்கம்! யோஜனாவாணி போர்ட்டலுக்கு நல்வரவு. அரசு திட்டங்கள் பற்றி அறிய மைக் பொத்தானை அழுத்தவும்.',
+      'kn': 'ನಮಸ್ಕಾರ! ಯೋಜನಾವಾಣಿ ಪೋರ್ಟಲ್‌ಗೆ ಸುಸ್ವಾಗತ. ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಮಾಹಿತಿಗಾಗಿ ಮೈಕ್ ಒತ್ತಿ ಮಾತನಾಡಿ.',
+      'ml': 'നമസ്കാരം! യോജനാവാണിയിലേക്ക് സ്വാഗതം. സർക്കാർ പദ്ധതികളെക്കുറിച്ച് ചോദിക്കൂ.',
+      'mr': 'नमस्कार! योजनावाणी पोर्टलवर आपले स्वागत आहे. सरकारी योजनांबद्दल प्रश्न विचारा.',
+      'bn': 'নমস্কার! যোজনা বাণী পোর্টালে আপনাকে স্বাগতম। সরকারি প্রকল্প সম্পর্কে প্রশ্ন করুন।',
+      'gu': 'નમસ્તે! યોજનાવાણી પોર્ટલ પર આપનું સ્વાગત છે.',
+      'pa': 'ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ! ਯੋਜਨਾਵਾਣੀ ਪੋਰਟਲ ਤੇ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ।'
+    };
+
     let announcementPlayed = false;
+
+    // Bulletproof Browser Voice Fallback (Web Speech API)
+    function fallbackSpeak(textToSpeak, langCode = 'en') {
+      if (!textToSpeak || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        
+        // Clean markdown characters out for smooth voice synthesis
+        const cleanText = textToSpeak.replace(/[\*\_#`]/g, '').trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+
+        const langMap = {
+          'te': 'te-IN', 'hi': 'hi-IN', 'en': 'en-IN', 'ta': 'ta-IN', 'kn': 'kn-IN',
+          'ml': 'ml-IN', 'mr': 'mr-IN', 'bn': 'bn-IN', 'gu': 'gu-IN', 'pa': 'pa-IN',
+          'ur': 'ur-PK', 'indic-auto': 'en-IN', 'hi-en': 'hi-IN'
+        };
+        utterance.lang = langMap[langCode] || 'en-IN';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+
+        const orb = document.getElementById('voiceOrb');
+        const title = document.getElementById('orbStatusTitle');
+        const stopBtn = document.getElementById('btnStopAudio');
+
+        utterance.onstart = () => {
+          announcementPlayed = true;
+          if (orb) orb.classList.add('speaking');
+          if (title) title.textContent = "🔊 AI Speaking...";
+          if (stopBtn) stopBtn.classList.remove('hidden');
+        };
+
+        utterance.onend = () => {
+          if (orb) orb.classList.remove('speaking');
+          if (stopBtn) stopBtn.classList.add('hidden');
+          if (title) title.textContent = "Tap Orb or Start Recording";
+        };
+
+        utterance.onerror = () => {
+          if (orb) orb.classList.remove('speaking');
+          if (stopBtn) stopBtn.classList.add('hidden');
+          if (title) title.textContent = "Tap Orb or Start Recording";
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.warn("[SpeechSynthesis Error]", e);
+      }
+    }
 
     async function playDirectAnnouncement(force = false) {
       if (announcementPlayed && !force) return;
       const lang = document.getElementById('langSelect')?.value || 'indic-auto';
       const audio = document.getElementById('globalAudio');
       if (!audio) return;
+
+      const fallbackText = ANNOUNCEMENT_TEXTS_LOCAL[lang] || ANNOUNCEMENT_TEXTS_LOCAL['indic-auto'];
 
       audio.pause();
       audio.currentTime = 0;
@@ -1175,18 +1240,25 @@
         if (stopBtn) stopBtn.classList.remove('hidden');
       };
 
+      // Handle backend audio fail / 404 / 500 by seamlessly switching to browser voice
+      audio.onerror = () => {
+        console.warn("[Voice Server] Cloud audio unavailable. Falling back to browser voice engine.");
+        fallbackSpeak(fallbackText, lang);
+      };
+
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(() => {
           onPlaybackActive();
         }).catch((err) => {
-          console.warn("[Autoplay Policy] Waiting for user interaction to begin voice intro.", err);
-          // Silently trigger on very first citizen interaction anywhere on the website without any banner
+          console.warn("[Autoplay Policy] Waiting for citizen touch to play intro.", err);
           const triggerOnFirstInteraction = () => {
             if (!announcementPlayed) {
               audio.play().then(() => {
                 onPlaybackActive();
-              }).catch(() => {});
+              }).catch(() => {
+                fallbackSpeak(fallbackText, lang);
+              });
             }
             ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(e => {
               window.removeEventListener(e, triggerOnFirstInteraction, true);
@@ -1616,6 +1688,10 @@
 
       if (data.audio_base64) {
         playAudio(data.audio_base64);
+      } else if (data.reply_text) {
+        // Fallback to browser voice when cloud API key is missing on deployed server
+        const langCode = data.detected_lang || document.getElementById('langSelect')?.value || 'en';
+        fallbackSpeak(data.reply_text, langCode);
       }
     }
 
@@ -1636,6 +1712,9 @@
 
     // Stop AI Voice Playback immediately
     function stopAudioPlayback() {
+      if (window.speechSynthesis) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
       const audio = document.getElementById('globalAudio');
       if (audio) {
         audio.pause();
