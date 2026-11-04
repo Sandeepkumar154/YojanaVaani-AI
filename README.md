@@ -2,7 +2,9 @@
 
 > **Aapki Bhasha Me Sarkari Yojnaon Ki Jankari**  
 > Built for the **[Gnani AI Great Indian AI Internship Challenge](https://www.gnani.ai/great-indian-ai-internship-registration-form)**  
-> Powered by **Gnani Prisma STT (Speech-to-Text)** and **Gnani Timbre TTS (Text-to-Speech)**.
+> Powered by **Gnani Prisma Indic STT** and **Gnani Timbre TTS (v2.5)**.  
+> 🌐 **Live Public App**: [https://yojanavaani-ai.onrender.com](https://yojanavaani-ai.onrender.com)  
+> 📂 **GitHub Repository**: [https://github.com/Sandeepkumar154/YojanaVaani-AI](https://github.com/Sandeepkumar154/YojanaVaani-AI)
 
 ---
 
@@ -25,7 +27,7 @@ Citizens simply **tap the mic and speak naturally in their mother tongue or Hing
 | Award Category | How YojanaVaani AI Hits It |
 |---|---|
 | 🗣️ **22 Official Languages** | Covers all 22 Eighth Schedule Indian languages (Hindi, Bengali, Telugu, Marathi, Tamil, Kannada, Malayalam, Gujarati, Punjabi, Odia, Assamese, etc.) + Hinglish & English via Prisma STT (`indic-auto`) & Timbre TTS |
-| 🏛️ **Central + All State Schemes** | 27+ welfare schemes covering Central Government & State initiatives across Maharashtra, Karnataka, Tamil Nadu, Madhya Pradesh, Uttar Pradesh, Telangana, Andhra Pradesh, West Bengal, Rajasthan, Bihar, Gujarat, Odisha |
+| 🏛️ **Central + All State Schemes** | 188+ verified major welfare schemes covering Central Government & State initiatives across 14 major states (at least 12 schemes per state) across Maharashtra, Karnataka, Tamil Nadu, Madhya Pradesh, Uttar Pradesh, Telangana, Andhra Pradesh, West Bengal, Rajasthan, Bihar, Gujarat, Odisha |
 | 🔀 **Code-Mixed Voice / Hinglish** | Built specifically to understand natural Indian code-mixing (e.g. *"Dukan ke liye Mudra loan kaise apply karein?"*, *"Ladki Bahin yojana me kitna milta hai?"*) |
 | 📞 **Noisy Audio Robustness** | Tested for real-world ambient street/village noise using Prisma's telephony-grade speech model |
 | 🌍 **Real-World Impact** | Connects marginalized rural & small-town families to life-changing healthcare, housing, and livelihood funds |
