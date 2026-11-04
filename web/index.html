@@ -288,10 +288,6 @@
 
           <!-- Explicit Action Buttons: Start, Stop, and Mute AI -->
           <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
-            <button id="btnPlayAnnouncement" onclick="playDirectAnnouncement(true)" class="px-5 py-3 rounded-2xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-sm flex items-center gap-2 border border-amber-500/40 shadow-lg shadow-amber-500/10 transition-all transform hover:scale-105 active:scale-95 cursor-pointer">
-              <span class="text-base">🔊</span>
-              <span id="btnAnnouncementText">Play Announcement</span>
-            </button>
             <button id="btnStartRecord" onclick="startRecording()" class="px-7 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-sm flex items-center gap-2.5 shadow-lg shadow-emerald-500/25 transition-all transform hover:scale-105 active:scale-95">
               <svg class="w-4 h-4 text-white pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
@@ -1156,21 +1152,9 @@
 
     let announcementPlayed = false;
 
-    function showAutoplayHint() {
-      if (document.getElementById('autoplayBanner')) return;
-      const b = document.createElement('div');
-      b.id = 'autoplayBanner';
-      b.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-gradient-to-r from-amber-500 to-emerald-500 text-slate-950 px-5 py-2.5 rounded-full font-bold text-xs shadow-2xl flex items-center gap-2 animate-bounce cursor-pointer border border-amber-200';
-      b.innerHTML = '<span class="text-sm">🔊</span> <span>Welcome announcement ready — Click anywhere to listen!</span>';
-      b.onclick = () => {
-        playDirectAnnouncement(true);
-        b.remove();
-      };
-      document.body.appendChild(b);
-    }
-
     async function playDirectAnnouncement(force = false) {
-      const lang = document.getElementById('langSelect').value || 'indic-auto';
+      if (announcementPlayed && !force) return;
+      const lang = document.getElementById('langSelect')?.value || 'indic-auto';
       const audio = document.getElementById('globalAudio');
       if (!audio) return;
 
@@ -1181,36 +1165,35 @@
       audio.src = `/api/announcement.wav?lang=${encodeURIComponent(lang)}`;
 
       const orb = document.getElementById('voiceOrb');
-      if (orb) orb.classList.add('speaking');
-      
       const title = document.getElementById('orbStatusTitle');
-      if (title) title.textContent = "🔊 Welcome Announcement Playing...";
-
       const stopBtn = document.getElementById('btnStopAudio');
-      if (stopBtn) stopBtn.classList.remove('hidden');
+
+      const onPlaybackActive = () => {
+        announcementPlayed = true;
+        if (orb) orb.classList.add('speaking');
+        if (title) title.textContent = "🔊 Welcome Announcement Playing...";
+        if (stopBtn) stopBtn.classList.remove('hidden');
+      };
 
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(() => {
-          announcementPlayed = true;
-          const banner = document.getElementById('autoplayBanner');
-          if (banner) banner.remove();
+          onPlaybackActive();
         }).catch((err) => {
-          console.warn("[Autoplay Policy] Direct playback restricted. Waiting for gesture.", err);
-          showAutoplayHint();
-          const triggerOnGesture = () => {
-            audio.play().then(() => {
-              announcementPlayed = true;
-              if (orb) orb.classList.add('speaking');
-              const banner = document.getElementById('autoplayBanner');
-              if (banner) banner.remove();
-            }).catch(() => {});
+          console.warn("[Autoplay Policy] Waiting for user interaction to begin voice intro.", err);
+          // Silently trigger on very first citizen interaction anywhere on the website without any banner
+          const triggerOnFirstInteraction = () => {
+            if (!announcementPlayed) {
+              audio.play().then(() => {
+                onPlaybackActive();
+              }).catch(() => {});
+            }
             ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(e => {
-              window.removeEventListener(e, triggerOnGesture);
+              window.removeEventListener(e, triggerOnFirstInteraction, true);
             });
           };
           ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(e => {
-            window.addEventListener(e, triggerOnGesture, { once: true });
+            window.addEventListener(e, triggerOnFirstInteraction, { once: true, capture: true });
           });
         });
       }
