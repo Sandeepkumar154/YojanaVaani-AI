@@ -210,8 +210,9 @@ def enhance_audio(audio_bytes: bytes) -> bytes:
     if not audio_bytes or len(audio_bytes) < 44:
         return audio_bytes
 
-    # Step 0: Transcode WebM / Opus / OGG into 16kHz linear PCM WAV
-    audio_bytes = convert_to_pcm_wav(audio_bytes, target_sr=16000)
+    # Step 0: Ensure 16kHz linear PCM WAV (avoid re-encoding if already true RIFF WAV)
+    if not (audio_bytes[:4] == b"RIFF" and b"WAVE" in audio_bytes[:16]):
+        audio_bytes = convert_to_pcm_wav(audio_bytes, target_sr=16000)
 
     try:
         with io.BytesIO(audio_bytes) as bio:
@@ -445,13 +446,18 @@ def transcribe(audio_bytes: bytes, filename: str, mime_type: str, language_code:
         "format": "codemix",
         "topic": "Government welfare schemes, citizen benefits, farmer assistance, health and housing",
     }
+    # Ensure file is sent with proper format
+    send_filename = "citizen_voice.wav" if audio_bytes[:4] == b"RIFF" else filename
+    send_mime = "audio/wav" if audio_bytes[:4] == b"RIFF" else (mime_type or "audio/wav")
+
     response = requests.post(
         STT_URL,
         headers={"X-API-Key-ID": api_key()},
-        files={"audio_file": (filename, audio_bytes, mime_type or "application/octet-stream")},
+        files={"audio_file": (send_filename, audio_bytes, send_mime)},
         data=data,
         timeout=60,
     )
+    print(f"[Prisma STT API] Status={response.status_code}, Bytes={len(audio_bytes)}, Resp={response.text[:120]}")
     if not response.ok:
         raise GnaniError(f"Prisma request failed ({response.status_code}): {response.text[:300]}")
     body = response.json()

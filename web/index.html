@@ -1436,6 +1436,57 @@
     }
 
     // Start Audio Recording with Persistent Audio Pipeline
+        // Direct Client-Side 16kHz 16-bit Mono Linear PCM WAV Encoder
+    let pcmProcessorNode = null;
+    let recordedPcmSamples = [];
+
+    function encodeWavBlob(samples, sourceRate) {
+      const targetRate = 16000;
+      let downsampled;
+      if (sourceRate === targetRate) {
+        downsampled = samples;
+      } else {
+        const ratio = sourceRate / targetRate;
+        const newLen = Math.round(samples.length / ratio);
+        downsampled = new Float32Array(newLen);
+        for (let i = 0; i < newLen; i++) {
+          const idx = Math.min(Math.floor(i * ratio), samples.length - 1);
+          downsampled[i] = samples[idx];
+        }
+      }
+
+      const buffer = new ArrayBuffer(44 + downsampled.length * 2);
+      const view = new DataView(buffer);
+
+      function writeStr(offset, str) {
+        for (let i = 0; i < str.length; i++) {
+          view.setUint8(offset + i, str.charCodeAt(i));
+        }
+      }
+
+      writeStr(0, 'RIFF');
+      view.setUint32(4, 36 + downsampled.length * 2, true);
+      writeStr(8, 'WAVE');
+      writeStr(12, 'fmt ');
+      view.setUint32(16, 16, true);          // SubChunk1Size (PCM = 16)
+      view.setUint16(20, 1, true);           // AudioFormat (1 = Linear PCM)
+      view.setUint16(22, 1, true);           // NumChannels (1 = Mono)
+      view.setUint32(24, targetRate, true);  // SampleRate (16000 Hz)
+      view.setUint32(28, targetRate * 2, true);// ByteRate (16000 * 1 * 2)
+      view.setUint16(32, 2, true);           // BlockAlign (1 * 2)
+      view.setUint16(34, 16, true);          // BitsPerSample (16-bit)
+      writeStr(36, 'data');
+      view.setUint32(40, downsampled.length * 2, true);
+
+      let offset = 44;
+      for (let i = 0; i < downsampled.length; i++, offset += 2) {
+        const s = Math.max(-1, Math.min(1, downsampled[i]));
+        view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      }
+
+      return new Blob([buffer], { type: 'audio/wav' });
+    }
+
     async function startRecording() {
       if (isRecording) return;
       stopAudioPlayback();
@@ -1473,6 +1524,19 @@
         analyser.smoothingTimeConstant = 0.5;
         source.connect(analyser);
 
+        // Native 16kHz PCM Buffer Collection (Direct Mic Tap - No lossy Opus compression)
+        recordedPcmSamples = [];
+        pcmProcessorNode = audioCtx.createScriptProcessor(4096, 1, 1);
+        pcmProcessorNode.onaudioprocess = (e) => {
+          if (!isRecording) return;
+          const input = e.inputBuffer.getChannelData(0);
+          for (let i = 0; i < input.length; i++) {
+            recordedPcmSamples.push(input[i]);
+          }
+        };
+        source.connect(pcmProcessorNode);
+        pcmProcessorNode.connect(audioCtx.destination);
+
         const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
           ? 'audio/webm;codecs=opus'
           : (MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '');
@@ -1485,19 +1549,28 @@
         };
 
         mediaRecorder.onstop = async () => {
-          const hasSpeech = speechDetected;
+          let audioBlob;
+          const sampleRate = audioCtx ? audioCtx.sampleRate : 16000;
           try {
+            if (pcmProcessorNode) {
+              pcmProcessorNode.disconnect();
+              pcmProcessorNode = null;
+            }
             if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
           } catch (e) {}
           analyser = null;
 
-          // Always process the recorded voice audio
-          if (audioChunks.length === 0) {
-            console.log("No audio chunks recorded.");
+          // Prefer direct true Linear PCM WAV
+          if (recordedPcmSamples && recordedPcmSamples.length > 2000) {
+            console.log(`[PCM Engine] Packaging ${recordedPcmSamples.length} raw audio samples into 16kHz RIFF WAV...`);
+            audioBlob = encodeWavBlob(recordedPcmSamples, sampleRate);
+          } else if (audioChunks.length > 0) {
+            audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          } else {
+            console.log("No audio recorded.");
             return;
           }
 
-          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
           await processSpokenAudio(audioBlob);
         };
 
