@@ -1333,5 +1333,158 @@
       "te": "వాహన మిత్ర పథకం ద్వారా సొంత ఆటో, టాక్సీ మరియు మ్యాక్సీ క్యాబ్ నడుపుకునే డ్రైవర్-ఓనర్లకు ఇన్సూరెన్స్, ఫిట్‌నెస్ ఖర్చుల కోసం ఏటా ₹10,000 అందిస్తారు.",
       "hi": "वाहन मित्र योजना के तहत ऑटो और टैक्सी चालक-मालिकों को वाहन बीमा और रखरखाव के लिए प्रतिवर्ष ₹10,000 की वित्तीय सहायता दी जाती है।"
     }
+  },
+  {
+    "id": "ap_nethanna_nestham",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Artisans & Weavers",
+    "name": "YSR Nethanna Nestham (Andhra Pradesh)",
+    "keywords": [
+      "nethanna nestham",
+      "weavers",
+      "cheka",
+      "మగ్గం",
+      "నేతన్న నేస్తం",
+      "చేనేత",
+      "weavers 24000",
+      "handloom",
+      "నేతన్న"
+    ],
+    "benefit": "₹24,000 annual direct cash assistance per weaver family to modernize handlooms.",
+    "eligibility": "Every handloom weaver family owning a working loom and registered with handlooms cooperative/department in AP.",
+    "documents": "Aadhaar Card, Rice Card, Weaver Registration/Weaver Society ID, Bank Passbook.",
+    "answer_en": "Under YSR Nethanna Nestham, eligible handloom weaver families in Andhra Pradesh receive ₹24,000 every year directly into their bank accounts to modernize equipment and purchase quality yarn. Apply at your village Sachivalayam.",
+    "answer_te": "వైఎస్సార్ నేతన్న నేస్తం పథకం కింద మగ్గం కలిగిన ప్రతి అర్హులైన చేనేత కుటుంబానికి ఏటా ₹24,000 ఆర్థిక సాయం నేరుగా బ్యాంక్ ఖాతాలో జమ చేస్తారు. అర్హులు గ్రామ/వార్డు సచివాలయంలో దరఖాస్తు చేసుకోవచ్చు."
+  },
+  {
+    "id": "ap_chedodu",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Self-Employed Artisans",
+    "name": "YSR Chedodu (Andhra Pradesh)",
+    "keywords": [
+      "chedodu",
+      "చేదోడు",
+      "darzi",
+      "tailor",
+      "barber",
+      "washerman",
+      "రజక",
+      "నాయీ బ్రాహ్మణ",
+      "దర్జీ",
+      "chedodu 10000"
+    ],
+    "benefit": "₹10,000 annual recurring cash assistance for tailors, barbers, and washermen.",
+    "eligibility": "Self-employed Rajakas (washermen), Nayee Brahmins (barbers), and tailors belonging to BPL families in AP.",
+    "documents": "Aadhaar Card, BPL Rice Card, Professional Trade Certificate / Shop Photo, Bank Passbook.",
+    "answer_en": "YSR Chedodu provides ₹10,000 every year to poor tailors, barbers, and washermen in Andhra Pradesh to purchase tools and support their livelihood.",
+    "answer_te": "వైఎస్సార్ చేదోడు పథకం కింద చిన్న వ్యాపారులు మరియు వృత్తి పనివారైన రజకులు, నాయీ బ్రాహ్మణులు మరియు దర్జీలకు ఏటా ₹10,000 ఉచిత ఆర్థిక సాయం అందుతుంది."
+  },
+  {
+    "id": "ap_jagananna_thodu",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Street Vendors & Micro Business",
+    "name": "Jagananna Thodu (Andhra Pradesh)",
+    "keywords": [
+      "jagananna thodu",
+      "తోడు",
+      "street vendor",
+      "వ్యాపారులు",
+      "వడ్డీ లేని రుణం",
+      "చిరు వ్యాపారులు",
+      "thodu 10000 loan"
+    ],
+    "benefit": "₹10,000 interest-free working capital loan for street vendors, hawkers, and small artisans (full interest paid by Govt).",
+    "eligibility": "Street vendors, roadside fruit/vegetable sellers, and artisans aged 18+ in Andhra Pradesh with annual income below BPL norms.",
+    "documents": "Aadhaar Card, Vending Identity Card / Municipal Certificate, Bank Passbook.",
+    "answer_en": "Jagananna Thodu provides ₹10,000 interest-free micro-loans to street vendors and roadside sellers. If repaid on time, the government reimburses 100% of the interest.",
+    "answer_te": "జగనన్న తోడు పథకం కింద రోడ్ల పక్కన పండ్లు, కూరగాయలు అమ్మే చిరు వ్యాపారులకు ₹10,000 వడ్డీ లేని బ్యాంక్ రుణం అందుతుంది. ప్రభుత్వం వడ్డీ మొత్తాన్ని పూర్తిగా చెల్లిస్తుంది."
+  },
+  {
+    "id": "ap_pedalandariki_illu",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Housing & Urban/Rural Development",
+    "name": "Pedalandariki Illu / PMAY Andhra Pradesh Housing",
+    "keywords": [
+      "pedalandariki illu",
+      "housing",
+      "ఇళ్లు",
+      "పేదలందరికీ ఇళ్లు",
+      "పట్టా",
+      "house site",
+      "ap housing",
+      "pmay ap"
+    ],
+    "benefit": "Free residential house plot patta in women's name + ₹1.80 Lakh grant for permanent pucca house construction.",
+    "eligibility": "Homeless poor BPL families residing in Andhra Pradesh who do not own a pucca house or urban land.",
+    "documents": "Aadhaar Card, BPL White Ration Card, Caste & Income Certificate, Bank Passbook.",
+    "answer_en": "Under Pedalandariki Illu, homeless poor families receive a free house site registered in the name of the woman of the household plus financial assistance of ₹1.80 Lakh to construct a pucca house.",
+    "answer_te": "పేదలందరికీ ఇళ్లు పథకం కింద ఇల్లు లేని పేద కుటుంబాల మహిళల పేరు మీద ఉచిత ఇంటి స్థలం పట్టా మరియు పక్కా ఇల్లు నిర్మించుకోవడానికి ₹1.80 లక్షల ప్రభుత్వ సాయం లభిస్తుంది."
+  },
+  {
+    "id": "ap_kalyanamasthu",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Marriage Assistance & Social Welfare",
+    "name": "YSR Kalyanamasthu & Shaadi Tohfa (Andhra Pradesh)",
+    "keywords": [
+      "kalyanamasthu",
+      "shaadi tohfa",
+      "పెళ్లి",
+      "కళ్యాణమస్తు",
+      "షాదీ తోఫా",
+      "marriage assistance",
+      "kalyanamasthu 1 lakh"
+    ],
+    "benefit": "Up to ₹1,00,000 financial grant for poor brides (₹1 Lakh for SC/ST, ₹50,000 for BC, ₹1.5 Lakh for differently abled).",
+    "eligibility": "BPL brides residing in AP who have passed Class 10th and attained minimum legal marriage age (18 for bride, 21 for groom).",
+    "documents": "10th Class Marks Memo, Aadhaar of bride and groom, Wedding Card, Marriage Registration Certificate, Income Certificate.",
+    "answer_en": "YSR Kalyanamasthu provides up to ₹1,00,000 marriage financial assistance to poor daughters of SC, ST, BC, and Minority communities upon passing 10th class.",
+    "answer_te": "వైఎస్సార్ కళ్యాణమస్తు & షాదీ తోఫా పథకం కింద పేద ఆడపిల్లల వివాహానికి ₹1,00,000 వరకు ఆర్థిక సాయం అందజేస్తారు. వధూవరులు 10వ తరగతి ఉత్తీర్ణులై ఉండాలి."
+  },
+  {
+    "id": "ap_kapu_ebc_nestham",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Women Empowerment",
+    "name": "YSR Kapu Nestham & EBC Nestham (Andhra Pradesh)",
+    "keywords": [
+      "kapu nestham",
+      "ebc nestham",
+      "కాపు నేస్తం",
+      "ఈబీసీ నేస్తం",
+      "kapu 15000",
+      "ebc 15000",
+      "women 45-60"
+    ],
+    "benefit": "₹15,000 per year (total ₹45,000 over 3 years) directly to poor women aged 45 to 60 years.",
+    "eligibility": "Poor women from Kapu, Balija, Telaga, Ontari, and Economically Backward Classes (EBC) aged 45-60.",
+    "documents": "Aadhaar Card, White Ration Card, Age proof (Birth/School Certificate), Integrated Caste Certificate.",
+    "answer_en": "YSR Kapu Nestham and EBC Nestham provide ₹15,000 per year directly to poor women aged 45-60 belonging to Kapu and EBC communities to support micro-business and livelihood.",
+    "answer_te": "కాపు నేస్తం మరియు ఈబీసీ నేస్తం పథకాల ద్వారా 45 నుండి 60 సంవత్సరాల మధ్య వయస్సు గల పేద మహిళలకు ఏటా ₹15,000 చొప్పున ఆర్థిక సాయం నేరుగా బ్యాంక్ ఖాతాలో జమ చేస్తారు."
+  },
+  {
+    "id": "ap_jala_kala",
+    "type": "State",
+    "state": "Andhra Pradesh",
+    "category": "Agriculture & Irrigation",
+    "name": "YSR Jala Kala Free Borewells (Andhra Pradesh)",
+    "keywords": [
+      "jala kala",
+      "borewell",
+      "బోరు",
+      "జలకళ",
+      "ఉచిత బోరు",
+      "free borewell",
+      "irrigation"
+    ],
+    "benefit": "100% free drilling of agricultural borewells, hydrogeological surveys, and free submersible motor pump sets for farmers.",
+    "eligibility": "Small and marginal farmers holding 2.5 to 5 contiguous acres without existing borewells in non-overexploited groundwater zones.",
+    "documents": "Aadhaar Card, Pattadar Passbook, 1B Land Records, Village Sachivalayam verification.",
+    "answer_en": "YSR Jala Kala provides free agricultural borewell drilling and free motor pumpsets to needy small and marginal farmers across Andhra Pradesh.",
+    "answer_te": "వైఎస్సార్ జలకళ పథకం కింద సాగునీటి వనరులు లేని సన్నకారు, చిన్నకారు రైతులకు ప్రభుత్వం 100% ఉచితంగా వ్యవసాయ బోర్‌వెల్ తవ్వించి మోటారు పంపుసెట్లను అందజేస్తుంది."
   }
 ]
