@@ -60,6 +60,7 @@ TTS_URL = "https://api.vachana.ai/api/v1/tts/inference"
 
 
 STATE_ALIASES: dict[str, list[str]] = {
+    "All India": ["central", "centralgov", "central gov", "central government", "central schemes", "central yojana", "kendra", "kendriya", "kendra sarkar", "national", "all india", "భారత ప్రభుత్వం", "కేంద్ర", "కేంద్ర ప్రభుత్వం", "కేంద్ర పథకాలు", "కేంద్ర ప్రభుత్వ పథకాలు", "केंद्र सरकार", "केंद्रीय योजनाएं", "مرکزی حکومت"],
     "Andhra Pradesh": ["andhra pradesh", "andhra", "ap", "ఆంధ్రప్రదేశ్", "ఆంధ్ర", "ఆంధ్ర ప్రదేశ్", "आंध्र प्रदेश", "ஆந்திரா", "ಆಂಧ್ರಪ್ರದೇಶ"],
     "Telangana": ["telangana", "ts", "తెలంగాణ", "तेलंगाना", "ತೆಲಂಗಾಣ", "தெலுங்கானா"],
     "Karnataka": ["karnataka", "కర్ణాటక", "ಕರ್ನಾಟಕ", "कर्नाटक", "கர்நாடகா"],
@@ -96,6 +97,47 @@ def detect_state_from_query(query: str) -> str | None:
         if any(a in low for a in aliases):
             return state
     return None
+
+
+SCHEME_FALLBACK_MESSAGES: dict[str, str] = {
+    "en": "We could not find the exact scheme you requested. Major Central and State welfare programs include PM-Kisan (₹6,000/yr for farmers), Ayushman Bharat (₹5 Lakh free health cover), PM Awas Yojana, and regional welfare pensions. Please state the specific benefit or name of the scheme.",
+    "hi": "हम आपके द्वारा पूछी गई योजना की सटीक जानकारी नहीं पा सके। प्रमुख सरकारी योजनाओं में पीएम-किसान (किसानों को ₹6,000 सालाना), आयुष्मान भारत (₹5 लाख तक मुफ्त इलाज), और पीएम आवास योजना शामिल हैं। कृपया योजना का नाम स्पष्ट बताएं।",
+    "hi-en": "Hum aapke dwara puchi gayi scheme ki exact details locate nahi kar sake. Major schemes me PM-Kisan (farmers ko ₹6,000/yr), Ayushman Bharat (₹5 Lakh free treatment) aur PM Awas Yojana shamil hain. Kripya scheme ka naam batayein.",
+    "te": "మీరు అడిగిన పథకం వివరాలు లభించలేదు. ప్రధాన సంక్షేమ పథకాల్లో పీఎం-కిసాన్ (రైతులకు ₹6,000), ఆయుష్మాన్ భారత్ (₹5 లక్షల ఉచిత వైద్యం), పీఎం ఆవాస్ మరియు సామాజిక పింఛన్లు ఉన్నాయి. దయచేసి పథకం పేరును వివరంగా అడగండి.",
+    "ta": "நீங்கள் கேட்ட திட்ட விவரங்கள் கிடைக்கவில்லை. முக்கியமான திட்டங்களில் பிஎம்-கிசான் (ரூ. 6,000), ஆயுஷ்மான் பாரத் (ரூ. 5 லட்சம் இலவச சிகிச்சை) ஆகியவை அடங்கும். திட்டத்தின் பெயரை தெளிவாகக் கூறவும்.",
+    "kn": "ನೀವು ಕೇಳಿದ ಯೋಜನೆಯ ವಿವರಗಳು ಲಭ್ಯವಿಲ್ಲ. ಪ್ರಮುಖ ಯೋಜನೆಗಳಲ್ಲಿ ಪಿಎಂ-ಕಿಸಾನ್ (ವಾರ್ಷಿಕ ₹6,000), ಆಯುಷ್ಮಾನ್ ಭಾರತ್ (₹5 ಲಕ್ಷ ಉಚಿತ ಚಿಕಿತ್ಸೆ) ಸೇರಿವೆ. ದಯವಿಟ್ಟು ಯೋಜನೆಯ ಹೆಸರನ್ನು ತಿಳಿಸಿ.",
+    "ml": "നിങ്ങൾ ചോദിച്ച പദ്ധതി വിവരങ്ങൾ ലഭ്യമല്ല. പ്രധാന പദ്ധതികളിൽ പിഎം-കിസാൻ (പ്രതിവർഷം ₹6,000), ആയുഷ്മാൻ ഭാരത് (₹5 ലക്ഷം സൗജന്യ ചികിത്സ) എന്നിവ ഉൾപ്പെടുന്നു.",
+    "mr": "तुम्ही विचारलेल्या योजनेची माहिती उपलब्ध नाही. प्रमुख योजनांमध्ये पीएम-किसान (शेतकऱ्यांना ₹6,000), आयुष्मान भारत (₹5 लाखांपर्यंत मोफत उपचार) यांचा समावेश आहे.",
+    "bn": "আপনার উল্লেখিত প্রকল্পের সঠিক তথ্য পাওয়া যায়নি। প্রধান প্রকল্পগুলির মধ্যে পিএম-কিসান (বছরে ₹৬,০০০), আয়ুষ্মান ভারত (₹৫ লাখ পর্যন্ত বিনামূল্যে চিকিৎসা) অন্তর্ভুক্ত।",
+    "gu": "તમે પૂછેલ યોજનાની ચોક્કસ માહિતી મળી નથી. મુખ્ય યોજનાઓમાં પીએમ-કિસાન (ખેડૂતોને ₹6,000), આયુષ્માન ભારત (₹5 લાખ સુધી મફત સારવાર) શામેલ છે.",
+    "pa": "ਤੁਹਾਡੇ ਵੱਲੋਂ ਪੁੱਛੀ ਗਈ ਸਕੀਮ ਦੇ ਵੇਰਵੇ ਨਹੀਂ ਮਿਲੇ। ਮੁੱਖ ਸਕੀਮਾਂ ਵਿੱਚ ਪੀਐਮ-ਕਿਸਾਨ (ਕਿਸਾਨਾਂ ਲਈ ₹6,000), ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ (₹5 ਲੱਖ ਤੱਕ ਮੁਫ਼ਤ ਇਲਾਜ) ਸ਼ਾਮਲ ਹਨ।",
+    "or": "ଆପଣ ପଚାରିଥିବା ଯୋଜନାର ସଠିକ୍ ସୂଚନା ମିଳିଲା ନାହିଁ। ପ୍ରମୁଖ ଯୋଜନା ମଧ୍ୟରେ ପିଏମ୍-କିଷାନ (ବାର୍ଷିକ ₹୬,୦୦୦), ଆୟୁଷ୍ମାନ ଭାରତ (₹୫ ଲକ୍ଷ ମାଗଣା ଚିକିତ୍ସା) ଅନ୍ତର୍ଭୁକ୍ତ।",
+    "as": "আপুনি সোধা আঁচনিৰ তথ্য বিচাৰি পোৱা নগল। প্ৰধান আঁচনিসমূহৰ ভিতৰত পিএম-কিষাণ (বাৰ্ষিক ₹৬,০০০), আয়ুষ্মান ভাৰত (₹৫ লাখলৈ বিনামূলীয়া চিকিৎসা) অন্তৰ্ভুক্ত।",
+    "ur": "آپ کی مطلوبہ اسکیم کی تفصیلات دستیاب نہیں ہیں۔ اہم اسکیموں میں پی ایم کسان (کسانوں کو ₹6,000 سالانہ) اور آیوشمان بھارت (₹5 لاکھ تک مفت علاج) شامل ہیں۔"
+}
+
+SCAM_MESSAGES: dict[str, str] = {
+    "en": "SECURITY ALERT: Never share your OTP, ATM PIN, UPI PIN, or bank passwords with anyone. Government welfare schemes never ask for passwords or upfront registration fees. Please protect your personal data.",
+    "hi": "सुरक्षा चेतावनी: कभी भी अपना ओटीपी, एटीएम पिन, यूपीआई पिन या बैंक पासवर्ड किसी के साथ साझा न करें। सरकारी योजनाएं कभी भी पासवर्ड या रजिस्ट्रेशन शुल्क नहीं मांगती हैं।",
+    "hi-en": "SECURITY ALERT: Kabhi bhi apna OTP, ATM PIN, UPI PIN ya bank password kisi ko mat batayein. Sarkari schemes kabhi password ya registration fee nahi maangti.",
+    "te": "భద్రతా హెచ్చరిక: మీ OTP, ATM పిన్ లేదా బ్యాంక్ పాస్‌వర్డ్‌లను ఎవరితోనూ పంచుకోవద్దు. ప్రభుత్వ సంక్షేమ పథకాలు ఎన్నడూ రుసుము లేదా పాస్‌వర్డ్ అడగవు.",
+    "ta": "பாதுகாப்பு எச்சரிக்கை: உங்கள் OTP அல்லது வங்கி PIN விவரங்களை யாரிடமும் பகிர வேண்டாம். அரசு திட்டங்கள் கட்டணம் அல்லது கடவுச்சொல் கேட்பதில்லை.",
+    "kn": "ಭದ್ರತಾ ಎಚ್ಚರಿಕೆ: ನಿಮ್ಮ OTP ಅಥವಾ ಬ್ಯಾಂಕ್ ಪಿನ್ ಅನ್ನು ಯಾರೊಂದಿಗೂ ಹಂಚಿಕೊಳ್ಳಬೇಡಿ. ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಪಾಸ್‌ವರ್ಡ್ ಅಥವಾ ಶುಲ್ಕವನ್ನು ಕೇಳುವುದಿಲ್ಲ."
+}
+
+OUT_OF_SCOPE_MESSAGES: dict[str, str] = {
+    "en": "I am YojanaVaani AI, specialized strictly in Indian Government welfare schemes, subsidies, pensions, and public citizen benefits. Please ask about government schemes like PM-Kisan, Ayushman Bharat, PMAY, or state welfare programs.",
+    "hi": "मैं योजनावाणी एआई हूँ, जो विशेष रूप से भारत सरकार की कल्याणकारी योजनाओं, सब्सिडी, पेंशन और नागरिक सेवाओं की जानकारी के लिए बना हूँ। कृपया सरकारी योजनाओं के बारे में पूछें।",
+    "hi-en": "Main YojanaVaani AI hoon, jo specially Indian Government welfare schemes, subsidies aur pensions ki jankari ke liye bana hai. Kripya kisi sarkari scheme ke baare me puchein.",
+    "te": "నేను యోజనవాణి AI ని. నేను భారత ప్రభుత్వ సంక్షేమ పథకాలు, సబ్సిడీలు మరియు పింఛన్ల సమాచారం అందించడానికి మాత్రమే రూపొందించబడ్డాను. దయచేసి ప్రభుత్వ పథకాల గురించి అడగండి."
+}
+
+UNCLEAR_AUDIO_MESSAGES: dict[str, str] = {
+    "en": "Could not clearly understand the audio. Please speak a bit louder into your microphone, or type your question below.",
+    "hi": "आपकी आवाज़ स्पष्ट रूप से सुनाई नहीं दी। कृपया थोड़ा साफ़ आवाज़ में बोलिए, या नीचे अपना प्रश्न टाइप करें।",
+    "hi-en": "Aapki aawaz clear nahi sunai di. Kripya thoda loud bolein ya neeche apna question type karein.",
+    "te": "మీ వాయిస్ స్పష్టంగా వినిపించలేదు. దయచేసి మైక్రోఫోన్‌లో స్పష్టంగా మాట్లాడండి లేదా క్రింద మీ ప్రశ్నను టైప్ చేయండి."
+}
 
 SCAM_OR_FRAUD_TERMS = (
     "otp", "atm pin", "cvv", "lottery", "password", "bank password",
@@ -814,37 +856,49 @@ def answer_open_ended_scheme(
 
 def build_comprehensive_state_schemes_response(state: str, schemes: list[dict[str, Any]], lang_code: str) -> str:
     """Build a complete, thorough scheme-by-scheme breakdown in native script when citizen requests full schemes."""
+    is_central = state in ("All India", "Central", "Central Government")
     if lang_code == "te":
-        header = f"ఆంధ్రప్రదేశ్ రాష్ట్రంలో ఉన్న ముఖ్యమైన ప్రభుత్వ సంక్షేమ పథకాల పూర్తి వివరాలు:" if state == "Andhra Pradesh" else f"{state} రాష్ట్ర సంక్షేమ పథకాలు:"
+        if is_central:
+            header = "భారత కేంద్ర ప్రభుత్వ ముఖ్యమైన సంక్షేమ పథకాల పూర్తి వివరాలు:"
+        elif state == "Andhra Pradesh":
+            header = "ఆంధ్రప్రదేశ్ రాష్ట్రంలో ఉన్న ముఖ్యమైన ప్రభుత్వ సంక్షేమ పథకాల పూర్తి వివరాలు:"
+        else:
+            header = f"{state} రాష్ట్ర సంక్షేమ పథకాలు:"
         entries = []
         for idx, s in enumerate(schemes, start=1):
             name = s.get("name", "")
             benefit = s.get("benefit", "")
             eligibility = s.get("eligibility", "")
             entries.append(f"{idx}. {name}:\n• లబ్ధి: {benefit}\n• అర్హత: {eligibility}")
-        footer = "\n\nదరఖాస్తు విధానం: గ్రామ/వార్డు సచివాలయంలో లేదా ఆన్‌లైన్ సేవా కేంద్రంలో ఆధార్ మరియు రేషన్ కార్డుతో దరఖాస్తు చేసుకోవచ్చు."
+        footer = "\n\nదరఖాస్తు విధానం: సమీపంలోని CSC కేంద్రంలో లేదా అధికారిక పోర్టల్‌లో ఆధార్ మరియు బ్యాంక్ పాస్‌బుక్‌తో దరఖాస్తు చేసుకోవచ్చు."
         return header + "\n\n" + "\n\n".join(entries) + footer
 
     elif lang_code == "hi":
-        header = f"{state} राज्य की प्रमुख सरकारी कल्याणकारी योजनाओं का संपूर्ण विवरण:"
+        if is_central:
+            header = "भारत सरकार (केंद्र सरकार) की प्रमुख कल्याणकारी योजनाओं का संपूर्ण विवरण:"
+        else:
+            header = f"{state} राज्य की प्रमुख सरकारी कल्याणकारी योजनाओं का संपूर्ण विवरण:"
         entries = []
         for idx, s in enumerate(schemes, start=1):
             name = s.get("name", "")
             benefit = s.get("benefit", "")
             eligibility = s.get("eligibility", "")
             entries.append(f"{idx}. {name}:\n• लाभ: {benefit}\n• पात्रता: {eligibility}")
-        footer = "\n\nआवेदन प्रक्रिया: आप नजदीकी ग्राम सचिवालय या ऑनलाइन सेवा केंद्र में आधार और राशन कार्ड के साथ आवेदन कर सकते हैं।"
+        footer = "\n\nआवेदन प्रक्रिया: नजदीकी जन सेवा केंद्र (CSC) या संबंधित आधिकारिक पोर्टल पर आधार कार्ड और बैंक पासबुक के साथ आवेदन करें।"
         return header + "\n\n" + "\n\n".join(entries) + footer
 
     else:
-        header = f"Comprehensive Overview of Welfare Schemes in {state}:"
+        if is_central:
+            header = "Comprehensive Overview of Major Central Government (All India) Welfare Schemes:"
+        else:
+            header = f"Comprehensive Overview of Welfare Schemes in {state}:"
         entries = []
         for idx, s in enumerate(schemes, start=1):
             name = s.get("name", "")
             benefit = s.get("benefit", "")
             eligibility = s.get("eligibility", "")
             entries.append(f"{idx}. {name}:\n• Benefit: {benefit}\n• Eligibility: {eligibility}")
-        footer = "\n\nHow to Apply: Visit your nearest Village/Ward Secretariat (Sachivalayam) or Common Service Centre with Aadhaar and Ration Card."
+        footer = "\n\nHow to Apply: Visit your nearest Common Service Centre (CSC) or official scheme portal with Aadhaar and Bank Passbook."
         return header + "\n\n" + "\n\n".join(entries) + footer
 
 def generate_multi_scheme_response(
@@ -981,14 +1035,30 @@ def answer_from_schemes(
 
     # Detect if citizen asked for a list or overview of multiple schemes or state schemes
     detected_state = detect_state_from_query(lowered) or (state_filter if state_filter not in ("All Schemes", "All India") else None)
+
+    # Explicit detection for Central Government inquiries
+    central_terms = [
+        "central", "centralgov", "central gov", "central government", "central schemes", "central yojana",
+        "kendra", "kendriya", "kendra sarkar", "delhi sarkar", "modi scheme", "modi yojana",
+        "all india scheme", "national scheme", "భారత ప్రభుత్వం", "కేంద్ర", "కేంద్ర ప్రభుత్వం", "కేంద్ర పథకాలు",
+        "కేంద్ర ప్రభుత్వ పథకాలు", "కేంద్ర ప్రభుత్వ పథకాలు చెప్పండి", "केंद्र सरकार", "केंद्रीय योजना", "केंद्रीय योजनाएं"
+    ]
+    is_central_query = any(w in lowered for w in central_terms)
+    if is_central_query and not detected_state:
+        detected_state = "All India"
+
     list_intents = ["list", "what and all", "what all", "available", "all schemes", "schemes in", "schemes for", "how many", "tell me schemes", 
                     "ప్రతి", "అన్ని", "జాబితా", "పథకాలు", "స్కీములు", "స్కీమ్", "చెప్పండి", "వివరించండి", "explain",
                     "सभी", "योजनाएं", "सूची", "हर योजना", "बताइए", "لیست", "Sab", "Saare"]
-    is_list_query = any(w in lowered for w in list_intents)
+    is_list_query = any(w in lowered for w in list_intents) or is_central_query
 
-    # If citizen asks for all/every scheme in a state (e.g. Andhra Pradesh)
+    # If citizen asks for all/every scheme in a state or Central Government
     if detected_state:
-        state_schemes = [item for item in items if item.get("state") == detected_state]
+        if detected_state == "All India":
+            state_schemes = [item for item in items if item.get("state") == "All India" or item.get("type") == "Central"]
+        else:
+            state_schemes = [item for item in items if item.get("state") == detected_state]
+
         if state_schemes and (is_list_query or score < 5):
             print(f"[State Schemes Engine] Resolved {len(state_schemes)} full schemes for {detected_state} in {active_lang}!")
             full_answer = build_comprehensive_state_schemes_response(detected_state, state_schemes, active_lang)
