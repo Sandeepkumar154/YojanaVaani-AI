@@ -166,7 +166,7 @@
       <!-- Navigation Tabs -->
       <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
         <button onclick="switchTab('studio')" id="tab-studio" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 transition flex items-center gap-1.5">
-          <i data-lucide="mic" class="w-3.5 h-3.5"></i> <span id="tabStudioText">Voice AI Studio</span>
+          <i data-lucide="message-square-text" class="w-3.5 h-3.5"></i> <span id="tabStudioText">Voice & Chat Assistant</span>
         </button>
         <button onclick="switchTab('phone')" id="tab-phone" class="nav-tab px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-1.5">
           <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> <span id="tabPhoneText">1800 Telephony</span>
@@ -239,10 +239,10 @@
           <span class="text-saffron">●</span> Digital India <span class="text-emerald">●</span> Citizen Empowerment
         </div>
         <h1 id="heroTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-          Speak in your <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue</span>, Get Instant Welfare Answers.
+          Speak or Type in your <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue</span>, Get Instant Welfare Answers.
         </h1>
         <p id="heroSub" class="text-sm text-slate-400">
-          Powered by Gnani Prisma Indic STT and Timbre TTS. Answers over 2,000+ Central and State welfare schemes in real time.
+          Powered by Gnani Prisma Indic STT and Timbre TTS. Answers 356+ Central and State welfare schemes across all 28 states in real time via Voice or Text Chat.
         </p>
       </div>
 
@@ -321,6 +321,60 @@
         </div>
 
       </div>
+
+
+      <!-- ======================================================== -->
+      <!-- CITIZEN CHAT ASSISTANCE INPUT DOCK                       -->
+      <!-- ======================================================== -->
+      <div id="chatAssistanceCard" class="max-w-3xl mx-auto glass-panel border-slate-700/80 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-500/30 text-sky-400 flex items-center justify-center">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 id="chatAssistanceTitle" class="text-sm font-bold text-white tracking-tight">Citizen Chat Assistant</h3>
+              <p class="text-[11px] text-slate-400">Ask any welfare scheme question in text (English, Hindi, Telugu, Hinglish, etc.)</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-bold text-emerald-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Online • 24 Languages
+            </span>
+            <button onclick="clearChatHistory()" class="text-slate-500 hover:text-rose-400 transition text-[11px] flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-800" title="Clear Chat History">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Clear</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Input Form Row -->
+        <div class="flex items-center gap-2.5">
+          <div class="flex-1 relative">
+            <input type="text" id="chatInputText" 
+                   placeholder="Type your welfare question here (e.g. PM-Kisan 6000 eligibility or Rythu Bharosa)..." 
+                   class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-4 pr-10 py-3.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 shadow-inner transition"
+                   onkeydown="if(event.key === 'Enter') submitChatInput()" />
+            <button type="button" onclick="document.getElementById('chatInputText').value = ''" 
+                    class="absolute right-3.5 top-3.5 text-slate-500 hover:text-slate-300 transition text-xs font-bold p-0.5 rounded" 
+                    title="Clear text">✕</button>
+          </div>
+          
+          <button id="btnSendChat" onclick="submitChatInput()" 
+                  class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 via-teal-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-white font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-sky-500/25 transition-all transform hover:scale-105 active:scale-95 whitespace-nowrap">
+            <span id="btnSendChatText">Send</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-400 pt-1">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400">💡</span>
+            <span><b>Dual Input:</b> Type above and press Enter, or tap the microphone orb above to speak.</span>
+          </div>
+          <span class="text-slate-500 font-mono text-[10px]">Responses voiced by Gnani Timbre female TTS</span>
+        </div>
+      </div>
+
 
       <!-- Live Conversation Feed -->
       <div id="convoFeed" class="max-w-3xl mx-auto space-y-4">
@@ -651,13 +705,16 @@
     const SITE_I18N = {
       'en': {
         headerSub: "Bharat's Citizen Voice AI • Powered by Gnani.ai",
-        tabStudio: "Voice AI Studio",
+        tabStudio: "Voice & Chat AI",
+        chatTitle: "Citizen Chat Assistant",
+        chatPlaceholder: "Type your welfare question here (e.g. PM-Kisan 6000 eligibility or Rythu Bharosa)...",
+        btnSendChat: "Send",
         tabPhone: "1800 Telephony",
         tabSchemes: "Schemes Directory",
         tabSecurity: "Anti-Fraud Shield",
         heroBadge: '<span class="text-saffron">●</span> Digital India <span class="text-emerald">●</span> Citizen Empowerment',
-        heroTitle: 'Speak in your <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue</span>, Get Instant Welfare Answers.',
-        heroSub: "Powered by Gnani Prisma Indic STT and Timbre TTS. Answers over 2,000+ Central and State welfare schemes in real time.",
+        heroTitle: 'Speak or Type in your <span class="bg-gradient-to-r from-saffron via-white to-emerald bg-clip-text text-transparent">Mother Tongue</span>, Get Instant Welfare Answers.',
+        heroSub: "Powered by Gnani Prisma Indic STT and Timbre TTS. Answers 356+ Central and State welfare schemes across all 28 states in real time via Voice or Text Chat.",
         orbTitle: 'Tap Orb or Click "Start Recording"',
         orbSub: 'Auto-detected via Gnani Prisma (All 22 Languages)',
         btnStart: 'Start Recording',
@@ -680,7 +737,10 @@
       },
       'te': {
         headerSub: 'భారత ప్రభుత్వ పౌర సంక్షేమ వాయిస్ AI • Powered by Gnani.ai',
-        tabStudio: 'వాయిస్ AI స్టూడియో',
+        tabStudio: 'వాయిస్ & చాట్ AI',
+        chatTitle: 'సిటిజన్ చాట్ అసిస్టెంట్',
+        chatPlaceholder: 'సంక్షేమ పథకాల గురించి మీ ప్రశ్నను ఇక్కడ టైప్ చేయండి (ఉదా: పీఎం-కిసాన్ లేదా రైతు భరోసా)...',
+        btnSendChat: 'పంపండి',
         tabPhone: '1800 టెలిఫోనీ హెల్ప్‌లైన్',
         tabSchemes: 'సంక్షేమ పథకాల జాబితా',
         tabSecurity: 'మోసాల నిరోధక రక్షణ',
@@ -709,7 +769,10 @@
       },
       'hi': {
         headerSub: 'भारत सरकार नागरिक कल्याण वॉयस एआई • Powered by Gnani.ai',
-        tabStudio: 'वॉयस एआई स्टूडियो',
+        tabStudio: 'वॉयस और चैट AI',
+        chatTitle: 'नागरिक चैट सहायक',
+        chatPlaceholder: 'सरकारी योजनाओं के बारे में अपना प्रश्न यहाँ टाइप करें (उदा: पीएम-किसान या लाडली बहना)...',
+        btnSendChat: 'भेजें',
         tabPhone: '1800 टेलीफोनी हेल्पलाइन',
         tabSchemes: 'योजना निर्देशिका',
         tabSecurity: 'धोखाधड़ी सुरक्षा शील्ड',
@@ -738,7 +801,10 @@
       },
       'hi-en': {
         headerSub: "Bharat's Citizen Welfare Voice AI • Powered by Gnani.ai",
-        tabStudio: "Voice AI Studio",
+        tabStudio: "Voice & Chat AI",
+        chatTitle: "Citizen Chat Assistant",
+        chatPlaceholder: "Type your welfare question here (e.g. PM-Kisan 6000 eligibility or Rythu Bharosa)...",
+        btnSendChat: "Send",
         tabPhone: "1800 Telephony Helpline",
         tabSchemes: "Schemes Directory",
         tabSecurity: "Anti-Fraud Shield",
@@ -1116,6 +1182,14 @@
       if (vadHint) vadHint.innerHTML = t.vadHint;
       const sampleHeading = document.getElementById('samplePromptHeadingText');
       if (sampleHeading) sampleHeading.textContent = t.sampleHeading;
+
+      // Chat Assistant Localization
+      const chatInput = document.getElementById('chatInputText');
+      if (chatInput && t.chatPlaceholder) chatInput.placeholder = t.chatPlaceholder;
+      const chatTitle = document.getElementById('chatAssistanceTitle');
+      if (chatTitle && t.chatTitle) chatTitle.textContent = t.chatTitle;
+      const btnSend = document.getElementById('btnSendChatText');
+      if (btnSend && t.btnSendChat) btnSend.textContent = t.btnSendChat;
 
       // Telephony Tab
       const phoneTitle = document.getElementById('phoneTitle');
@@ -1748,12 +1822,59 @@
     }
 
     // Query Prompt via text
+    
+    // ========================================================
+    // CITIZEN CHAT ASSISTANCE LOGIC
+    // ========================================================
+    function submitChatInput() {
+      const input = document.getElementById('chatInputText');
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      window._lastQuerySource = 'Chat';
+      askPrompt(text);
+    }
+
+    function clearChatHistory() {
+      const feed = document.getElementById('convoFeed');
+      if (feed) {
+        feed.innerHTML = `
+          <div class="text-center py-6 text-slate-500 text-xs italic">
+            Chat history cleared. Tap the mic above or type a new question to start.
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    }
+
     async function askPrompt(text) {
+      switchTab('studio');
       const lang = document.getElementById('langSelect').value;
-      appendUserMessage(text);
+      const source = window._lastQuerySource || 'Voice';
+      window._lastQuerySource = null;
+      appendUserMessage(text, source);
       
       const title = document.getElementById('orbStatusTitle');
-      title.textContent = "Generating Voice...";
+      if (title) title.textContent = "AI Searching & Generating Voice...";
+
+      // Render temporary searching indicator in chat feed
+      const feed = document.getElementById('convoFeed');
+      const typingId = "typing-" + Date.now();
+      const typingCard = document.createElement('div');
+      typingCard.id = typingId;
+      typingCard.className = "flex justify-start";
+      typingCard.innerHTML = `
+        <div class="glass-panel border-slate-700/70 rounded-2xl rounded-tl-sm p-3.5 text-xs text-slate-300 flex items-center gap-2.5">
+          <div class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></div>
+          <span>YojanaVaani AI is retrieving scheme details and generating voice response...</span>
+        </div>
+      `;
+      if (feed) {
+        feed.appendChild(typingCard);
+        typingCard.scrollIntoView({ behavior: 'smooth' });
+      }
 
       try {
         const res = await fetch('/api/chat', {
@@ -1762,9 +1883,14 @@
           body: JSON.stringify({ text: text, lang: lang })
         });
         const data = await res.json();
+        const placeholder = document.getElementById(typingId);
+        if (placeholder) placeholder.remove();
         handleApiResponse(data, true); // true = skip duplicate user message
       } catch (err) {
         console.error(err);
+        const placeholder = document.getElementById(typingId);
+        if (placeholder) placeholder.remove();
+        appendBotMessage("Service connection interrupted. Please try typing or speaking again.", null, null);
       } finally {
         resetOrbUI();
       }
@@ -1850,12 +1976,12 @@
     let lastUserMessageText = "";
     let lastUserMessageTime = 0;
 
-    function appendUserMessage(text) {
+    function appendUserMessage(text, source = 'Voice') {
       if (!text || !text.trim()) return;
       const cleanText = text.trim();
       const now = Date.now();
-      // Strict Deduplication: Do not render duplicate question within 5 seconds
-      if (cleanText === lastUserMessageText && (now - lastUserMessageTime) < 5000) {
+      // Strict Deduplication: Do not render duplicate question within 4 seconds
+      if (cleanText === lastUserMessageText && (now - lastUserMessageTime) < 4000) {
         return;
       }
       lastUserMessageText = cleanText;
@@ -1864,10 +1990,12 @@
       const feed = document.getElementById('convoFeed');
       const card = document.createElement('div');
       card.className = "flex justify-end";
+      const icon = source === 'Chat' ? 'message-square' : 'mic';
+      const label = source === 'Chat' ? 'Citizen Chat' : 'Citizen Voice';
       card.innerHTML = `
         <div class="max-w-xl bg-sky-600/20 border border-sky-500/30 rounded-2xl rounded-tr-sm p-4 text-sm text-sky-100 shadow-md">
           <div class="flex items-center gap-2 mb-1 text-[10px] text-sky-300 font-bold uppercase tracking-wider">
-            <i data-lucide="user" class="w-3 h-3"></i> Citizen Voice
+            <i data-lucide="${icon}" class="w-3 h-3"></i> ${label}
           </div>
           <p>${cleanText}</p>
         </div>
@@ -1885,20 +2013,29 @@
       let schemeBadge = "";
       if (scheme) {
         schemeBadge = `
-          <div class="mt-2 pt-2 border-t border-slate-700/60 flex items-center justify-between text-xs text-amber-300">
-            <span>🏛️ <b>Matched Scheme:</b> ${scheme.name}</span>
+          <div class="mt-3 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-300">
+            <span class="flex items-center gap-1.5 font-bold">🏛️ <b>Matched Scheme:</b> ${scheme.name}</span>
             <span class="text-[10px] bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30">${scheme.state || 'All India'}</span>
           </div>
         `;
       }
 
+      const replayBtn = audioB64 ? `
+        <button onclick="playAudio('${audioB64}')" class="px-2.5 py-1 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold flex items-center gap-1.5 transition border border-sky-500/20" title="Listen to spoken response again">
+          <i data-lucide="volume-2" class="w-3.5 h-3.5"></i> <span>Replay Voice</span>
+        </button>
+      ` : '';
+
       card.innerHTML = `
-        <div class="max-w-xl glass-panel border-slate-700 rounded-2xl rounded-tl-sm p-4 text-sm text-slate-100 shadow-lg space-y-2">
+        <div class="max-w-xl glass-panel border-slate-700 rounded-2xl rounded-tl-sm p-4 text-sm text-slate-100 shadow-lg space-y-2.5">
           <div class="flex items-center justify-between text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
-            <span class="flex items-center gap-1.5"><i data-lucide="bot" class="w-3.5 h-3.5"></i> YojanaVaani AI Voice</span>
-            <span class="text-slate-400 font-mono">Gnani Timbre</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="bot" class="w-3.5 h-3.5"></i> YojanaVaani AI Assistant</span>
+            <div class="flex items-center gap-2">
+              <span class="text-slate-400 font-mono">Gnani Timbre</span>
+              ${replayBtn}
+            </div>
           </div>
-          <p class="leading-relaxed">${text}</p>
+          <p class="leading-relaxed whitespace-pre-line">${text}</p>
           ${schemeBadge}
         </div>
       `;

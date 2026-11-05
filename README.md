@@ -40,7 +40,8 @@ Citizens simply **tap the mic and speak naturally in their mother tongue or Hing
 
 ## 🚀 Key Features
 
-- **🎙️ Live Mic Voice Assistant**: Tap the microphone button in the browser to speak; auto-processes through Prisma STT and Timbre TTS.
+- **🎙️ Live Mic Voice Assistant**: Tap the microphone orb in the browser to speak in your mother tongue; auto-processes through Gnani Prisma Indic STT and Timbre TTS.
+- **💬 Interactive Citizen Chat Assistant**: Dual-mode input allowing citizens to either speak into the microphone OR type text questions in English, Hindi, Telugu, or Hinglish with real-time audio playback and voice replay buttons.
 - **⚡ One-Click Citizen Scenarios**: Instant demo buttons for Farmers (PM-Kisan), Healthcare (Ayushman Bharat), Livelihoods (Mudra Loan), Girls' Education (Sukanya Samriddhi), Housing (PM Awas), and Scam Guardrail.
 - **🏛️ Complete Pan-India Grounded Knowledge Base**: 356+ verified flagship welfare schemes covering Central Government and ALL 28 States of India (at least 12 complete schemes per state) with benefits, eligibility, and required documents in 24 Indian languages and Hinglish.
 - **🔊 Spoken Multilingual Voice Output**: Generates synthesized speech using Timbre v2.5 in the citizen's detected language.
