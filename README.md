@@ -27,7 +27,7 @@ Citizens simply **tap the mic and speak naturally in their mother tongue or Hing
 | Award Category | How YojanaVaani AI Hits It |
 |---|---|
 | 🗣️ **22 Official Languages** | Covers all 22 Eighth Schedule Indian languages (Hindi, Bengali, Telugu, Marathi, Tamil, Kannada, Malayalam, Gujarati, Punjabi, Odia, Assamese, etc.) + Hinglish & English via Prisma STT (`indic-auto`) & Timbre TTS |
-| 🏛️ **Central + All State Schemes** | 188+ verified major welfare schemes covering Central Government & State initiatives across 14 major states (at least 12 schemes per state) across Maharashtra, Karnataka, Tamil Nadu, Madhya Pradesh, Uttar Pradesh, Telangana, Andhra Pradesh, West Bengal, Rajasthan, Bihar, Gujarat, Odisha |
+| 🏛️ **Central + All State Schemes** | 356+ verified major welfare schemes covering Central Government & ALL 28 STATES OF INDIA (at least 12 schemes per state) across Andhra Pradesh, Arunachal Pradesh, Assam, Bihar, Chhattisgarh, Goa, Gujarat, Haryana, Himachal Pradesh, Jharkhand, Karnataka, Kerala, Madhya Pradesh, Maharashtra, Manipur, Meghalaya, Mizoram, Nagaland, Odisha, Punjab, Rajasthan, Sikkim, Tamil Nadu, Telangana, Tripura, Uttar Pradesh, Uttarakhand, and West Bengal |
 | 🔀 **Code-Mixed Voice / Hinglish** | Built specifically to understand natural Indian code-mixing (e.g. *"Dukan ke liye Mudra loan kaise apply karein?"*, *"Ladki Bahin yojana me kitna milta hai?"*) |
 | 📞 **Noisy Audio Robustness** | Tested for real-world ambient street/village noise using Prisma's telephony-grade speech model |
 | 🌍 **Real-World Impact** | Connects marginalized rural & small-town families to life-changing healthcare, housing, and livelihood funds |
@@ -42,7 +42,7 @@ Citizens simply **tap the mic and speak naturally in their mother tongue or Hing
 
 - **🎙️ Live Mic Voice Assistant**: Tap the microphone button in the browser to speak; auto-processes through Prisma STT and Timbre TTS.
 - **⚡ One-Click Citizen Scenarios**: Instant demo buttons for Farmers (PM-Kisan), Healthcare (Ayushman Bharat), Livelihoods (Mudra Loan), Girls' Education (Sukanya Samriddhi), Housing (PM Awas), and Scam Guardrail.
-- **🏛️ Grounded Scheme Database**: 12+ verified Central welfare schemes with benefits, eligibility, and required documents in Hindi, Hinglish, and English.
+- **🏛️ Complete Pan-India Grounded Knowledge Base**: 356+ verified flagship welfare schemes covering Central Government and ALL 28 States of India (at least 12 complete schemes per state) with benefits, eligibility, and required documents in 24 Indian languages and Hinglish.
 - **🔊 Spoken Multilingual Voice Output**: Generates synthesized speech using Timbre v2.5 in the citizen's detected language.
 - **📋 CSC / Gram Panchayat Ticket Desk**: Citizens can register for local representative follow-up with their Village/District details (stored in SQLite).
 - **📊 Real-Time Analytics Dashboard**: Visualizes citizen demand by scheme and lists pending assistance tickets.

@@ -65,7 +65,7 @@ STATE_ALIASES: dict[str, list[str]] = {
     "Karnataka": ["karnataka", "కర్ణాటక", "ಕರ್ನಾಟಕ", "कर्नाटक", "கர்நாடகா"],
     "Tamil Nadu": ["tamil nadu", "tamilnadu", "tn", "తమిళనాడు", "தமிழ்நாடு", "तमिलनाडु", "ತಮಿಳುನಾಡು"],
     "Maharashtra": ["maharashtra", "మహారాష్ట్ర", "महाराष्ट्र", "மகாராஷ்டிரா"],
-    "Kerala": ["kerala", "కేరళ", "കേരളం", "केरल", "கேரளா"],
+    "Kerala": ["kerala", "కేరళ", "കേരളം", "केरल", "கேரளா"],
     "Uttar Pradesh": ["uttar pradesh", "up", "ఉత్తర ప్రదేశ్", "उत्तर प्रदेश"],
     "Bihar": ["bihar", "బీహార్", "बिहार"],
     "West Bengal": ["west bengal", "bengal", "పశ్చిమ బెంగాల్", "পশ্চিমবঙ্গ", "पश्चिम बंगाल"],
@@ -74,7 +74,20 @@ STATE_ALIASES: dict[str, list[str]] = {
     "Gujarat": ["gujarat", "గుజరాత్", "ગુજરાત", "गुजरात"],
     "Odisha": ["odisha", "orissa", "ఒడిశా", "ଓଡ଼ିଶା", "ओडिशा"],
     "Punjab": ["punjab", "పంజాబ్", "ਪੰਜਾਬ", "पंजाब"],
-    "Assam": ["assam", "అస్సాం", "অসম", "असम"]
+    "Assam": ["assam", "అస్సాం", "অসম", "असम"],
+    "Haryana": ["haryana", "హర్యానా", "हरियाणा", "ਹਰਿਆਣਾ"],
+    "Jharkhand": ["jharkhand", "జార్ఖండ్", "झारखंड", "ঝাড়খণ্ড"],
+    "Chhattisgarh": ["chhattisgarh", "chattisgarh", "ఛత్తీస్‌గఢ్", "छत्तीसगढ़"],
+    "Uttarakhand": ["uttarakhand", "uttaranchal", "ఉత్తరాఖండ్", "उत्तराखंड", "उत्तरांचल"],
+    "Himachal Pradesh": ["himachal pradesh", "himachal", "hp", "హిమాచల్ ప్రదేశ్", "हिमाचल प्रदेश", "हिमाचल"],
+    "Goa": ["goa", "గోవా", "गोवा", "गोंय"],
+    "Tripura": ["tripura", "త్రిపుర", "त्रिपुरा", "ত্রিপুরা"],
+    "Meghalaya": ["meghalaya", "మేఘాలయ", "मेघालय"],
+    "Manipur": ["manipur", "మణిపూర్", "मणिपुर", "ꯃꯅꯤꯄꯨꯔ"],
+    "Nagaland": ["nagaland", "నాగాలాండ్", "नागालैंड"],
+    "Arunachal Pradesh": ["arunachal pradesh", "arunachal", "అరుణాచల్ ప్రదేశ్", "अरुणाचल प्रदेश", "अरुणाचल"],
+    "Mizoram": ["mizoram", "మిజోరాం", "मिजोरम"],
+    "Sikkim": ["sikkim", "సిక్కిం", "सिक्किम"]
 }
 
 def detect_state_from_query(query: str) -> str | None:

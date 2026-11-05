@@ -2000,6 +2000,23 @@
       lucide.createIcons();
     }
 
+    function filterSchemes() {
+      const query = (document.getElementById('schemeSearch')?.value || '').toLowerCase().trim();
+      if (!query) {
+        renderSchemes(allSchemes);
+        return;
+      }
+      const filtered = allSchemes.filter(s => {
+        const nameMatch = (s.name || '').toLowerCase().includes(query);
+        const stateMatch = (s.state || '').toLowerCase().includes(query);
+        const benefitMatch = (s.benefit || '').toLowerCase().includes(query);
+        const categoryMatch = (s.category || '').toLowerCase().includes(query);
+        const kwMatch = Array.isArray(s.keywords) && s.keywords.some(k => k.toLowerCase().includes(query));
+        return nameMatch || stateMatch || benefitMatch || categoryMatch || kwMatch;
+      });
+      renderSchemes(filtered);
+    }
+
     // Initial greeting and visualizer loop
     window.onload = () => {
       onLangChange(true);
