@@ -108,11 +108,13 @@ def get_languages_list():
 
 
 class ChatPayload(BaseModel):
-    text: str
+    text: str = ""
+    query: str = ""
+    message: str = ""
     lang: str = "indic-auto"
 
-
-
+    def get_query_text(self) -> str:
+        return (self.text or self.query or self.message or "").strip()
 
 ANNOUNCEMENT_CACHE = {}
 
@@ -179,10 +181,11 @@ def get_announcement_wav(lang: str = "indic-auto"):
 def api_chat(payload: ChatPayload):
     """Direct query API for web interface with live Timbre TTS speech."""
     try:
-        turn = process_voice_turn(user_text=payload.text, preferred_lang=payload.lang)
+        query_text = payload.get_query_text()
+        turn = process_voice_turn(user_text=query_text, preferred_lang=payload.lang)
         audio_b64 = base64.b64encode(turn["reply_audio"]).decode("utf-8") if turn.get("reply_audio") else None
         return {
-            "user_text": turn.get("user_text", payload.text),
+            "user_text": turn.get("user_text", query_text),
             "reply_text": turn.get("reply_text", "Information is being retrieved."),
             "audio_base64": audio_b64,
             "matched_scheme": turn.get("matched_scheme"),

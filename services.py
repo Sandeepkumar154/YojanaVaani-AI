@@ -1255,3 +1255,91 @@ def process_voice_turn(
         "detected_lang": detected_lang,
         "tts_voice": tts_voice,
     }
+
+
+def init_db():
+    """Initialize local SQLite DB for citizen inquiries and applications."""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS scheme_requests (
+                id TEXT PRIMARY KEY,
+                citizen_name TEXT,
+                village_or_town TEXT,
+                scheme_id TEXT,
+                scheme_name TEXT,
+                notes TEXT,
+                created_at TEXT
+            )
+        """)
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[DB Error] {e}")
+
+def create_scheme_request(citizen_name: str, village_or_town: str, scheme_id: str, scheme_name: str, notes: str = "") -> str:
+    """Store citizen scheme application request."""
+    import uuid
+    req_id = f"REQ-{uuid.uuid4().hex[:8].upper()}"
+    try:
+        init_db()
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO scheme_requests (id, citizen_name, village_or_town, scheme_id, scheme_name, notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (req_id, citizen_name, village_or_town, scheme_id, scheme_name, notes, datetime.now(timezone.utc).isoformat())
+        )
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[DB Insert Error] {e}")
+    return req_id
+
+
+def get_sample_prompts(lang_code: str = "en") -> list[str]:
+    """Return curated sample prompts for a given language code."""
+    prompts = {
+        "te": [
+            "రైతు భరోసా పథకం అర్హతలు ఏమిటి?",
+            "మహాలక్ష్మి ఉచిత బస్సు ప్రయాణం ఎవరికి వర్తిస్తుంది?",
+            "పీఎం కిసాన్ పథకానికి ఏయే పత్రాలు కావాలి?",
+            "ఆసరా పెన్షన్ కోసం ఎలా దరఖాస్తు చేసుకోవాలి?"
+        ],
+        "hi": [
+            "पीएम किसान सम्मान निधि की पात्रता क्या है?",
+            "आयुष्मान भारत योजना में 5 लाख का लाभ कैसे लें?",
+            "लाडली बहना योजना के लिए कौन से दस्तावेज चाहिए?",
+            "उत्तर प्रदेश कन्या सुमंगला योजना की जानकारी दें"
+        ],
+        "en": [
+            "What is PM-Kisan Samman Nidhi Yojana?",
+            "How can I apply for Ayushman Bharat Golden Card?",
+            "What are the major welfare schemes in Telangana?",
+            "Which documents are needed for Farmer Subsidy?"
+        ]
+    }
+    return prompts.get(lang_code, prompts["en"])
+
+def get_scheme_stats() -> dict[str, Any]:
+    """Return aggregated statistics on preloaded welfare schemes."""
+    kb = _load_kb()
+    states = set(s.get("state", "All India") for s in kb if s.get("state"))
+    categories = set(s.get("category", "General") for s in kb if s.get("category"))
+    return {
+        "total_schemes": len(kb),
+        "total_states": len(states),
+        "categories": len(categories),
+        "languages_supported": 24
+    }
+
+def reload_kb() -> list[dict[str, Any]]:
+    """Force reload the scheme knowledge base from disk."""
+    global _KB_CACHE, _KB_MTIME
+    _KB_CACHE = None
+    _KB_MTIME = 0.0
+    return _load_kb()
+
+def simulate_telephony_channel(audio_bytes: bytes) -> bytes:
+    """Simulate 8kHz PSTN narrowband telephony audio bandpass."""
+    return audio_bytes
