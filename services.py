@@ -652,6 +652,10 @@ def _pick_answer(item: dict[str, Any], lang_code: str | None) -> str:
     if key in item and item[key]:
         return item[key]
 
+    trans = item.get("translations", {})
+    if isinstance(trans, dict) and lang_code in trans and trans[lang_code]:
+        return trans[lang_code]
+
     name = item.get("name", "Welfare Scheme")
     benefit = item.get("benefit", "")
     eligibility = item.get("eligibility", "")
