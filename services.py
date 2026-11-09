@@ -94,8 +94,15 @@ STATE_ALIASES: dict[str, list[str]] = {
 def detect_state_from_query(query: str) -> str | None:
     low = query.lower()
     for state, aliases in STATE_ALIASES.items():
-        if any(a in low for a in aliases):
-            return state
+        for a in aliases:
+            a_low = a.lower()
+            if len(a_low) <= 3:
+                # Require word boundary for short abbreviations like 'ts', 'ap', 'up', 'mp', 'hp'
+                if re.search(r'\b' + re.escape(a_low) + r'\b', low):
+                    return state
+            else:
+                if a_low in low:
+                    return state
     return None
 
 
@@ -1047,10 +1054,13 @@ def answer_from_schemes(
     if is_central_query and not detected_state:
         detected_state = "All India"
 
-    list_intents = ["list", "what and all", "what all", "available", "all schemes", "schemes in", "schemes for", "how many", "tell me schemes", 
-                    "ప్రతి", "అన్ని", "జాబితా", "పథకాలు", "స్కీములు", "స్కీమ్", "చెప్పండి", "వివరించండి", "explain",
-                    "सभी", "योजनाएं", "सूची", "हर योजना", "बताइए", "لیست", "Sab", "Saare"]
-    is_list_query = any(w in lowered for w in list_intents) or is_central_query
+    catalog_intents = [
+        "list", "what and all", "what all", "available schemes", "all schemes", "schemes in", "schemes for", 
+        "how many schemes", "tell me schemes", "show schemes", "show all", "overview of schemes",
+        "అన్ని పథకాలు", "పథకాల జాబితా", "పథకాలు ఏమిటి", "ఏమేమి పథకాలు", "ఎన్ని పథకాలు", "జాబితా",
+        "सभी योजनाएं", "सारी योजनाएं", "योजनाओं की सूची", "कितनी योजनाएं", "لیست", "सब योजनाएं", "सारे स्कीम्स"
+    ]
+    is_catalog_query = any(w in lowered for w in catalog_intents) or is_central_query
 
     # If citizen asks for all/every scheme in a state or Central Government
     if detected_state:
@@ -1059,12 +1069,13 @@ def answer_from_schemes(
         else:
             state_schemes = [item for item in items if item.get("state") == detected_state]
 
-        if state_schemes and (is_list_query or score < 5):
+        # Only return full state/central catalog if user explicitly asked for a list/catalog OR no specific scheme scored well
+        if state_schemes and (is_catalog_query or score < 6):
             print(f"[State Schemes Engine] Resolved {len(state_schemes)} full schemes for {detected_state} in {active_lang}!")
             full_answer = build_comprehensive_state_schemes_response(detected_state, state_schemes, active_lang)
             return full_answer, state_schemes[0], False
 
-    if is_list_query and score >= 5:
+    if is_catalog_query and score >= 5:
         matched_schemes = [item for sc, item in scored if sc >= 5][:8]
         if len(matched_schemes) > 1:
             if has_gemini_key():
