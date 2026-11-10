@@ -1,7 +1,7 @@
 """Telephony Voice Gateway for YojanaVaani AI.
 
 Integrates with Cloud Telephony providers (Twilio, Exotel, or Tata Tele)
-to allow citizens to dial a real phone number (e.g. +1 737 250 8034 / 1800-YOJANA)
+to allow citizens to dial a real phone number (e.g. 1800-YOJANA (Gov Toll-Free Roadmap))
 and converse with the AI voice assistant in real time over standard cellular voice lines.
 """
 import os
@@ -89,7 +89,7 @@ def health_check():
         "gnani_check": gnani_diag,
         "gemini_check": gemini_diag,
         "server_url": get_server_url(),
-        "carrier_number": os.getenv("TWILIO_PHONE_NUMBER", "+17372508034"),
+        "carrier_number": os.getenv("GOV_TOLLFREE_NUMBER", "1800-YOJANA-GOV"),
         "total_active_sessions": len(CALL_SESSIONS),
         "cached_audio_clips": len(AUDIO_CACHE),
     }

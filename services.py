@@ -509,6 +509,11 @@ def detect_query_language(text: str, preferred_lang: str | None = None) -> str:
     if best_count > 0 and len(indic_words) >= 2:
         return best_script
 
+        # 3.5 Detect Romanized Telugu (Teluglish) markers
+    teluglish_words = {"naaku", "naku", "andi", "kosam", "gurunchi", "gurinchi", "cheppandi", "kavali", "undi", "unnayi", "ela", "eppudu", "ekkada", "entha", "padhakam", "pathakam", "amma", "vodi", "rythu", "bharosa", "telusukovalani", "danikosam", "meeru", "manaku", "meeku", "avunu", "konchem"}
+    if sum(1 for w in latin_words if w in teluglish_words) >= 2:
+        return "te"
+
     # 4. If Hinglish markers in Latin script
     if hinglish_matches >= 2:
         return "hi-en"
@@ -745,7 +750,9 @@ def generate_dynamic_response(
         f"Strict Guidelines:\n"
         f"1. Compose a warm, conversational 2-3 sentence spoken answer in {lang_name} ({native_name} script).\n"
         f"2. You are strictly an Indian Government welfare assistant. Answer ONLY about this verified government scheme. Do not discuss any unrelated, commercial, political, or external topics.\n"
-        f"3. Do NOT use markdown, bold, asterisks, or bullet points because this text will be read aloud by Timbre TTS over the telephone."
+        f"3. Do NOT use markdown, bold, asterisks, or bullet points.\n"
+        f"4. STRICT VISIBILITY RULE: ALWAYS write ALL numbers, amounts, percentages, classes, and ages in NUMERIC DIGITS (e.g. ₹15,000, ₹6,000, ₹5,00,000, 75%, 1 నుండి 12, 18+). NEVER spell out numbers in words (NEVER write 'పదిహేను వేల', 'డెబ్బై ఐదు', 'पंद्रह हजार', 'fifteen thousand').\n"
+        f"5. Write 95%+ of the response in pure {lang_name} ({native_name} script), keeping English words to absolute minimum."
     )
 
     for endpoint in candidate_models:
@@ -758,8 +765,11 @@ def generate_dynamic_response(
                     "contents": [{"parts": [{"text": system_instruction}]}],
                     "generationConfig": {"temperature": 0.2, "maxOutputTokens": 1000, "thinkingConfig": {"thinkingBudget": 0}},
                 },
-                timeout=8,
+                timeout=5,
             )
+            if resp.status_code == 429:
+                print(f"[Gemini Quota 429] Fast fallback active.")
+                break
             if resp.ok:
                 data = resp.json()
                 candidates = data.get("candidates", [])
@@ -805,7 +815,9 @@ def answer_open_ended_scheme(
         f"1. IF THIS QUERY IS ABOUT AN INDIAN GOVERNMENT SCHEME OR PUBLIC WELFARE BENEFIT:\n"
         f"   - Detail the primary financial or social benefits (₹ amounts, subsidies), who is eligible, and documents required.\n"
         f"   - Keep it to 2-3 spoken sentences in {lang_name} ({native_name} script).\n"
-        f"   - Do NOT use any asterisks, markdown, bolding, or lists (it will be spoken via TTS).\n"
+        f"   - Do NOT use any asterisks, markdown, bolding, or lists.\n"
+        f"   - ALWAYS write ALL numbers, amounts, percentages, classes, and ages in NUMERIC DIGITS (e.g. ₹15,000, 75%, 1-12). NEVER spell numbers out in words.\n"
+        f"   - Write 95%+ of the response in pure {lang_name} ({native_name} script), minimizing English words.\n"
         f"   - At the end on a new line write: 'SCHEME_NAME: <Official Name of Scheme>'\n\n"
         f"2. IF THIS QUERY IS NOT ABOUT AN INDIAN GOVERNMENT SCHEME OR CITIZEN WELFARE SERVICE:\n"
         f"   (For example: general chit-chat, movies, cinema, cricket, sports, cooking, coding/tech, weather, jokes, songs, personal life, or opinions):\n"
@@ -824,8 +836,11 @@ def answer_open_ended_scheme(
                     "contents": [{"parts": [{"text": system_instruction}]}],
                     "generationConfig": {"temperature": 0.2, "maxOutputTokens": 1000, "thinkingConfig": {"thinkingBudget": 0}},
                 },
-                timeout=8,
+                timeout=5,
             )
+            if resp.status_code == 429:
+                print(f"[Gemini Quota 429] Fast fallback active.")
+                break
             if resp.ok:
                 data = resp.json()
                 candidates = data.get("candidates", [])
@@ -946,7 +961,9 @@ def generate_multi_scheme_response(
         f"Strict Guidelines:\n"
         f"1. Compose a friendly 2-3 sentence spoken summary in {lang_name} ({native_name} script) listing and briefly explaining these top schemes.\n"
         f"2. You are an Indian Government welfare assistant. Answer ONLY about these verified schemes.\n"
-        f"3. Do NOT use markdown, bold asterisks, or bullet points because this will be read aloud over the phone.\n"
+        f"3. Do NOT use markdown, bold asterisks, or bullet points.\n"
+        f"4. ALWAYS write ALL numbers, amounts, percentages, and ages in NUMERIC DIGITS (e.g. ₹15,000, 75%, 1-12). NEVER write numbers in words.\n"
+        f"5. Write 95%+ of the response in pure {lang_name} ({native_name} script), keeping English to absolute minimum.\n"
     )
 
     for endpoint in candidate_models:
@@ -1237,13 +1254,13 @@ def process_voice_turn(
     tts_lang, tts_voice = get_voice_for_language(detected_lang)
     if has_api_key():
         try:
-            # Low-latency voice spurt: Synthesize first 1-2 punchy sentences (~160 chars) for speech
-            # while the citizen sees the full, detailed scheme answer in the visual card.
+            # Read the COMPLETE output cleanly so no sentence or document step is cut off.
             spoken_text = reply_text.strip()
-            # Split on sentence terminals: danda (।), period, exclamation, or question mark
-            sentences = [s.strip() for s in re.split(r"(?<=[।\.\!\?])\s+", spoken_text) if s.strip()]
-            if sentences and len(sentences) >= 2 and len(spoken_text) > 170:
-                spoken_text = f"{sentences[0]} {sentences[1]}"
+            spoken_text = re.sub(r"[*_#•]", "", spoken_text)
+            if len(spoken_text) > 1150:
+                cut = spoken_text[:1150]
+                last_end = max(cut.rfind("."), cut.rfind("।"), cut.rfind("!"), cut.rfind("?"), cut.rfind("\n"))
+                spoken_text = cut[:last_end + 1] if last_end > 300 else cut
             reply_audio = synthesize(spoken_text, language=tts_lang, voice=tts_voice)
         except Exception as e:
             print(f"[Voice Turn] TTS synthesis error: {e}")
