@@ -107,43 +107,111 @@ def detect_state_from_query(query: str) -> str | None:
 
 
 SCHEME_FALLBACK_MESSAGES: dict[str, str] = {
-    "en": "We could not find the exact scheme you requested. Major Central and State welfare programs include PM-Kisan (₹6,000/yr for farmers), Ayushman Bharat (₹5 Lakh free health cover), PM Awas Yojana, and regional welfare pensions. Please state the specific benefit or name of the scheme.",
-    "hi": "हम आपके द्वारा पूछी गई योजना की सटीक जानकारी नहीं पा सके। प्रमुख सरकारी योजनाओं में पीएम-किसान (किसानों को ₹6,000 सालाना), आयुष्मान भारत (₹5 लाख तक मुफ्त इलाज), और पीएम आवास योजना शामिल हैं। कृपया योजना का नाम स्पष्ट बताएं।",
-    "hi-en": "Hum aapke dwara puchi gayi scheme ki exact details locate nahi kar sake. Major schemes me PM-Kisan (farmers ko ₹6,000/yr), Ayushman Bharat (₹5 Lakh free treatment) aur PM Awas Yojana shamil hain. Kripya scheme ka naam batayein.",
-    "te": "మీరు అడిగిన పథకం వివరాలు లభించలేదు. ప్రధాన సంక్షేమ పథకాల్లో పీఎం-కిసాన్ (రైతులకు ₹6,000), ఆయుష్మాన్ భారత్ (₹5 లక్షల ఉచిత వైద్యం), పీఎం ఆవాస్ మరియు సామాజిక పింఛన్లు ఉన్నాయి. దయచేసి పథకం పేరును వివరంగా అడగండి.",
-    "ta": "நீங்கள் கேட்ட திட்ட விவரங்கள் கிடைக்கவில்லை. முக்கியமான திட்டங்களில் பிஎம்-கிசான் (ரூ. 6,000), ஆயுஷ்மான் பாரத் (ரூ. 5 லட்சம் இலவச சிகிச்சை) ஆகியவை அடங்கும். திட்டத்தின் பெயரை தெளிவாகக் கூறவும்.",
-    "kn": "ನೀವು ಕೇಳಿದ ಯೋಜನೆಯ ವಿವರಗಳು ಲಭ್ಯವಿಲ್ಲ. ಪ್ರಮುಖ ಯೋಜನೆಗಳಲ್ಲಿ ಪಿಎಂ-ಕಿಸಾನ್ (ವಾರ್ಷಿಕ ₹6,000), ಆಯುಷ್ಮಾನ್ ಭಾರತ್ (₹5 ಲಕ್ಷ ಉಚಿತ ಚಿಕಿತ್ಸೆ) ಸೇರಿವೆ. ದಯವಿಟ್ಟು ಯೋಜನೆಯ ಹೆಸರನ್ನು ತಿಳಿಸಿ.",
-    "ml": "നിങ്ങൾ ചോദിച്ച പദ്ധതി വിവരങ്ങൾ ലഭ്യമല്ല. പ്രധാന പദ്ധതികളിൽ പിഎം-കിസാൻ (പ്രതിവർഷം ₹6,000), ആയുഷ്മാൻ ഭാരത് (₹5 ലക്ഷം സൗജന്യ ചികിത്സ) എന്നിവ ഉൾപ്പെടുന്നു.",
-    "mr": "तुम्ही विचारलेल्या योजनेची माहिती उपलब्ध नाही. प्रमुख योजनांमध्ये पीएम-किसान (शेतकऱ्यांना ₹6,000), आयुष्मान भारत (₹5 लाखांपर्यंत मोफत उपचार) यांचा समावेश आहे.",
-    "bn": "আপনার উল্লেখিত প্রকল্পের সঠিক তথ্য পাওয়া যায়নি। প্রধান প্রকল্পগুলির মধ্যে পিএম-কিসান (বছরে ₹৬,০০০), আয়ুষ্মান ভারত (₹৫ লাখ পর্যন্ত বিনামূল্যে চিকিৎসা) অন্তর্ভুক্ত।",
-    "gu": "તમે પૂછેલ યોજનાની ચોક્કસ માહિતી મળી નથી. મુખ્ય યોજનાઓમાં પીએમ-કિસાન (ખેડૂતોને ₹6,000), આયુષ્માન ભારત (₹5 લાખ સુધી મફત સારવાર) શામેલ છે.",
-    "pa": "ਤੁਹਾਡੇ ਵੱਲੋਂ ਪੁੱਛੀ ਗਈ ਸਕੀਮ ਦੇ ਵੇਰਵੇ ਨਹੀਂ ਮਿਲੇ। ਮੁੱਖ ਸਕੀਮਾਂ ਵਿੱਚ ਪੀਐਮ-ਕਿਸਾਨ (ਕਿਸਾਨਾਂ ਲਈ ₹6,000), ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ (₹5 ਲੱਖ ਤੱਕ ਮੁਫ਼ਤ ਇਲਾਜ) ਸ਼ਾਮਲ ਹਨ।",
-    "or": "ଆପଣ ପଚାରିଥିବା ଯୋଜନାର ସଠିକ୍ ସୂଚନା ମିଳିଲା ନାହିଁ। ପ୍ରମୁଖ ଯୋଜନା ମଧ୍ୟରେ ପିଏମ୍-କିଷାନ (ବାର୍ଷିକ ₹୬,୦୦୦), ଆୟୁଷ୍ମାନ ଭାରତ (₹୫ ଲକ୍ଷ ମାଗଣା ଚିକିତ୍ସା) ଅନ୍ତର୍ଭୁକ୍ତ।",
-    "as": "আপুনি সোধা আঁচনিৰ তথ্য বিচাৰি পোৱা নগল। প্ৰধান আঁচনিসমূহৰ ভিতৰত পিএম-কিষাণ (বাৰ্ষিক ₹৬,০০০), আয়ুষ্মান ভাৰত (₹৫ লাখলৈ বিনামূলীয়া চিকিৎসা) অন্তৰ্ভুক্ত।",
-    "ur": "آپ کی مطلوبہ اسکیم کی تفصیلات دستیاب نہیں ہیں۔ اہم اسکیموں میں پی ایم کسان (کسانوں کو ₹6,000 سالانہ) اور آیوشمان بھارت (₹5 لاکھ تک مفت علاج) شامل ہیں۔"
+    "en": "We could not find the exact scheme you requested. Major welfare schemes include PM-Kisan (₹6,000/yr), Ayushman Bharat (₹5,00,000 free health cover), and PM Awas Yojana. Please state the scheme name clearly.",
+    "hi": "हम आपके द्वारा पूछी गई योजना की सटीक जानकारी नहीं पा सके। प्रमुख सरकारी योजनाओं में पीएम-किसान (₹6,000 सालाना), आयुष्मान भारत (₹5,00,000 तक मुफ्त इलाज), और पीएम आवास योजना शामिल हैं। कृपया योजना का नाम स्पष्ट बताएं।",
+    "hi-en": "Hum aapke dwara puchi gayi scheme ki exact details locate nahi kar sake. Major schemes me PM-Kisan (₹6,000/yr), Ayushman Bharat (₹5,00,000 free treatment) aur PM Awas Yojana shamil hain. Kripya scheme ka naam batayein.",
+    "te": "మీరు అడిగిన పథకం వివరాలు లభించలేదు. ప్రధాన పథకాల్లో పీఎం-కిసాన్ (₹6,000/సం.), ఆయుష్మాన్ భారత్ (₹5,00,000 ఉచిత వైద్యం), మరియు పీఎం ఆవాస్ ఉన్నాయి. దయచేసి పథకం పేరును స్పష్టంగా చెప్పండి.",
+    "ta": "நீங்கள் கேட்ட திட்ட விவரங்கள் கிடைக்கவில்லை. முக்கிய திட்டங்களில் பிஎம்-கிசான் (₹6,000), ஆயுஷ்மான் பாரத் (₹5,00,000 இலவச சிகிச்சை) அடங்கும். திட்டத்தின் பெயரை தெளிவாகக் கூறவும்.",
+    "kn": "ನೀವು ಕೇಳಿದ ಯೋಜನೆಯ ವಿವರಗಳು ಲಭ್ಯವಿಲ್ಲ. ಪ್ರಮುಖ ಯೋಜನೆಗಳಲ್ಲಿ ಪಿಎಂ-ಕಿಸಾನ್ (ವಾರ್ಷಿಕ ₹6,000), ಆಯುಷ್ಮಾನ್ ಭಾರತ್ (₹5,00,000 ಉಚಿತ ಚಿಕಿತ್ಸೆ) ಸೇರಿವೆ. ದಯವಿಟ್ಟು ಯೋಜನೆಯ ಹೆಸರನ್ನು ತಿಳಿಸಿ.",
+    "ml": "നിങ്ങൾ ചോദിച്ച പദ്ധതി വിവരങ്ങൾ ലഭ്യമല്ല. പ്രധാന പദ്ധതികളിൽ പിഎം-കിസാൻ (₹6,000), ആയുഷ്മാൻ ഭാരത് (₹5,00,000 സൗജന്യ ചികിത്സ) എന്നിവ ഉൾപ്പെടുന്നു. പദ്ധതിയുടെ പേര് വ്യക്തമാക്കുക.",
+    "mr": "तुम्ही विचारलेल्या योजनेची माहिती उपलब्ध नाही. प्रमुख योजनांमध्ये पीएम-किसान (₹6,000), आयुष्मान भारत (₹5,00,000 मोफत उपचार) यांचा समावेश आहे. कृपया योजनेचे नाव स्पष्ट सांगा.",
+    "bn": "আপনার উল্লেখিত প্রকল্পের তথ্য পাওয়া যায়নি। প্রধান প্রকল্পগুলির মধ্যে পিএম-কিসান (₹6,000), আয়ুষ্মান ভারত (₹5,00,000 চিকিৎসা) অন্তর্ভুক্ত। অনুগ্রহ করে প্রকল্পের নাম বলুন।",
+    "gu": "તમે પૂછેલ યોજનાની માહિતી મળી નથી. મુખ્ય યોજનાઓમાં પીએમ-કિસાન (₹6,000), આયુષ્માન ભારત (₹5,00,000 મફત સારવાર) શામેલ છે. કૃપા કરીને યોજનાનું નામ જણાવો.",
+    "pa": "ਤੁਹਾਡੇ ਵੱਲੋਂ ਪੁੱਛੀ ਗਈ ਸਕੀਮ ਦੇ ਵੇਰਵੇ ਨਹੀਂ ਮਿਲੇ। ਮੁੱਖ ਸਕੀਮਾਂ ਵਿੱਚ ਪੀਐਮ-ਕਿਸਾਨ (₹6,000), ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ (₹5,00,000 ਮੁਫ਼ਤ ਇਲਾਜ) ਸ਼ਾਮਲ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਸਕੀਮ ਦਾ ਨਾਮ ਦੱਸੋ।",
+    "or": "ଆପଣ ପଚାରିଥିବା ଯୋଜନାର ସୂଚନା ମିଳିଲା ନାହିଁ। ପ୍ରମୁଖ ଯୋଜନାରେ ପିଏମ୍-କିଷାନ (₹6,000), ଆୟୁଷ୍ମାନ ଭାରତ (₹5,00,000 ମାଗଣା ଚିକିତ୍ସା) ଅନ୍ତର୍ଭୁକ୍ତ। ଦୟାକରି ଯୋଜନାର ନାମ ସ୍ପଷ୍ଟ କରନ୍ତୁ।",
+    "as": "আপুনি সোধা আঁচনিৰ তথ্য পোৱা নগ'ল। প্ৰধান আঁচনিত পিএম-কিষাণ (₹6,000), আয়ুষ্মান ভাৰত (₹5,00,000 চিকিৎসা) অন্তৰ্ভুক্ত। অনুগ্ৰহ কৰি আঁচনিৰ নাম কওক।",
+    "ur": "آپ کی مطلوبہ اسکیم کی تفصیلات دستیاب نہیں ہیں۔ اہم اسکیموں میں پی ایم کسان (₹6,000) اور آیوشمان بھارت (₹5,00,000 مفت علاج) شامل ہیں۔ براہ کرم اسکیم کا نام واضح بتائیں۔",
+    "sa": "भवता पृष्टायाः योजनायाः विवरणं न प्राप्तम्। प्रमुखयोजनासु पीएम-किसान (₹6,000), आयुष्मान भारत (₹5,00,000) च अन्तर्भवन्ति। कृपया योजनानाम स्पष्टं वदतु।",
+    "ne": "तपाईंले खोज्नुभएको योजनाको विवरण भेटिएन। प्रमुख योजनाहरूमा पीएम-किसान (₹6,000), आयुष्मान भारत (₹5,00,000) पर्दछन्। कृपया योजनाको नाम स्पष्ट भन्नुहोस्।",
+    "kok": "तुमी विचारिल्ल्या येवजणेची म्हायती मेळ्ळी ना। मुखेल येवजण्यांनी पीएम-किसान (₹6,000), आयुष्मान भारत (₹5,00,000) आसपावतात। उपकार करून येवजणेचें नांव स्पष्ट सांगात।",
+    "mai": "अहाँ द्वारा पुछल योजनाक जानकारी नहि भेटल। प्रमुख योजना मे पीएम-किसान (₹6,000), आयुष्मान भारत (₹5,00,000) शामिल अछि। कृपया योजनाक नाम स्पष्ट कहू।",
+    "doi": "तुंदे पुच्छे दी स्कीमा दा ब्योरा नेईं थ्होया। मुक्ख स्कीमें च पीएम-किसान (₹6,000), आयुष्मान भारत (₹5,00,000) शामल न। मेहरबानी करियै स्कीमा दा नां स्पष्ट दस्सो।",
+    "ks": "تُہنٛز پُژھمٕژ سکیٖم ہٕنٛز تفصیٖل میٖل نہٕ۔ اہم سکیٖمَن مَنٛز پی ایم کِسان (₹6,000) تہٕ آیوشمان بھارَت (₹5,00,000) شٲمِل چھِ۔",
+    "sd": "توهان جي پڇيل اسڪيم جا تفصيل نه مليا۔ اهم اسڪيمن ۾ پي ايم ڪسان (₹6,000) ۽ آيوشمان ڀارت (₹5,00,000) شامل آهن۔ مهرباني ڪري اسڪيم جو نالو واضح ٻڌايو۔",
+    "mni": "ꯑꯗꯣꯝꯅꯥ ꯍꯪꯂꯤꯕꯥ ꯊꯧꯔꯥꯡꯒꯤ ꯑꯀꯨꯞꯄꯥ ꯐꯪꯗ꯭ꯔꯦ꯫ ꯃꯔꯨꯑꯣꯏꯕꯥ ꯊꯧꯔꯥꯡꯁꯤꯡꯗꯥ PM-Kisan (₹6,000) ꯑꯃꯁꯨꯡ Ayushman Bharat (₹5,00,000) ꯌꯥꯎꯔꯤ꯫",
+    "brx": "नोंथाङा सोंनाय बिथांखिनि सोमोन्दै मोनाखै। गाहाय बिथांखिफोरनि गेजेराव PM-Kisan (₹6,000) आरो Ayushman Bharat (₹5,00,000) दं।",
+    "sat": "ᱟᱢ ᱠᱩᱞᱤ ᱟᱠᱟᱫ ᱡᱚᱡᱚᱱᱟ ᱨᱮᱱᱟᱜ ᱵᱤᱵᱚᱨᱚᱬ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ᱾ ᱢᱩᱬᱩᱛ ᱡᱚᱡᱚᱱᱟ ᱠᱚᱨᱮ PM-Kisan (₹6,000) ᱟᱨ Ayushman Bharat (₹5,00,000) ᱥᱮᱞᱮᱫ ᱢᱮᱱᱟᱜᱼᱟ᱾"
 }
 
 SCAM_MESSAGES: dict[str, str] = {
-    "en": "SECURITY ALERT: Never share your OTP, ATM PIN, UPI PIN, or bank passwords with anyone. Government welfare schemes never ask for passwords or upfront registration fees. Please protect your personal data.",
-    "hi": "सुरक्षा चेतावनी: कभी भी अपना ओटीपी, एटीएम पिन, यूपीआई पिन या बैंक पासवर्ड किसी के साथ साझा न करें। सरकारी योजनाएं कभी भी पासवर्ड या रजिस्ट्रेशन शुल्क नहीं मांगती हैं।",
-    "hi-en": "SECURITY ALERT: Kabhi bhi apna OTP, ATM PIN, UPI PIN ya bank password kisi ko mat batayein. Sarkari schemes kabhi password ya registration fee nahi maangti.",
-    "te": "భద్రతా హెచ్చరిక: మీ OTP, ATM పిన్ లేదా బ్యాంక్ పాస్‌వర్డ్‌లను ఎవరితోనూ పంచుకోవద్దు. ప్రభుత్వ సంక్షేమ పథకాలు ఎన్నడూ రుసుము లేదా పాస్‌వర్డ్ అడగవు.",
+    "en": "SECURITY ALERT: Never share your OTP, ATM PIN, UPI PIN, or bank passwords with anyone. Government schemes never ask for passwords or fees.",
+    "hi": "सुरक्षा चेतावनी: कभी भी अपना OTP, ATM पिन, UPI पिन या बैंक पासवर्ड साझा न करें। सरकारी योजनाएं कभी भी पासवर्ड या शुल्क नहीं मांगती हैं।",
+    "hi-en": "SECURITY ALERT: Kabhi bhi apna OTP, ATM PIN, UPI PIN ya bank password kisi ko mat batayein. Sarkari schemes kabhi password ya fee nahi maangti.",
+    "te": "భద్రతా హెచ్చరిక: మీ OTP, ATM పిన్ లేదా బ్యాంక్ పాస్‌వర్డ్‌లను ఎవరితోనూ పంచుకోవద్దు. ప్రభుత్వ పథకాలు ఎన్నడూ రుసుము లేదా OTP అడగవు.",
     "ta": "பாதுகாப்பு எச்சரிக்கை: உங்கள் OTP அல்லது வங்கி PIN விவரங்களை யாரிடமும் பகிர வேண்டாம். அரசு திட்டங்கள் கட்டணம் அல்லது கடவுச்சொல் கேட்பதில்லை.",
-    "kn": "ಭದ್ರತಾ ಎಚ್ಚರಿಕೆ: ನಿಮ್ಮ OTP ಅಥವಾ ಬ್ಯಾಂಕ್ ಪಿನ್ ಅನ್ನು ಯಾರೊಂದಿಗೂ ಹಂಚಿಕೊಳ್ಳಬೇಡಿ. ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಪಾಸ್‌ವರ್ಡ್ ಅಥವಾ ಶುಲ್ಕವನ್ನು ಕೇಳುವುದಿಲ್ಲ."
+    "kn": "ಭದ್ರತಾ ಎಚ್ಚರಿಕೆ: ನಿಮ್ಮ OTP ಅಥವಾ ಬ್ಯಾಂಕ್ ಪಿನ್ ಅನ್ನು ಯಾರೊಂದಿಗೂ ಹಂಚಿಕೊಳ್ಳಬೇಡಿ. ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಪಾಸ್‌ವರ್ಡ್ ಅಥವಾ ಶುಲ್ಕವನ್ನು ಕೇಳುವುದಿಲ್ಲ.",
+    "ml": "സുരക്ഷാ മുന്നറിയിപ്പ്: നിങ്ങളുടെ OTP, ATM പിൻ, ബാങ്ക് പാസ്‌വേഡ് എന്നിവ ആരുമായും പങ്കിടരുത്. സർക്കാർ പദ്ധതികൾ ഒരിക്കലും ഫീസ് ആവശ്യപ്പെടുന്നില്ല.",
+    "mr": "सुरक्षा सूचना: तुमचा OTP, ATM पिन किंवा बँक पासवर्ड कोणाशीही शेअर करू नका. सरकारी योजना कधीही शुल्क किंवा पासवर्ड मागत नाहीत.",
+    "bn": "নিরাপত্তা সতর্কতা: আপনার OTP, ATM পিন বা ব্যাংকের পাসওয়ার্ড কারো সাথে শেয়ার করবেন না। সরকারি প্রকল্পে কোনো ফি লাগে না।",
+    "gu": "સુરક્ષા ચેતવણી: તમારો OTP, ATM પિન કે બેંક પાસવર્ડ ક્યારેય કોઈની સાથે શેર કરશો નહીં. સરકારી યોજનાઓ ક્યારેય ફી કે પાસવર્ડ માંગતી નથી.",
+    "pa": "ਸੁਰੱਖਿਆ ਚੇਤਾਵਨੀ: ਆਪਣਾ OTP, ATM ਪਿੰਨ ਜਾਂ ਬੈਂਕ ਪਾਸਵਰਡ ਕਦੇ ਕਿਸੇ ਨਾਲ ਸਾਂਝਾ ਨਾ ਕਰੋ। ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਕਦੇ ਫੀਸ ਨਹੀਂ ਮੰਗਦੀਆਂ।",
+    "or": "ସୁରକ୍ଷା ସତର୍କତା: ଆପଣଙ୍କର OTP, ATM ପିନ୍ କିମ୍ବା ବ୍ୟାଙ୍କ ପାସୱାର୍ଡ କାହା ସହିତ ସେୟାର କରନ୍ତୁ ନାହିଁ। ସରକାରୀ ଯୋଜନା କେବେବି ଶୁଳ୍କ ମାଗେ ନାହିଁ।",
+    "as": "সুৰক্ষা সতৰ্কবাণী: আপোনাৰ OTP, ATM পিন বা বেংক পাছৱৰ্ড কাৰো সৈতে শ্বেয়াৰ নকৰিব। চৰকাৰী আঁচনিত কেতিয়াও মাচুল নালাগে।",
+    "ur": "حفاظتی انتباہ: اپنا OTP، اے ٹی ایم پن یا بینک پاس ورڈ کسی کو نہ بتائیں۔ سرکاری اسکیمیں کبھی فیس یا پاس ورڈ نہیں مانگتیں۔",
+    "sa": "सुरक्षाचेतावनी: स्वकीयं OTP, ATM पिन वा बैंक-कूटशब्दं कदापि केनापि सह न योजयतु।",
+    "ne": "सुरक्षा चेतावनी: आफ्नो OTP, ATM पिन वा बैंक पासवर्ड कसैसँग साझा नगर्नुहोस्। सरकारी योजनाले शुल्क माग्दैन।",
+    "kok": "सुरक्षा शिटकावणी: तुमचो OTP, ATM पिन वा बँक पासवर्ड कोणाकूच दिवचो न्हय। सरकारी येवजण्यो केन्नाच फी मागत नात।",
+    "mai": "सुरक्षा चेतावनी: अपन OTP, ATM पिन वा बैंक पासवर्ड ककरो सँ साझा नहि करू। सरकारी योजना शुल्क नहि मांगैत अछि।",
+    "doi": "सुरक्षा चेतावनी: अपना OTP, ATM पिन जां बैंक पासवर्ड कुसै कन्नै सांझा नेईं करो। सरकारी स्कीमां कदें फीस नेईं मंगदियां।",
+    "ks": "حفاظتی خبردار: پنُن OTP یا بینک پِن مٕہ دِیو کٲنٛسہِ تہِ۔ سرکٲری سکیٖمہٕ چھَنہٕ کُنہِ تہِ فیٖس منگان۔",
+    "sd": "حفاظتي خبردار: پنهنجو OTP، ATM پن يا بئنڪ پاسورڊ ڪنهن سان به شيئر نه ڪريو۔",
+    "mni": "ꯁꯦꯀ꯭ꯌꯨꯔꯤꯇꯤ ꯋꯥꯔꯅꯤꯡ: ꯅꯍꯥꯛꯀꯤ OTP ꯅꯠꯇ꯭ꯔꯒꯥ ꯕꯦꯡꯛ ꯄꯤꯟ ꯀꯅꯥꯗꯥꯁꯨ ꯄꯤꯕꯤꯒꯅꯨ꯫",
+    "brx": "रैखाथि सांग्रांथि: नोंथांनि OTP एबा बेंक पिनखौ रावजोंबो सेयार खालामनाङा।",
+    "sat": "ᱡᱟᱜᱽᱨᱩᱠᱛᱟ ᱪᱮᱛᱟᱣᱱᱤ: ᱟᱢᱟᱜ OTP ᱥᱮ ᱵᱮᱸᱠ ᱯᱤᱱ ᱚᱠᱚᱭ ᱥᱟᱶ ᱦᱚᱸ ᱟᱞᱚᱢ ᱥᱮᱭᱟᱨᱟ᱾"
 }
 
 OUT_OF_SCOPE_MESSAGES: dict[str, str] = {
-    "en": "I am YojanaVaani AI, specialized strictly in Indian Government welfare schemes, subsidies, pensions, and public citizen benefits. Please ask about government schemes like PM-Kisan, Ayushman Bharat, PMAY, or state welfare programs.",
-    "hi": "मैं योजनावाणी एआई हूँ, जो विशेष रूप से भारत सरकार की कल्याणकारी योजनाओं, सब्सिडी, पेंशन और नागरिक सेवाओं की जानकारी के लिए बना हूँ। कृपया सरकारी योजनाओं के बारे में पूछें।",
-    "hi-en": "Main YojanaVaani AI hoon, jo specially Indian Government welfare schemes, subsidies aur pensions ki jankari ke liye bana hai. Kripya kisi sarkari scheme ke baare me puchein.",
-    "te": "నేను యోజనవాణి AI ని. నేను భారత ప్రభుత్వ సంక్షేమ పథకాలు, సబ్సిడీలు మరియు పింఛన్ల సమాచారం అందించడానికి మాత్రమే రూపొందించబడ్డాను. దయచేసి ప్రభుత్వ పథకాల గురించి అడగండి."
+    "en": "I am YojanaVaani AI, built strictly for Indian Government welfare schemes, subsidies, and pensions. Please ask about schemes like PM-Kisan, Ayushman Bharat, or state welfare programs.",
+    "hi": "मैं योजनावाणी एआई हूँ, जो विशेष रूप से भारत सरकार की कल्याणकारी योजनाओं, सब्सिडी और पेंशन की जानकारी के लिए बना हूँ। कृपया केवल सरकारी योजनाओं के बारे में पूछें।",
+    "hi-en": "Main YojanaVaani AI hoon, jo strictly Indian Government welfare schemes, subsidies aur pensions ke liye bana hai. Kripya sarkari schemes ke baare me puchein.",
+    "te": "నేను యోజనవాణి AI ని. నేను కేవలం భారత ప్రభుత్వ సంక్షేమ పథకాలు, సబ్సిడీలు మరియు పింఛన్ల సమాచారం కోసం మాత్రమే పనిచేస్తాను. దయచేసి ప్రభుత్వ పథకాల గురించి అడగండి.",
+    "ta": "நான் யோஜனாவாணி AI. இந்திய அரசு நலத்திட்டங்கள், மானியங்கள் மற்றும் ஓய்வூதியத் தகவல்களுக்கு மட்டுமே உதவ வடிவமைக்கப்பட்டுள்ளேன். தயவுசெய்து அரசு திட்டங்களைப் பற்றி கேட்கவும்.",
+    "kn": "ನಾನು ಯೋಜನಾವಾಣಿ AI. ಭಾರತ ಸರ್ಕಾರದ ಕಲ್ಯಾಣ ಯೋಜನೆಗಳು, ಸಬ್ಸಿಡಿಗಳು ಮತ್ತು ಪಿಂಚಣಿ ಮಾಹಿತಿಗಾಗಿ ಮಾತ್ರ ನಾನು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತೇನೆ. ದಯವಿಟ್ಟು ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಕೇಳಿ.",
+    "ml": "ഞാൻ യോജനാവാണി AI ആണ്. ഇന്ത്യൻ സർക്കാർ ക്ഷേമ പദ്ധതികൾ, സബ്‌സിഡികൾ, പെൻഷൻ എന്നിവയെക്കുറിച്ച് മാത്രം വിവരങ്ങൾ നൽകാൻ നിർമ്മിച്ചതാണ്. ദയവായി സർക്കാർ പദ്ധതികളെക്കുറിച്ച് ചോദിക്കുക.",
+    "mr": "मी योजनावाणी AI आहे. मी केवळ भारत सरकारच्या कल्याणकारी योजना, अनुदान आणि पेन्शनची माहिती देण्यासाठी बनवलेला आहे. कृपया सरकारी योजनांबद्दल विचारा.",
+    "bn": "আমি যোজনাবাণী AI। আমি শুধুমাত্র ভারত সরকারের জনকল্যাণমূলক প্রকল্প, ভর্তুকি এবং পেনশন সম্পর্কে তথ্য দেওয়ার জন্য তৈরি। অনুগ্রহ করে সরকারি প্রকল্প সম্পর্কে জিজ্ঞাসা করুন।",
+    "gu": "હું યોજનાવાણી AI છું. હું માત્ર ભારત સરકારની કલ્યાણકારી યોજનાઓ, સબસિડી અને પેન્શનની માહિતી માટે બનાવવામાં આવ્યો છું. કૃપા કરીને સરકારી યોજનાઓ વિશે પૂછો.",
+    "pa": "ਮੈਂ ਯੋਜਨਾਵਾਣੀ AI ਹਾਂ। ਮੈਂ ਸਿਰਫ਼ ਭਾਰਤ ਸਰਕਾਰ ਦੀਆਂ ਭਲਾਈ ਸਕੀਮਾਂ, ਸਬਸਿਡੀਆਂ ਅਤੇ ਪੈਨਸ਼ਨਾਂ ਦੀ ਜਾਣਕਾਰੀ ਦੇਣ ਲਈ ਬਣਿਆ ਹਾਂ। ਕਿਰਪਾ ਕਰਕੇ ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਬਾਰੇ ਪੁੱਛੋ।",
+    "or": "ମୁଁ ଯୋଜନାବାଣୀ AI। ମୁଁ କେବଳ ଭାରତ ସରକାରଙ୍କ କଲ୍ୟାଣକାରୀ ଯୋଜନା, ସବସିଡି ଏବଂ ପେନସନ ବିଷୟରେ ସୂଚନା ଦେବା ପାଇଁ ପ୍ରସ୍ତୁତ। ଦୟାକରି ସରକାରୀ ଯୋଜନା ବିଷୟରେ ପଚାରନ୍ତୁ।",
+    "as": "মই যোজনাবাণী AI। মই কেৱল ভাৰত চৰকাৰৰ কল্যাণমূলক আঁচনি, ৰাজসাহায্য আৰু পেঞ্চনৰ তথ্য দিবলৈ নিৰ্মাণ কৰা হৈছো। অনুগ্ৰহ কৰি চৰকাৰী আঁচনিৰ বিষয়ে সোধক।",
+    "ur": "میں یوجنا وانی AI ہوں، جو صرف ہندوستانی حکومت کی فلاحی اسکیموں، سبسڈی اور پنشن کی معلومات کے لیے بنایا گیا ہے۔ براہ کرم سرکاری اسکیموں کے بارے میں پوچھیں۔",
+    "sa": "अहं योजनावाणी AI अस्मि। अहं केवलं भारतसर्वकारस्य कल्याणकारीयोजनानां विषये सूचनां दातुं निर्मितः। कृपया सर्वकारीययोजनानां विषये पृच्छतु।",
+    "ne": "म योजनावाणी AI हुँ। म केवल भारत सरकारका कल्याणकारी योजनाहरू, अनुदान र पेन्सनको जानकारी दिनको लागि बनाइएको हुँ। कृपया सरकारी योजनाबारे सोध्नुहोस्।",
+    "kok": "हांव योजनावाणी AI. हांव फकत भारत सरकाराच्या कल्याणकारी येवजण्यांची म्हायती दिवपाक तयार आसा. उपकार करून सरकारी येवजण्यां विशीं विचारात.",
+    "mai": "हम योजनावाणी AI छी। हम केवल भारत सरकारक कल्याणकारी योजना, अनुदान आ पेंशनक जानकारी लेल बनल छी। कृपया सरकारी योजनाक बारे मे पुछू।",
+    "doi": "मैं योजनावाणी AI आं। मैं सिर्फ भारत सरकार दी भलाई स्कीमें, सब्सिडी ते पेंशन दी जानकारी देने लेई बणेआ आं। मेहरबानी करियै सरकारी स्कीमें बारै पुच्छो।",
+    "ks": "بہٕ چھُس یوجنا وانی AI، یُس صرف سرکٲری فلاحی سکیٖمَن ہٕنٛز جانکٲری دِنہٕ خٲطرٕ بناونہٕ آو۔",
+    "sd": "آئون يوجنا واڻي AI آهيان، جيڪو صرف سرڪاري ڀلائي اسڪيمن بابت ڄاڻ لاءِ ٺاهيو ويو آهي۔ مهرباني ڪري سرڪاري اسڪيمن بابت پڇو۔",
+    "mni": "ꯑꯩꯍꯥꯛ ꯌꯣꯖꯅꯥꯕꯥꯅꯤ AI ꯅꯤ꯫ ꯑꯩꯍꯥꯛ ꯂꯩꯉꯥꯛꯀꯤ ꯌꯥꯏꯐ-ꯊꯧꯔꯥꯡꯁꯤꯡꯒꯤ ꯃꯇꯥꯡꯗꯥ ꯈꯪꯍꯟꯅꯕꯥ ꯁꯦꯝꯕꯅꯤ꯫",
+    "brx": "आं योजनावाणी AI। आं सरकारनि मुलाम्फा बिथांखिफोरनि सोमोन्दै मिथिहोनायनि थाखाय बानायजानाय।",
+    "sat": "ᱤᱧ ᱫᱚ ᱭᱳᱡᱽᱱᱟᱵᱟᱱᱤ AI ᱠᱟᱱᱟᱧ᱾ ᱥᱚᱨᱠᱟᱨᱤ ᱡᱚᱡᱚᱱᱟ ᱠᱚ ᱵᱟᱵᱚᱛ ᱛᱮ ᱠᱩᱞᱤᱭᱮᱢ᱾"
 }
 
 UNCLEAR_AUDIO_MESSAGES: dict[str, str] = {
     "en": "Could not clearly understand the audio. Please speak a bit louder into your microphone, or type your question below.",
     "hi": "आपकी आवाज़ स्पष्ट रूप से सुनाई नहीं दी। कृपया थोड़ा साफ़ आवाज़ में बोलिए, या नीचे अपना प्रश्न टाइप करें।",
     "hi-en": "Aapki aawaz clear nahi sunai di. Kripya thoda loud bolein ya neeche apna question type karein.",
-    "te": "మీ వాయిస్ స్పష్టంగా వినిపించలేదు. దయచేసి మైక్రోఫోన్‌లో స్పష్టంగా మాట్లాడండి లేదా క్రింద మీ ప్రశ్నను టైప్ చేయండి."
+    "te": "మీ వాయిస్ స్పష్టంగా వినిపించలేదు. దయచేసి మైక్రోఫోన్‌లో స్పష్టంగా మాట్లాడండి లేదా క్రింద మీ ప్రశ్నను టైప్ చేయండి.",
+    "ta": "உங்கள் குரல் தெளிவாகக் கேட்கவில்லை. தயவுசெய்து மைக்ரோஃபோனில் தெளிவாகப் பேசவும் அல்லது கீழே தட்டச்சு செய்யவும்.",
+    "kn": "ನಿಮ್ಮ ಧ್ವನಿ ಸ್ಪಷ್ಟವಾಗಿ ಕೇಳಿಸಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮೈಕ್ರೋಫೋನ್‌ನಲ್ಲಿ ಸ್ಪಷ್ಟವಾಗಿ ಮಾತನಾಡಿ ಅಥವಾ ಕೆಳಗೆ ಟೈಪ್ ಮಾಡಿ.",
+    "ml": "നിങ്ങളുടെ ശബ്ദം വ്യക്തമായി കേട്ടില്ല. ദയവായി മൈക്രോഫോണിൽ വ്യക്തമായി സംസാരിക്കുക അല്ലെങ്കിൽ താഴെ ടൈപ്പ് ചെയ്യുക.",
+    "mr": "तुमचा आवाज स्पष्ट ऐकू आला नाही. कृपया मायक्रोफोनमध्ये स्पष्ट बोला किंवा खाली तुमचा प्रश्न टाइप करा.",
+    "bn": "আপনার কথা স্পষ্ট শোনা যায়নি। অনুগ্রহ করে মাইক্রোফোনে স্পষ্ট করে বলুন অথবা নিচে টাইপ করুন।",
+    "gu": "તમારો અવાજ સ્પષ્ટ સંભળાયો નથી. કૃપા કરીને માઇક્રોફોનમાં સ્પષ્ટ બોલો અથવા નીચે ટાઇપ કરો.",
+    "pa": "ਤੁਹਾਡੀ ਆਵਾਜ਼ ਸਾਫ਼ ਸੁਣਾਈ ਨਹੀਂ ਦਿੱਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਮਾਈਕ ਵਿੱਚ ਸਾਫ਼ ਬੋਲੋ ਜਾਂ ਹੇਠਾਂ ਟਾਈਪ ਕਰੋ।",
+    "or": "ଆପଣଙ୍କ ସ୍ୱର ସ୍ପଷ୍ଟ ଭାବରେ ଶୁଣାଗଲା ନାହିଁ। ଦୟାକରି ମାଇକ୍ରୋଫୋନରେ ସ୍ପଷ୍ଟ ଭାବରେ କୁହନ୍ତୁ କିମ୍ବା ତଳେ ଟାଇପ୍ କରନ୍ତୁ।",
+    "as": "আপোনাৰ মাত স্পষ্টকৈ শুনা নগ'ল। অনুগ্ৰহ কৰি মাইক্ৰ'ফোনত স্পষ্টকৈ কওক বা তলত টাইপ কৰক।",
+    "ur": "آپ کی آواز واضح سنائی نہیں دی۔ براہ کرم مائیکروفون میں صاف بولیں یا نیچے اپنا سوال ٹائپ کریں۔",
+    "sa": "भवतः ध्वनिः स्पष्टं न श्रुतः। कृपया स्पष्टं वदतु अथवा अधः लिखतु।",
+    "ne": "तपाईंको आवाज स्पष्ट सुनिएन। कृपया माइक्रोफोनमा स्पष्ट बोल्नुहोस् वा तल टाइप गर्नुहोस्।",
+    "kok": "तुमचो आवाज स्पष्ट आयकूंक आयलो ना. उपकार करून स्पष्ट उलय्यात वा सकयल बरयात.",
+    "mai": "अहाँक आवाज स्पष्ट नहि सुनाएल। कृपया स्पष्ट बाजू वा नीचाँ लिखू।",
+    "doi": "तुंदी आवाज साफ नेईं सुणी। मेहरबानी करियै साफ बोलो जां हेठ लिखो।",
+    "ks": "تُہنٛز آواز آیہِ نہٕ صاف بوزنہٕ۔ مہربٲنی کٔرِتھ بولیو صاف۔",
+    "sd": "توهان جو آواز صاف نه آيو. مهرباني ڪري مائڪروفون ۾ صاف ڳالهايو يا هيٺ لکو.",
+    "mni": "ꯅꯍꯥꯛꯀꯤ ꯈꯣꯟꯖꯦꯜ ꯃꯌꯦꯛ ꯁꯦꯡꯅꯥ ꯇꯥꯕꯥ ꯉꯝꯗꯦ꯫ ꯆꯥꯟꯕꯤꯗꯨꯅꯥ ꯃꯌꯦꯛ ꯁꯦꯡꯅꯥ ꯉꯥꯡꯕꯤꯌꯨ꯫",
+    "brx": "नोंथांनि खोनासंनाया रोखा नङा। अननानै रोखा बुं एबा गाहायाव लिर।",
+    "sat": "ᱟᱢᱟᱜ ᱟᱲᱟᱝ ᱥᱟᱯᱷᱟ ᱛᱮ ᱵᱟᱝ ᱟᱸᱡᱚᱢ ᱞᱮᱱᱟ᱾ ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱥᱟᱯᱷᱟ ᱛᱮ ᱨᱚᱲ ᱢᱮ᱾"
 }
 
 SCAM_OR_FRAUD_TERMS = (
@@ -514,6 +582,15 @@ def detect_query_language(text: str, preferred_lang: str | None = None) -> str:
     if sum(1 for w in latin_words if w in teluglish_words) >= 2:
         return "te"
 
+        # 3.6 Detect Romanized Kannada (Kanglish) & Tamil (Tanglish) markers
+    kanglish_words = {"nannage", "nanage", "yojana", "bagge", "heli", "helu", "kodi", "beku", "yava", "elli", "hege", "karnataka", "gruha", "lakshmi", "anna", "bhagya"}
+    if sum(1 for w in latin_words if w in kanglish_words) >= 2:
+        return "kn"
+
+    tanglish_words = {"enakku", "sollunga", "thittam", "eppadi", "yethu", "enna", "vendu", "tamil", "magalir", "urimai", "kudumba"}
+    if sum(1 for w in latin_words if w in tanglish_words) >= 2:
+        return "ta"
+
     # 4. If Hinglish markers in Latin script
     if hinglish_matches >= 2:
         return "hi-en"
@@ -881,112 +958,73 @@ def answer_open_ended_scheme(
 
 
 def build_comprehensive_state_schemes_response(state: str, schemes: list[dict[str, Any]], lang_code: str) -> str:
-    """Build a complete, thorough scheme-by-scheme breakdown in native script when citizen requests full schemes."""
+    """Build a complete, thorough scheme-by-scheme breakdown in native script across ALL 24 official languages."""
     is_central = state in ("All India", "Central", "Central Government")
-    if lang_code == "te":
-        if is_central:
-            header = "భారత కేంద్ర ప్రభుత్వ ముఖ్యమైన సంక్షేమ పథకాల పూర్తి వివరాలు:"
-        elif state == "Andhra Pradesh":
-            header = "ఆంధ్రప్రదేశ్ రాష్ట్రంలో ఉన్న ముఖ్యమైన ప్రభుత్వ సంక్షేమ పథకాల పూర్తి వివరాలు:"
-        else:
-            header = f"{state} రాష్ట్ర సంక్షేమ పథకాలు:"
-        entries = []
-        for idx, s in enumerate(schemes, start=1):
-            name = s.get("name", "")
-            benefit = s.get("benefit", "")
-            eligibility = s.get("eligibility", "")
-            entries.append(f"{idx}. {name}:\n• లబ్ధి: {benefit}\n• అర్హత: {eligibility}")
-        footer = "\n\nదరఖాస్తు విధానం: సమీపంలోని CSC కేంద్రంలో లేదా అధికారిక పోర్టల్‌లో ఆధార్ మరియు బ్యాంక్ పాస్‌బుక్‌తో దరఖాస్తు చేసుకోవచ్చు."
-        return header + "\n\n" + "\n\n".join(entries) + footer
+    
+    headers = {
+        "te": "భారత కేంద్ర ప్రభుత్వ ముఖ్యమైన సంక్షేమ పథకాల పూర్తి వివరాలు:" if is_central else f"{state} రాష్ట్రంలోని ముఖ్యమైన ప్రభుత్వ సంక్షేమ పథకాల పూర్తి వివరాలు:",
+        "hi": "भारत सरकार (केंद्र सरकार) की प्रमुख कल्याणकारी योजनाओं का संपूर्ण विवरण:" if is_central else f"{state} राज्य की प्रमुख सरकारी कल्याणकारी योजनाओं का संपूर्ण विवरण:",
+        "hi-en": "Central Government (All India) ki Pramukh Welfare Schemes:" if is_central else f"{state} Rajya ki Pramukh Welfare Schemes:",
+        "kn": "ಭಾರತ ಕೇಂದ್ರ ಸರ್ಕಾರದ ಪ್ರಮುಖ ಕಲ್ಯಾಣ ಯೋಜನೆಗಳ ಸಂಪೂರ್ಣ ವಿವರಗಳು:" if is_central else f"{state} ರಾಜ್ಯದ ಪ್ರಮುಖ ಸರ್ಕಾರಿ ಕಲ್ಯಾಣ ಯೋಜನೆಗಳ ಸಂಪೂರ್ಣ ವಿವರಗಳು:",
+        "ta": "மத்திய அரசின் முக்கிய மக்கள் நலத் திட்டங்களின் முழு விவரங்கள்:" if is_central else f"{state} மாநில அரசின் முக்கிய நலத்திட்டங்களின் முழு விவரங்கள்:",
+        "ml": "കേന്ദ്ര സർക്കാരിന്റെ പ്രധാന ക്ഷേമ പദ്ധതികളുടെ പൂർണ്ണ വിവരങ്ങൾ:" if is_central else f"{state} സംസ്ഥാനത്തെ പ്രധാന സർക്കാർ ക്ഷേമ പദ്ധതികളുടെ വിവരങ്ങൾ:",
+        "mr": "केंद्र सरकारच्या प्रमुख कल्याणकारी योजनांची संपूर्ण माहिती:" if is_central else f"{state} राज्यातील प्रमुख सरकारी कल्याणकारी योजनांची माहिती:",
+        "bn": "কেন্দ্রীয় সরকারের প্রধান জনকল্যাণমূলক প্রকল্পগুলির সম্পূর্ণ বিবরণ:" if is_central else f"{state} রাজ্যের প্রধান সরকারি কল্যাণমূলক প্রকল্পগুলির বিবরণ:",
+        "gu": "કેન્દ્ર સરકારની મુખ્ય કલ્યાણકારી યોજનાઓની સંપૂર્ણ માહિતી:" if is_central else f"{state} રાજ્યની મુખ્ય સરકારી કલ્યાણકારી યોજનાઓની માહિતી:",
+        "pa": "ਕੇਂਦਰ ਸਰਕਾਰ ਦੀਆਂ ਪ੍ਰਮੁੱਖ ਭਲਾਈ ਸਕੀਮਾਂ ਦਾ ਪੂਰਾ ਵੇਰਵਾ:" if is_central else f"{state} ਰਾਜ ਦੀਆਂ ਪ੍ਰਮੁੱਖ ਸਰਕਾਰੀ ਭਲਾਈ ਸਕੀਮਾਂ ਦਾ ਵੇਰਵਾ:",
+        "or": "କେନ୍ଦ୍ର ସରକାରଙ୍କ ପ୍ରମୁଖ କଲ୍ୟାଣକାରୀ ଯୋଜନାର ସମ୍ପୂର୍ଣ୍ଣ ବିବରଣୀ:" if is_central else f"{state} ରାଜ୍ୟର ପ୍ରମୁଖ ସରକାରୀ କଲ୍ୟାଣକାରୀ ଯୋଜନାର ବିବରଣୀ:",
+        "as": "কেন্দ্ৰীয় চৰকাৰৰ প্ৰধান কল্যাণমূলক আঁচনিসমূহৰ সম্পূৰ্ণ বিৱৰণ:" if is_central else f"{state} ৰাজ্যৰ প্ৰধান চৰকাৰী কল্যাণমূলক আঁচনিসমূহৰ বিৱৰণ:",
+        "ur": "مرکزی حکومت کی اہم فلاحی اسکیموں کی مکمل تفصیلات:" if is_central else f"{state} ریاست کی اہم سرکاری فلاحی اسکیموں کی تفصیلات:",
+    }
 
-    elif lang_code == "hi":
-        if is_central:
-            header = "भारत सरकार (केंद्र सरकार) की प्रमुख कल्याणकारी योजनाओं का संपूर्ण विवरण:"
-        else:
-            header = f"{state} राज्य की प्रमुख सरकारी कल्याणकारी योजनाओं का संपूर्ण विवरण:"
-        entries = []
-        for idx, s in enumerate(schemes, start=1):
-            name = s.get("name", "")
-            benefit = s.get("benefit", "")
-            eligibility = s.get("eligibility", "")
-            entries.append(f"{idx}. {name}:\n• लाभ: {benefit}\n• पात्रता: {eligibility}")
-        footer = "\n\nआवेदन प्रक्रिया: नजदीकी जन सेवा केंद्र (CSC) या संबंधित आधिकारिक पोर्टल पर आधार कार्ड और बैंक पासबुक के साथ आवेदन करें।"
-        return header + "\n\n" + "\n\n".join(entries) + footer
+    footers = {
+        "te": "\n\nదరఖాస్తు విధానం: సమీపంలోని CSC కేంద్రంలో లేదా గ్రామ/వార్డు సచివాలయంలో ఆధార్ మరియు బ్యాంక్ పాస్‌బుక్‌తో దరఖాస్తు చేసుకోవచ్చు.",
+        "hi": "\n\nआवेदन प्रक्रिया: नजदीकी जन सेवा केंद्र (CSC) या संबंधित आधिकारिक पोर्टल पर आधार कार्ड और बैंक पासबुक के साथ आवेदन करें।",
+        "hi-en": "\n\nApply karne ke liye nazdeeki CSC center ya official portal par Aadhaar aur Bank Passbook ke sath jayein.",
+        "kn": "\n\nಅರ್ಜಿ ಸಲ್ಲಿಸುವ ವಿಧಾನ: ಹತ್ತಿರದ ಗ್ರಾಮ ಒನ್ / ಕರ್ನಾಟಕ ಒನ್ / CSC ಕೇಂದ್ರದಲ್ಲಿ ಆಧಾರ್ ಮತ್ತು ಬ್ಯಾಂಕ್ ಪಾಸ್‌బుక్‌ನೊಂದಿಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ.",
+        "ta": "\n\nவிண்ணப்பிக்கும் முறை: அருகிலுள்ள இ-சேவை / CSC மையத்தில் ஆதார் மற்றும் வங்கி பாஸ்புக்குடன் விண்ணப்பிக்கவும்.",
+        "ml": "\n\nഅപേക്ഷിക്കേണ്ട വിധം: അടുത്തുള്ള അക്ഷയ / CSC കേന്ദ്രത്തിൽ ആധാർ, ബാങ്ക് പാസ്ബുക്ക് എന്നിവയുമായി അപേക്ഷിക്കാം.",
+        "mr": "\n\nअर्ज प्रक्रिया: जवळच्या आपले सरकार / CSC केंद्रात आधार कार्ड आणि बँक पासबुकसह अर्ज करावा.",
+        "bn": "\n\nআবেদন পদ্ধতি: নিকটবর্তী সিএসসি (CSC) কেন্দ্র বা সরকারি পোর্টালে আধার কার্ড এবং ব্যাংক পাসবুক নিয়ে আবেদন করুন।",
+        "gu": "\n\nઅરજી પ્રક્રિયા: નજીકના CSC કેન્દ્ર અથવા સત્તાવાર પોર્ટલ પર આધાર કાર્ડ અને બેંક પાસબુક સાથે અરજી કરો.",
+        "pa": "\n\nਅਪਲਾਈ ਕਰਨ ਦਾ ਤਰੀਕਾ: ਨੇੜਲੇ CSC ਕੇਂਦਰ ਵਿੱਚ ਆਧਾਰ ਕਾਰਡ ਅਤੇ ਬੈਂਕ ਪਾਸਬੁੱਕ ਲੈ ਕੇ ਅਪਲਾਈ ਕਰੋ।",
+        "or": "\n\nଆବେଦନ ପ୍ରକ୍ରିୟା: ନିକଟସ୍ଥ ଜନସେବା କେନ୍ଦ୍ର (CSC) ରେ ଆଧାର କାର୍ଡ ଏବଂ ବ୍ୟାଙ୍କ ପାସବୁକ୍ ସହିତ ଆବେଦନ କରନ୍ତୁ।",
+        "as": "\n\nআবেদন প্ৰক্ৰিয়া: ওচৰৰ CSC কেন্দ্ৰত আধাৰ কাৰ্ড আৰু বেংক পাছবুক লৈ আবেদন কৰক।",
+        "ur": "\n\nدرخواست دینے کا طریقہ: قریبی سی ایس سی سنٹر پر آدھار کارڈ اور بینک پاس بک کے ساتھ درخواست دیں۔",
+    }
 
+    if is_central:
+        default_header = "Comprehensive Overview of Major Central Government (All India) Welfare Schemes:"
     else:
-        if is_central:
-            header = "Comprehensive Overview of Major Central Government (All India) Welfare Schemes:"
+        default_header = f"Comprehensive Overview of Welfare Schemes in {state}:"
+    default_footer = "\n\nHow to Apply: Visit your nearest CSC center or official portal with Aadhaar and Bank Passbook."
+
+    header = headers.get(lang_code, default_header)
+    footer = footers.get(lang_code, default_footer)
+
+    entries = []
+    for idx, s in enumerate(schemes, start=1):
+        name = s.get("name", "")
+        # Prioritize pure native regional translation over raw English fields!
+        native_ans = s.get(f"answer_{lang_code}") or s.get("translations", {}).get(lang_code)
+        if native_ans and lang_code != "en":
+            entries.append(f"{idx}. {name}:\n• {native_ans}")
         else:
-            header = f"Comprehensive Overview of Welfare Schemes in {state}:"
-        entries = []
-        for idx, s in enumerate(schemes, start=1):
-            name = s.get("name", "")
             benefit = s.get("benefit", "")
             eligibility = s.get("eligibility", "")
-            entries.append(f"{idx}. {name}:\n• Benefit: {benefit}\n• Eligibility: {eligibility}")
-        footer = "\n\nHow to Apply: Visit your nearest Common Service Centre (CSC) or official scheme portal with Aadhaar and Bank Passbook."
-        return header + "\n\n" + "\n\n".join(entries) + footer
+            if lang_code == "te":
+                entries.append(f"{idx}. {name}:\n• ప్రయోజనం: {benefit}\n• అర్హత: {eligibility}")
+            elif lang_code == "hi":
+                entries.append(f"{idx}. {name}:\n• लाभ: {benefit}\n• पात्रता: {eligibility}")
+            elif lang_code == "kn":
+                entries.append(f"{idx}. {name}:\n• ಪ್ರಯೋಜನ: {benefit}\n• ಅರ್ಹತೆ: {eligibility}")
+            elif lang_code == "ta":
+                entries.append(f"{idx}. {name}:\n• பலன்: {benefit}\n• தகுதி: {eligibility}")
+            else:
+                entries.append(f"{idx}. {name}:\n• Benefit: {benefit}\n• Eligibility: {eligibility}")
 
-def generate_multi_scheme_response(
-    query: str,
-    schemes: list[dict[str, Any]],
-    lang_code: str,
-) -> str:
-    """Generate a cohesive multi-scheme summary when citizen asks for a list or overview."""
-    key = os.getenv("GEMINI_API_KEY", "").strip()
-    lang_meta = INDIAN_OFFICIAL_LANGUAGES.get(lang_code, {"name": "Indian Regional Language", "native": ""})
-    lang_name = lang_meta.get("name", "Telugu")
-    native_name = lang_meta.get("native", "")
+    return header + "\n\n" + "\n\n".join(entries) + footer
 
-    if not key or not schemes:
-        # Fallback multi-scheme text
-        parts = [f"{s.get('name')}: {s.get('benefit', '')}" for s in schemes[:3]]
-        return " Key schemes available: " + "; ".join(parts)
-
-    candidate_models = [
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
-    ]
-
-    schemes_text = ""
-    for idx, s in enumerate(schemes[:4], start=1):
-        schemes_text += f"{idx}. {s.get('name')} ({s.get('state', 'All India')}): {s.get('benefit', '')}\n"
-
-    system_instruction = (
-        f"You are YojanaVaani AI, an official Indian Government citizen welfare voice assistant.\n"
-        f"Citizen Query: \"{query}\"\n\n"
-        f"Verified Available Government Schemes:\n"
-        f"{schemes_text}\n"
-        f"Strict Guidelines:\n"
-        f"1. Compose a friendly 2-3 sentence spoken summary in {lang_name} ({native_name} script) listing and briefly explaining these top schemes.\n"
-        f"2. You are an Indian Government welfare assistant. Answer ONLY about these verified schemes.\n"
-        f"3. Do NOT use markdown, bold asterisks, or bullet points.\n"
-        f"4. ALWAYS write ALL numbers, amounts, percentages, and ages in NUMERIC DIGITS (e.g. ₹15,000, 75%, 1-12). NEVER write numbers in words.\n"
-        f"5. Write 95%+ of the response in pure {lang_name} ({native_name} script), keeping English to absolute minimum.\n"
-    )
-
-    for endpoint in candidate_models:
-        try:
-            url = f"{endpoint}?key={key}"
-            payload = {
-                "contents": [{"parts": [{"text": system_instruction}]}],
-                "generationConfig": {"temperature": 0.2, "maxOutputTokens": 1000, "thinkingConfig": {"thinkingBudget": 0}},
-            }
-            res = requests.post(url, json=payload, timeout=6.0)
-            if res.status_code == 200:
-                data = res.json()
-                ans = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "").strip()
-                if ans:
-                    ans = re.sub(r"[*_#`]", "", ans)
-                    print(f"[Gemini Multi-Scheme] Dynamically summarized {len(schemes)} schemes in {lang_name}")
-                    return ans
-        except Exception as e:
-            print(f"[Gemini Multi-Scheme] Error calling {endpoint}: {e}")
-
-    # Fallback if API fails
-    parts = [f"{s.get('name')}: {s.get('benefit', '')}" for s in schemes[:3]]
-    return " Key schemes available: " + "; ".join(parts)
 
 def answer_from_schemes(
     question: str, lang_code: str | None = None, state_filter: str | None = None
