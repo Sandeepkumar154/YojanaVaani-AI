@@ -4,7 +4,8 @@
 > Built for the **[Gnani AI Great Indian AI Internship Challenge](https://www.gnani.ai/great-indian-ai-internship-registration-form)**  
 > Powered by **Gnani Prisma Indic STT** and **Gnani Timbre TTS (v2.5)**.  
 > 🌐 **Live Public App**: [https://yojanavaani-ai.onrender.com](https://yojanavaani-ai.onrender.com)  
-> 📂 **GitHub Repository**: [https://github.com/Sandeepkumar154/YojanaVaani-AI](https://github.com/Sandeepkumar154/YojanaVaani-AI)
+> 📂 **GitHub Repository**: [https://github.com/Sandeepkumar154/YojanaVaani-AI](https://github.com/Sandeepkumar154/YojanaVaani-AI)  
+> 📄 **1-Page Solution Pitch**: [SOLUTION_PITCH.md](SOLUTION_PITCH.md)
 
 ---
 
