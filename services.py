@@ -1026,6 +1026,120 @@ def build_comprehensive_state_schemes_response(state: str, schemes: list[dict[st
     return header + "\n\n" + "\n\n".join(entries) + footer
 
 
+
+GENERIC_QUERY_STOPWORDS = {
+    "scheme", "schemes", "yojana", "card", "cards", "government", "sarkari", "state", "central",
+    "free", "paisa", "money", "help", "explain", "details", "apply", "online", "process",
+    "how", "what", "which", "get", "need", "want", "have", "dont", "didnt", "missing",
+    "పథకం", "పథకాలు", "కార్డు", "కార్డ్", "గురించి", "కోసం", "లేదు", "లేకపోతే", "ఏం", "చేయాలి", "చెప్పండి", "వివరాలు",
+    "योजना", "कार्ड", "कैसे", "क्या", "नहीं", "चाहिए", "बनाना", "बताओ"
+}
+
+DOCUMENT_HELP_TEMPLATES: dict[str, dict[str, str]] = {
+    "ration": {
+        "te": "నమస్కారం, మీ దగ్గర రేషన్ కార్డ్ (తెల్ల రేషన్ కార్డ్) లేకపోతే కొత్తగా దరఖాస్తు చేసుకోవడానికి సమీపంలోని గ్రామ/వార్డు సచివాలయం లేదా మీ సేవా (MeeSeva / CSC) కేంద్రాన్ని సంప్రదించండి. దీని కోసం కుటుంబ సభ్యులందరి ఆధార్ కార్డులు, నివాస ధృవీకరణ పత్రం (కరెంట్ బిల్లు లేదా అద్దె ఒప్పందం), మరియు ఆదాయ ధృవీకరణ పత్రం అవసరం అవుతాయి. దరఖాస్తు చేసిన 15 నుండి 30 రోజుల్లోగా వెరిఫికేషన్ పూర్తయి కొత్త రేషన్ కార్డ్ జారీ చేయబడుతుంది.",
+        "hi": "नमस्ते, यदि आपके पास राशन कार्ड नहीं है, तो नया राशन कार्ड बनवाने के लिए अपने नजदीकी जन सेवा केंद्र (CSC), खाद्य आपूर्ति कार्यालय या राज्य के ई-डिस्ट्रिक्ट पोर्टल पर आवेदन करें। इसके लिए परिवार के सभी सदस्यों के आधार कार्ड, निवास प्रमाण पत्र (बिजली बिल) और आय प्रमाण पत्र की आवश्यकता होती है। आवेदन के 15 से 30 दिनों के भीतर जांच पूरी होने पर नया राशन कार्ड जारी कर दिया जाता है।",
+        "kn": "ನಮಸ್ಕಾರ, ನಿಮ್ಮ ಬಳಿ ಪಡಿತರ ಚೀಟಿ (ರೇಷನ್ ಕಾರ್ಡ್) ಇಲ್ಲದಿದ್ದರೆ, ಹೊಸದಾಗಿ ಅರ್ಜಿ ಸಲ್ಲಿಸಲು ಹತ್ತಿರದ ಗ್ರಾಮ ಒನ್, ಕರ್ನಾಟಕ ಒನ್ ಅಥವಾ CSC ಕೇಂದ್ರಕ್ಕೆ ಭೇಟಿ ನೀಡಿ. ಇದಕ್ಕಾಗಿ ಕುಟುಂಬದ ಎಲ್ಲಾ ಸದಸ್ಯರ ಆಧಾರ್ ಕಾರ್ಡ್, ವಿಳಾಸ ಪುರಾವೆ ಮತ್ತು ಆದಾಯ ಪ್ರಮಾಣ ಪತ್ರ ಬೇಕಾಗುತ್ತದೆ. ಅರ್ಜಿ ಸಲ್ಲಿಸಿದ 15 ರಿಂದ 30 ದಿನಗಳಲ್ಲಿ ಪರಿಶೀಲನೆ ಪೂರ್ಣಗೊಂಡು ರೇಷನ್ ಕಾರ್ಡ್ ನೀಡಲಾಗುತ್ತದೆ.",
+        "ta": "வணக்கம், உங்களிடம் ரேஷன் கார்டு இல்லையென்றால், புதிய ரேஷன் கார்டுக்கு விண்ணப்பிக்க அருகிலுள்ள இ-சேவை (CSC) மையம் அல்லது TNPDS இணையதளத்தை அணுகவும். இதற்கு குடும்ப உறுப்பினர்களின் ஆதார் அட்டை, முகவரி சான்று மற்றும் வருமானச் சான்றிதழ் தேவைப்படும். விண்ணப்பித்த 15 முதல் 30 நாட்களுக்குள் சரிபார்ப்பு முடிந்து கார்டு வழங்கப்படும்.",
+        "en": "If you do not have a Ration Card, you can apply for a new card at your nearest Gram/Ward Sachivalayam, MeeSeva, CSC center, or state food portal. You will need Aadhaar cards of all family members, proof of address (electricity bill), and an income certificate. After verification, your card is issued within 15 to 30 days."
+    },
+    "aadhaar": {
+        "te": "నమస్కారం, మీ దగ్గర ఆధార్ కార్డు లేకపోతే లేదా అప్‌డేట్ చేయాలంటే సమీపంలోని ఆధార్ సేవా కేంద్రం (Aadhaar Seva Kendra), పోస్టాఫీసు లేదా బ్యాంక్ బ్రాంచ్‌కు వెళ్లండి. దీని కోసం జనన ధృవీకరణ పత్రం, రేషన్ కార్డ్ లేదా పాఠశాల/ఓటర్ గుర్తింపు కార్డు తీసుకెళ్లాలి. బయోమెట్రిక్ నమోదు పూర్తయిన 15 నుండి 30 రోజుల్లోగా మీ ఆధార్ కార్డు సిద్ధమవుతుంది.",
+        "hi": "नमस्ते, नया आधार कार्ड बनवाने या अपडेट कराने के लिए अपने नजदीकी आधार सेवा केंद्र, डाकघर या बैंक शाखा में जाएं। इसके लिए जन्म प्रमाण पत्र, राशन कार्ड या पते का प्रमाण साथ ले जाएं। बायोमेट्रिक प्रक्रिया के 15 से 30 दिनों में आपका आधार कार्ड जारी हो जाता है।",
+        "en": "To get a new Aadhaar Card or update details, visit your nearest Aadhaar Seva Kendra, Post Office, or designated Bank branch with Proof of Identity and Address. Your Aadhaar is processed within 15 to 30 days."
+    },
+    "certificate": {
+        "te": "నమస్కారం, ఆదాయ, కుల లేదా నివాస ధృవీకరణ పత్రాలు (Income/Caste/Residence Certificate) లేకపోతే సమీపంలోని మీ సేవా (MeeSeva) లేదా గ్రామ/వార్డు సచివాలయంలో దరఖాస్తు చేసుకోవచ్చు. దీని కోసం ఆధార్ కార్డు, రేషన్ కార్డు లేదా పాత స్కూల్ సర్టిఫికెట్ తీసుకెళ్లాలి. సాధారణంగా 7 నుండి 15 రోజుల్లోగా డిజిటల్ సర్టిఫికెట్ జారీ అవుతుంది.",
+        "hi": "नमस्ते, आय, जाति या निवास प्रमाण पत्र बनवाने के लिए नजदीकी जन सेवा केंद्र (CSC) या ई-डिस्ट्रिक्ट पोर्टल पर आवेदन करें। इसके लिए आधार कार्ड, राशन कार्ड और स्व-घोषणा पत्र आवश्यक हैं। यह प्रमाण पत्र 7 से 15 दिनों के भीतर जारी हो जाता है।",
+        "en": "To obtain an Income, Caste, or Residence Certificate, apply via your nearest MeeSeva, CSC center, or state e-District portal with your Aadhaar and Ration Card. Certificates are typically issued within 7 to 15 days."
+    },
+    "passbook": {
+        "te": "నమస్కారం, మీ దగ్గర పట్టాదారు పాస్‌బుక్ లేదా భూమి రికార్డు లేకపోతే మీ మండల తహశీల్దార్ (MRO) కార్యాలయం లేదా సమీపంలోని మీ సేవా / సచివాలయంలో భూమి మ్యుటేషన్ కోసం దరఖాస్తు చేసుకోవచ్చు. దీని కోసం రిజిస్టర్డ్ సేల్ డీడ్, ఆధార్ కార్డు మరియు పాత 1B/అడంగల్ నకలు అవసరం అవుతాయి. వెరిఫికేషన్ తర్వాత 15 నుండి 30 రోజుల్లో పట్టాదారు పాస్‌బుక్ అందుతుంది.",
+        "hi": "नमस्ते, भूमि रिकॉर्ड या पासबुक बनवाने के लिए अपनी तहसील कार्यालय या जन सेवा केंद्र (CSC) में आधार कार्ड और जमीन के रजिस्ट्री कागजात के साथ आवेदन करें। जांच के बाद 15 से 30 दिनों में खतौनी/पासबुक प्राप्त हो जाती है।",
+        "en": "To obtain a Pattadar Passbook or land ownership record, apply for land mutation at your Mandal Tehsildar (MRO) office or MeeSeva center with your Sale Deed, Aadhaar Card, and 1B/Adangal records. Processing takes 15 to 30 days."
+    }
+}
+
+def answer_missing_card_or_document_help(question: str, lang_code: str) -> str | None:
+    """Detect if citizen is asking how to apply for a missing prerequisite document/card (Ration, Aadhaar, Income/Caste, Passbook)."""
+    low = question.lower()
+    
+    # Detect document type
+    doc_type = None
+    if any(w in low for w in ["ration", "రేషన్", "राशन", "ಪಡಿತರ", "ரேஷன்", "rice card"]):
+        doc_type = "ration"
+    elif any(w in low for w in ["aadhaar", "aadhar", "ఆధార్", "आधार", "ಆಧಾರ್", "ஆதார்"]):
+        doc_type = "aadhaar"
+    elif any(w in low for w in ["income certificate", "caste certificate", "residence certificate", "ఆదాయ", "కుల", "నివాస", "आय प्रमाण", "जाति प्रमाण"]):
+        doc_type = "certificate"
+    elif any(w in low for w in ["pattadar", "పట్టాదారు", "land record", "khatauni", "passbook", "పాస్బుక్", "పాస్ బుక్"]):
+        doc_type = "passbook"
+
+    if not doc_type:
+        return None
+
+    # Check if this is purely about obtaining the missing card/document (vs asking about a specific scheme like Amma Vodi / PM Kisan)
+    specific_scheme_keywords = ["amma vodi", "talliki", "అమ్మ ఒడి", "తల్లికి", "pm kisan", "kisan", "కిసాన్", "ayushman", "ఆయుష్మాన్", "rythu", "రైతు", "pension", "పింఛన్", "gruha", "lakshmi", "scholarship"]
+    if any(sk in low for sk in specific_scheme_keywords):
+        return None
+
+    missing_or_apply_intent = any(w in low for w in [
+        "లేదు", "లేకపోతే", "కావాలి", "ఎలా", "ఏం చేయాలి", "కొత్త", "దరఖాస్తు",
+        "don't have", "dont have", "didn't have", "didnt have", "no ", "not having", "missing", "how to get", "apply for", "new ",
+        "नहीं है", "नहीं", "कैसे बनवा", "बनवाना", "नया", "चाहिए", "ಇಲ್ಲ", "ಹೇಗೆ", "இல்லை", "எப்படி"
+    ])
+    if not missing_or_apply_intent:
+        return None
+
+    # First try Gemini specifically scoped ONLY to obtaining this card/document!
+    key = os.getenv("GEMINI_API_KEY", "").strip()
+    if key:
+        lang_meta = INDIAN_OFFICIAL_LANGUAGES.get(lang_code, {"name": "Indian Regional Language", "native": ""})
+        lang_name = lang_meta.get("name", "Telugu")
+        native_name = lang_meta.get("native", "")
+        prompt = (
+            f"You are YojanaVaani AI, an official Indian Citizen Services & Document Guidance Assistant.\n"
+            f"Citizen Query: \"{question}\"\n\n"
+            f"The citizen does NOT have their {doc_type.upper()} document/card and is asking how to get/apply for a new {doc_type} card.\n"
+            f"Strict Instructions:\n"
+            f"1. Answer ONLY about how to apply for and obtain a new {doc_type} card/document (required documents, where to go like MeeSeva / Gram-Ward Sachivalayam / CSC / official portal, and typical 15-30 day timeline).\n"
+            f"2. Do NOT talk about unrelated health or farmer schemes like Ayushman Bharat unless they asked about them.\n"
+            f"3. Compose a helpful 2-3 sentence answer in pure {lang_name} ({native_name} script), keeping 95%+ in native language.\n"
+            f"4. ALWAYS write ALL numbers, days, and amounts in NUMERIC DIGITS (e.g. 15 నుండి 30 రోజులు, 18+, ₹0). NEVER write numbers in words.\n"
+            f"5. Do NOT use markdown, asterisks, or bullet points."
+        )
+        for endpoint in [
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+        ]:
+            try:
+                resp = requests.post(
+                    f"{endpoint}?key={key}",
+                    headers={"Content-Type": "application/json"},
+                    json={
+                        "contents": [{"parts": [{"text": prompt}]}],
+                        "generationConfig": {"temperature": 0.2, "maxOutputTokens": 800, "thinkingConfig": {"thinkingBudget": 0}},
+                    },
+                    timeout=5,
+                )
+                if resp.status_code == 429:
+                    break
+                if resp.ok:
+                    cands = resp.json().get("candidates", [])
+                    if cands:
+                        parts = cands[0].get("content", {}).get("parts", [])
+                        if parts and "text" in parts[0]:
+                            ans = re.sub(r"[*_#`]", "", parts[0]["text"].strip())
+                            print(f"[Document Guidance AI] Resolved '{doc_type}' acquisition in {lang_name}")
+                            return ans
+            except Exception as e:
+                print(f"[Document Guidance Error] {e}")
+
+    # Fast deterministic fallback template
+    tmpl_map = DOCUMENT_HELP_TEMPLATES.get(doc_type, DOCUMENT_HELP_TEMPLATES["ration"])
+    return tmpl_map.get(lang_code, tmpl_map["en"])
+
+
 def answer_from_schemes(
     question: str, lang_code: str | None = None, state_filter: str | None = None
 ) -> tuple[str, dict[str, Any] | None, bool]:
@@ -1051,8 +1165,13 @@ def answer_from_schemes(
             print(f"[Direct Scope Guard] Filtered out non-government query: '{question}'")
             return (msg, None, False)
 
-    # Extract all alphanumeric and Indic script word tokens
-    tokens = set(re.findall(r"[\w\u0900-\u0D7F]+", lowered))
+    # Direct Prerequisite Document / Missing Card Acquisition Guidance (Ration Card, Aadhaar, Certificates, Passbook)
+    if doc_help_ans := answer_missing_card_or_document_help(question, active_lang):
+        return (doc_help_ans, None, False)
+
+    # Extract meaningful alphanumeric and Indic script word tokens (excluding generic stopwords like 'card', 'scheme')
+    raw_tokens = set(re.findall(r"[\w\u0900-\u0D7F]+", lowered))
+    tokens = raw_tokens - GENERIC_QUERY_STOPWORDS
 
     items = _load_kb()
     scored: list[tuple[int, dict[str, Any]]] = []
@@ -1066,30 +1185,24 @@ def answer_from_schemes(
         if item_state != "All India" and item_state.lower() in lowered:
             score += 5
 
-        # 1. Exact phrase matching in keywords
+        # 1. Exact phrase matching in keywords (ignore single generic stopwords)
         for keyword in item.get("keywords", []):
-            kw_clean = keyword.lower()
+            kw_clean = keyword.lower().strip()
+            if kw_clean in GENERIC_QUERY_STOPWORDS or len(kw_clean) <= 2:
+                continue
             if kw_clean in lowered:
                 score += 6
-            # 2. Token overlap for code-mixed speech
-            kw_tokens = set(re.findall(r"[\w\u0900-\u0D7F]+", kw_clean))
+            # 2. Token overlap for meaningful speech tokens
+            kw_tokens = set(re.findall(r"[\w\u0900-\u0D7F]+", kw_clean)) - GENERIC_QUERY_STOPWORDS
             score += len(tokens.intersection(kw_tokens)) * 3
 
-        # 3. Item title & name tokens
-        name_tokens = set(re.findall(r"[\w\u0900-\u0D7F]+", item.get("name", "").lower()))
+        # 3. Item title & name tokens (ignoring generic words)
+        name_tokens = set(re.findall(r"[\w\u0900-\u0D7F]+", item.get("name", "").lower())) - GENERIC_QUERY_STOPWORDS
         score += len(tokens.intersection(name_tokens)) * 3
 
         # 4. Scheme ID tokens (e.g. 'kisan', 'ayushman', 'solar', 'ladki')
-        id_tokens = set(re.findall(r"[\w]+", item.get("id", "").lower()))
+        id_tokens = set(re.findall(r"[\w]+", item.get("id", "").lower())) - GENERIC_QUERY_STOPWORDS
         score += len(tokens.intersection(id_tokens)) * 4
-
-        # 5. Code-mixed Hinglish phrase boost (e.g. "PM-Kisan", "Ayushman card")
-        hindi_hinglish_phrases = ["pm-kisan", "pm kisan", "ayushman", "ayushman bharat",
-                                  "free treatment", "free ilaaj", "ration card", "ration card banana",
-                                  "solar panel", "solar lagwana", "scholarship", "scholarship yojana"]
-        for phrase in hindi_hinglish_phrases:
-            if phrase in lowered:
-                score += 8
 
         scored.append((score, item))
 
